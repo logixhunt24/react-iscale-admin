@@ -42,6 +42,15 @@ export default function AddJobUpdate() {
     if (file) setLogoFile(file)
   }
 
+  // Older jobs may still carry the pre-PM/PA salary_type strings; normalize
+  // them on load so the dropdown only ever needs to offer PM/PA, and saving
+  // (even without touching this field) writes the current value back.
+  const normalizeSalaryType = (value) => {
+    if (value === 'per_month') return 'PM'
+    if (value === 'per_annum') return 'PA'
+    return value || 'PM'
+  }
+
   useEffect(() => {
     const fetchJob = async () => {
       try {
@@ -59,7 +68,7 @@ export default function AddJobUpdate() {
             experience: job.experience?.max?.toString() || '',
             salaryFrom: job.salary?.min?.toString() || '',
             salaryTo: job.salary?.max?.toString() || '',
-            salary_type: job.salary_type || 'PM',
+            salary_type: normalizeSalaryType(job.salary_type),
             job_description: job.job_description || '',
             apply_link: job.application_link || job.apply_link || '',
             linkedin: job.company_social_links?.linkedin || job.social_links?.linkedin || '',
@@ -85,7 +94,7 @@ export default function AddJobUpdate() {
           experience: job.experience?.max?.toString() || '',
           salaryFrom: job.salary?.min?.toString() || '',
           salaryTo: job.salary?.max?.toString() || '',
-          salary_type: job.salary_type || 'PM',
+          salary_type: normalizeSalaryType(job.salary_type),
           job_description: job.job_description || '',
           apply_link: job.application_link || job.apply_link || '',
           linkedin: job.company_social_links?.linkedin || job.social_links?.linkedin || '',
@@ -352,8 +361,6 @@ export default function AddJobUpdate() {
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]">
                <option value="PM">Per Month</option>
                <option value="PA">Per Annum</option>
-               <option value="per_month">Per Month (legacy)</option>
-               <option value="per_annum">Per Annum (legacy)</option>
               </select>
             </div>
           </div>
