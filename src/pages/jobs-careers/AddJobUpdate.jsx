@@ -352,6 +352,8 @@ export default function AddJobUpdate() {
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]">
                <option value="PM">Per Month</option>
                <option value="PA">Per Annum</option>
+               <option value="per_month">Per Month (legacy)</option>
+               <option value="per_annum">Per Annum (legacy)</option>
               </select>
             </div>
           </div>
