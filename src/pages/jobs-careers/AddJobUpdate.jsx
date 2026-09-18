@@ -2,17 +2,20 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
+import { getImageUrl } from '../../utils/imageUtils'
 import { Image, Play, Grid, MoreHorizontal } from 'lucide-react'
 
 export default function AddJobUpdate() {
   const navigate = useNavigate()
   const { id } = useParams()
   const location = useLocation()
-  
+
   const [backendError, setBackendError] = useState(null)
   const [enumHints, setEnumHints] = useState([])
   const [loading, setLoading] = useState(false)
   const [jobTitles, setJobTitles] = useState([])
+  const [logoFile, setLogoFile] = useState(null)
+  const [existingLogo, setExistingLogo] = useState('')
   const [formData, setFormData] = useState({
     job_title: '',
     company_name: '',
@@ -32,6 +35,11 @@ export default function AddJobUpdate() {
       ...formData,
       [e.target.name]: e.target.value
     })
+  }
+
+  const handleLogoChange = (e) => {
+    const file = e.target.files?.[0]
+    if (file) setLogoFile(file)
   }
 
   useEffect(() => {
@@ -55,8 +63,9 @@ export default function AddJobUpdate() {
             job_description: job.job_description || '',
             apply_link: job.application_link || job.apply_link || '',
             linkedin: job.company_social_links?.linkedin || job.social_links?.linkedin || '',
-            job_order: job.job_order || ''
+            job_order: (job.order ?? job.job_order ?? '').toString()
           })
+          setExistingLogo(job.company_logo || '')
         }
       } catch (err) {
         console.error('Error fetching job details', err)
@@ -80,8 +89,9 @@ export default function AddJobUpdate() {
           job_description: job.job_description || '',
           apply_link: job.application_link || job.apply_link || '',
           linkedin: job.company_social_links?.linkedin || job.social_links?.linkedin || '',
-          job_order: job.job_order || ''
+          job_order: (job.order ?? job.job_order ?? '').toString()
         })
+        setExistingLogo(job.company_logo || '')
       } else {
         fetchJob()
       }
@@ -133,26 +143,25 @@ export default function AddJobUpdate() {
       setBackendError(null)
       const token = localStorage.getItem('token')
 
-      const payload = {
-        job_title: formData.job_title,
-        company_name: formData.company_name,
-        job_locations: [formData.location],
-        salary: {
-          min: Number(formData.salaryFrom) || 0,
-          max: Number(formData.salaryTo) || 0
-        },
-        salary_type: formData.salary_type,
-        experience: formData.experience || '0',
-        job_description: formData.job_description || 'No description provided',
-        application_link: formData.apply_link,
-        company_social_links: {
-          linkedin: formData.linkedin
-        },
-        status: "1",
-        job_status: 1
-      }
+      const payload = new FormData()
+      payload.append('job_title', formData.job_title)
+      payload.append('company_name', formData.company_name)
+      payload.append('location', formData.location)
+      payload.append('salary_from', Number(formData.salaryFrom) || 0)
+      payload.append('salary_to', Number(formData.salaryTo) || 0)
+      payload.append('salary_type', formData.salary_type)
+      payload.append('experience', formData.experience || '0')
+      payload.append('job_description', formData.job_description || 'No description provided')
+      payload.append('apply_link', formData.apply_link)
+      payload.append('linkedin', formData.linkedin)
+      payload.append('order', Number(formData.job_order) || 0)
+      // Only default a brand-new job to Active; editing an existing job must
+      // not silently reactivate one an admin has deliberately deactivated.
+      if (!id) payload.append('status', '1')
+      payload.append('job_status', '1')
+      if (logoFile) payload.append('company_logo', logoFile)
 
-      const url = id 
+      const url = id
         ? `${BASE_URL}/myadmin/comp-requirement/update-job/${id}`
         : `${BASE_URL}/myadmin/comp-requirement/add-jobs`
 
@@ -236,9 +245,22 @@ export default function AddJobUpdate() {
               </datalist>
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Image <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Company Logo</label>
               <div className="flex items-center gap-2 mt-1">
-                <input type="file" className="text-sm text-slate-500 dark:text-slate-400 file:mr-4 file:py-1 file:px-3 file:rounded file:border file:border-slate-300 dark:border-[#1f1b2e] file:bg-[#f6f6ff] file:text-slate-700 dark:text-slate-300 hover:file:bg-slate-50 dark:bg-[#1f1b2e]/50 cursor-pointer" />
+                {(logoFile || existingLogo) && (
+                  <img
+                    src={logoFile ? URL.createObjectURL(logoFile) : getImageUrl(existingLogo)}
+                    alt="Company logo"
+                    className="w-9 h-9 rounded object-cover border border-slate-300 dark:border-gray-700 flex-shrink-0"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="company_logo"
+                  onChange={handleLogoChange}
+                  className="text-sm text-slate-500 dark:text-slate-400 file:mr-4 file:py-1 file:px-3 file:rounded file:border file:border-slate-300 dark:border-[#1f1b2e] file:bg-[#f6f6ff] file:text-slate-700 dark:text-slate-300 hover:file:bg-slate-50 dark:bg-[#1f1b2e]/50 cursor-pointer"
+                />
               </div>
             </div>
           </div>
@@ -328,9 +350,8 @@ export default function AddJobUpdate() {
                 value={formData.salary_type}
                 onChange={handleChange}
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]">
-               <option value="PM">PM (Per Month)</option>
-               <option value="per_annum">Per Annum</option>
-               <option value="per_month">Per Month</option>
+               <option value="PM">Per Month</option>
+               <option value="PA">Per Annum</option>
               </select>
             </div>
           </div>

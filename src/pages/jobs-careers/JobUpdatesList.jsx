@@ -3,6 +3,7 @@ import { Edit2, Trash2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
+import { getImageUrl } from '../../utils/imageUtils'
 
 export default function JobUpdatesList() {
   const navigate = useNavigate()
@@ -64,7 +65,7 @@ export default function JobUpdatesList() {
   const handleToggleStatus = async (id) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.put(`${BASE_URL}/myadmin/comp-requirement/status/${id}`, {}, {
+      const response = await axios.patch(`${BASE_URL}/myadmin/comp-requirement/status/${id}`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -168,7 +169,18 @@ export default function JobUpdatesList() {
                     </td>
                     <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle w-48 font-medium">{row.job_title}</td>
                     <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
-                      <div className="w-12 h-12 mx-auto flex items-center justify-center font-bold text-[#144f36] bg-[#144f36]/10 text-xl rounded">
+                      {row.company_logo ? (
+                        <img
+                          src={getImageUrl(row.company_logo)}
+                          alt={row.company_name || 'Company logo'}
+                          className="w-12 h-12 mx-auto rounded object-cover"
+                          onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                        />
+                      ) : null}
+                      <div
+                        className="w-12 h-12 mx-auto items-center justify-center font-bold text-[#144f36] bg-[#144f36]/10 text-xl rounded"
+                        style={{ display: row.company_logo ? 'none' : 'flex' }}
+                      >
                         {row.company_name ? row.company_name.charAt(0).toUpperCase() : 'C'}
                       </div>
                     </td>
