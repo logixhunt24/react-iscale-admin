@@ -5,6 +5,7 @@ import MainLayout from '../layouts/MainLayout'
 
 // Import split route arrays
 import authRoutes from './authRoutes'
+import careerFitRoutes from './careerFitRoutes'
 import cmsContentRoutes from './cmsContentRoutes'
 import coursesRoutes from './coursesRoutes'
 import eventsWebinarsRoutes from './eventsWebinarsRoutes'
@@ -56,6 +57,7 @@ export default function AppRoutes() {
           {marketingRoutes.protected}
           {instructorsRoutes}
           {partnersClientsRoutes}
+          {careerFitRoutes}
           {cmsContentRoutes}
           {locationsRoutes}
           {settingsRoutes}

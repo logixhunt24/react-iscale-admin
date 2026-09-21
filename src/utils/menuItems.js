@@ -206,7 +206,8 @@ export const menuItems = [
       { id: 'placement-talks', label: 'Placement Talks', path: '/placement-talks' },
       { id: 'news-updates', label: 'News & Updates', path: '/news-updates' },
       { id: 'our-allied', label: 'Our Allied', path: '/our-allied' },
-      { id: 'our-clients', label: 'Our Clients', path: '/our-clients' }
+      { id: 'our-clients', label: 'Our Clients', path: '/our-clients' },
+      { id: 'career-fit', label: 'Career Fit', path: '/career-fit' }
     ]
   },
   {
