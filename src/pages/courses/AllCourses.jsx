@@ -153,6 +153,27 @@ const fetchCategoriesDropdown = async () => {
     }
   }
 
+  // No dedicated popular-toggle endpoint exists (unlike LMS status), so this
+  // reuses update-course with just the one field - updateCourse only writes
+  // fields actually present in the body, so it's a safe partial update.
+  const handleTogglePopular = async (id, currentlyPopular) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.put(
+        `${BASE_URL}/myadmin/course/update-course/${id}`,
+        { m_course_popular: currentlyPopular ? 0 : 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      if (response.data?.status) {
+        fetchCourses()
+      } else {
+        await window.customAlert(response.data?.message || 'Failed to update Popular status')
+      }
+    } catch (error) {
+      await window.customAlert(error.response?.data?.message || 'Error updating Popular status')
+    }
+  }
+
   const handleDelete = async (id) => {
   if (!await window.customConfirm('Are you sure you want to delete this course?')) {
     return
@@ -332,13 +353,14 @@ const fetchCategoriesDropdown = async () => {
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Training Highlights</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Status</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">LMS</th>
+                  <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Popular</th>
                   <th className="px-3 py-3 font-bold whitespace-nowrap">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="17" className="text-center py-8">Loading...</td>
+                    <td colSpan="18" className="text-center py-8">Loading...</td>
                   </tr>
                 ) : currentData.map((row, index) => (
                   <tr key={row._id} className="border-b border-slate-200 dark:border-gray-800/50 hover:bg-[#eaf3f8]/60 dark:hover:bg-indigo-900/20 transition-all duration-200 group">
@@ -444,6 +466,15 @@ const fetchCategoriesDropdown = async () => {
                         title={`Click to ${row.m_course_lms_status === 1 ? 'remove from' : 'add to'} the LMS course list`}
                       >
                         {row.m_course_lms_status === 1 ? 'On LMS' : 'Not on LMS'}
+                      </button>
+                    </td>
+                    <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
+                      <button
+                        onClick={() => handleTogglePopular(row._id, row.popular)}
+                        className={`px-3 py-1 rounded-full text-white text-xs whitespace-nowrap cursor-pointer transition-opacity hover:opacity-80 ${row.popular ? 'bg-[#144f36]' : 'bg-gray-500'}`}
+                        title={`Click to ${row.popular ? 'remove from' : 'mark as'} popular`}
+                      >
+                        {row.popular ? 'Popular' : 'Not Popular'}
                       </button>
                     </td>
                     <td className="px-3 py-3 align-middle">
