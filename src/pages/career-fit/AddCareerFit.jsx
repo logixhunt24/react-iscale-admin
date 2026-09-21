@@ -25,6 +25,9 @@ export default function AddCareerFit() {
   const [selectedCourseIds, setSelectedCourseIds] = useState([])
   const [courseSearch, setCourseSearch] = useState('')
 
+  const [allDestinations, setAllDestinations] = useState([])
+  const [selectedDestinationIds, setSelectedDestinationIds] = useState([])
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -39,6 +42,20 @@ export default function AddCareerFit() {
       }
     }
     fetchCourses()
+
+    const fetchDestinations = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const response = await axios.get(`${BASE_URL}/myadmin/hiring-destination/get-all`, {
+          params: { limit: 500 },
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setAllDestinations(response.data?.data || [])
+      } catch (err) {
+        console.error('Error fetching hiring destinations', err)
+      }
+    }
+    fetchDestinations()
   }, [])
 
   const handleChange = (e) => {
@@ -51,6 +68,12 @@ export default function AddCareerFit() {
     )
   }
 
+  const toggleDestination = (destinationId) => {
+    setSelectedDestinationIds((prev) =>
+      prev.includes(destinationId) ? prev.filter((id) => id !== destinationId) : [...prev, destinationId]
+    )
+  }
+
   const populate = (cf) => {
     setFormData({
       m_cf_title: cf.m_cf_title || '',
@@ -60,9 +83,10 @@ export default function AddCareerFit() {
       m_cf_status: (cf.m_cf_status ?? 1).toString()
     })
     setExistingIcon(cf.m_cf_icon || '')
-    // m_cf_courses arrives populated ({_id, m_course_title, ...}) from the
-    // API - just the ids are needed here for the checkbox list.
+    // m_cf_courses / m_cf_hiring_destinations arrive populated from the API
+    // - just the ids are needed here for the checkbox lists.
     setSelectedCourseIds((cf.m_cf_courses || []).map((c) => c._id || c))
+    setSelectedDestinationIds((cf.m_cf_hiring_destinations || []).map((d) => d._id || d))
   }
 
   useEffect(() => {
@@ -112,6 +136,7 @@ export default function AddCareerFit() {
       payload.append('m_cf_desc', formData.m_cf_desc)
       payload.append('m_cf_keywords', formData.m_cf_keywords)
       payload.append('m_cf_courses', JSON.stringify(selectedCourseIds))
+      payload.append('m_cf_hiring_destinations', JSON.stringify(selectedDestinationIds))
       payload.append('m_cf_order', Number(formData.m_cf_order) || 0)
       payload.append('m_cf_status', formData.m_cf_status)
       if (iconFile) payload.append('m_cf_icon', iconFile)
@@ -260,6 +285,34 @@ export default function AddCareerFit() {
             </div>
             {selectedCourseIds.length > 0 && (
               <p className="text-xs text-slate-500 mt-1">{selectedCourseIds.length} course(s) selected</p>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Prime Hiring Destinations</label>
+            <p className="text-xs text-slate-500 mb-1">Pick which logos show in this goal's "Prime Hiring Destinations" strip. If none are picked, the full logo gallery is shown instead. Manage the gallery itself under <button type="button" onClick={() => navigate('/career-fit/hiring-destinations')} className="underline text-[#144f36] font-semibold">Hiring Destinations</button>.</p>
+            <div className="border border-slate-300 dark:border-gray-700 rounded max-h-48 overflow-y-auto bg-white dark:bg-[#13111c]">
+              {allDestinations.length === 0 ? (
+                <p className="text-xs text-slate-400 p-3">No logos in the gallery yet.</p>
+              ) : (
+                allDestinations.map((d) => (
+                  <label key={d._id} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-gray-800 last:border-b-0 hover:bg-slate-50 dark:hover:bg-[#1f1b2e]/50 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedDestinationIds.includes(d._id)}
+                      onChange={() => toggleDestination(d._id)}
+                      className="accent-[#144f36]"
+                    />
+                    {d.m_phd_logo && (
+                      <img src={getImageUrl(d.m_phd_logo)} alt="" className="w-6 h-6 object-contain rounded border border-slate-200 dark:border-gray-700 bg-white" />
+                    )}
+                    {d.m_phd_name || 'Untitled logo'}
+                  </label>
+                ))
+              )}
+            </div>
+            {selectedDestinationIds.length > 0 && (
+              <p className="text-xs text-slate-500 mt-1">{selectedDestinationIds.length} logo(s) selected</p>
             )}
           </div>
 
