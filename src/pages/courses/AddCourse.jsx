@@ -27,6 +27,12 @@ export default function AddCourse() {
     { tier_name: 'Premium', price: '', offer_price: '' },
     { tier_name: 'Pro', price: '', offer_price: '' },
   ]);
+  // Positional against feeTiers above (included[0] -> feeTiers[0], etc),
+  // not keyed by tier name, so renaming a tier doesn't disconnect it from
+  // its checkboxes here.
+  const [feeFeatures, setFeeFeatures] = useState([
+    { label: '', included: [false, false, false] },
+  ]);
   const [order, setOrder] = useState('');
   const [views, setViews] = useState('0');
   const [reviews, setReviews] = useState('0');
@@ -77,6 +83,24 @@ export default function AddCourse() {
     fetchInstructors();
   }, []);
 
+  const updateFeatureLabel = (idx, label) => {
+    setFeeFeatures((prev) => prev.map((f, i) => (i === idx ? { ...f, label } : f)))
+  }
+  const toggleFeatureIncluded = (idx, tierIdx) => {
+    setFeeFeatures((prev) => prev.map((f, i) => {
+      if (i !== idx) return f
+      const included = [...f.included]
+      included[tierIdx] = !included[tierIdx]
+      return { ...f, included }
+    }))
+  }
+  const addFeatureRow = () => {
+    setFeeFeatures((prev) => [...prev, { label: '', included: [false, false, false] }])
+  }
+  const removeFeatureRow = (idx) => {
+    setFeeFeatures((prev) => prev.filter((_, i) => i !== idx))
+  }
+
   const handleSubmit = async () => {
     const titleVal = document.getElementById('course_title')?.value?.trim();
     const categoryVal = document.getElementById('course_category')?.value;
@@ -119,6 +143,8 @@ export default function AddCourse() {
         const validTiers = feeTiers.filter(t => t.tier_name?.trim() && Number(t.price) > 0);
         payload.append('m_course_fee_tiers', JSON.stringify(validTiers));
       }
+      const validFeatures = feeFeatures.filter(f => f.label.trim())
+      payload.append('m_course_fee_features', JSON.stringify(validFeatures))
 
       if (selectedInstructor) {
         payload.append('m_course_trainee', selectedInstructor);
@@ -312,6 +338,34 @@ export default function AddCourse() {
                   ))}
                 </div>
               )}
+
+              <div className="mt-5">
+                <label className="block text-[13px] font-bold text-slate-800 mb-1">Fee Feature Comparison</label>
+                <p className="text-xs text-slate-500 mb-2">Shown on the course page's pricing cards. Every feature shows under all 3 tiers - check the ones a tier includes, and the rest show struck through for that tier.</p>
+                <div className="space-y-2">
+                  {feeFeatures.map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-3 border border-slate-200 rounded p-2">
+                      <input
+                        type="text"
+                        value={feature.label}
+                        onChange={e => updateFeatureLabel(idx, e.target.value)}
+                        placeholder="Feature name"
+                        className="flex-1 border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]"
+                      />
+                      {feeTiers.map((tier, tIdx) => (
+                        <label key={tIdx} className="flex items-center gap-1 text-xs font-bold text-slate-700 whitespace-nowrap">
+                          <input type="checkbox" checked={feature.included[tIdx]} onChange={() => toggleFeatureIncluded(idx, tIdx)} />
+                          {tier.tier_name || `Tier ${tIdx + 1}`}
+                        </label>
+                      ))}
+                      <button type="button" onClick={() => removeFeatureRow(idx)} className="text-red-500 hover:text-red-700 text-xs font-bold px-2">✕</button>
+                    </div>
+                  ))}
+                </div>
+                <button type="button" onClick={addFeatureRow} className="mt-2 text-sm font-semibold text-[#144f36] hover:underline">
+                  + Add Feature
+                </button>
+              </div>
             </div>
           )}
 
