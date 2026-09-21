@@ -23,6 +23,7 @@ export default function EditCourse() {
     m_course_status: 1,
     m_course_status_web: 1,
     m_course_popular: 0,
+    m_course_badge_text: '',
     m_course_recomended: 0,
     m_course_lifetime: 0,
     m_course_description: '',
@@ -152,6 +153,7 @@ export default function EditCourse() {
         m_course_status: normStatus(course.status ?? course.m_course_status),
         m_course_status_web: normStatus(course.status_web ?? course.m_course_status_web),
         m_course_popular: isTruthy(course.popular ?? course.m_course_popular),
+        m_course_badge_text: course.badge_text ?? course.m_course_badge_text ?? '',
         m_course_recomended: isTruthy(course.recomended ?? course.recommended ?? course.m_course_recomended),
         m_course_lifetime: isTruthy(course.lifetime ?? course.m_course_lifetime),
         m_course_description: course.description ?? course.m_course_description ?? '',
@@ -438,6 +440,11 @@ export default function EditCourse() {
                 <ToggleSwitch id="m_course_lifetime" checked={courseData.m_course_lifetime === 1} onChange={handleChange} label="Add to lifetime courses" />
                 <ToggleSwitch id="m_course_certificate" checked={courseData.m_course_certificate === 1} onChange={handleChange} label="Certificate Show" />
                 <ToggleSwitch id="m_course_live_class" checked={courseData.m_course_live_class === 1} onChange={handleChange} label="Live Class Show" />
+              </div>
+              <div className="mt-3">
+                <label className="block text-[13px] font-bold text-slate-800 mb-1">Card Badge Text</label>
+                <p className="text-xs text-slate-500 mb-1">Shown as a small ribbon on the nav menu's course card — any text (e.g. "Popular", "New", "50% Off"). Leave empty for no ribbon.</p>
+                <input id="m_course_badge_text" type="text" maxLength={40} placeholder="e.g. Popular" value={courseData.m_course_badge_text || ''} onChange={handleChange} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
               </div>
             </div>
             <div>

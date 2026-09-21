@@ -39,6 +39,7 @@ export default function AddCourse() {
   const [certificateShow, setCertificateShow] = useState(false);
   const [liveClassShow, setLiveClassShow] = useState(false);
   const [popularShow, setPopularShow] = useState(false);
+  const [badgeText, setBadgeText] = useState('');
   const [recommendedShow, setRecommendedShow] = useState(false);
   const [lifetimeShow, setLifetimeShow] = useState(false);
   const [price, setPrice] = useState('');
@@ -127,6 +128,7 @@ export default function AddCourse() {
       const recommendedVal = recommendedShow ? '1' : '0';
       const lifetimeVal = lifetimeShow ? '1' : '0';
       payload.append('m_course_popular', popularVal);
+      payload.append('m_course_badge_text', badgeText.trim());
       payload.append('m_course_recomended', recommendedVal);
       payload.append('m_course_lifetime', lifetimeVal);
       payload.append('popular', popularVal);
@@ -358,6 +360,11 @@ export default function AddCourse() {
                 <ToggleSwitch id="course_lifetime" checked={lifetimeShow} onChange={e => setLifetimeShow(e.target.checked)} label="Add to lifetime courses" />
                 <ToggleSwitch id="course_certificate" checked={certificateShow} onChange={e => setCertificateShow(e.target.checked)} label="Is Certificate Show" />
                 <ToggleSwitch id="course_live_class" checked={liveClassShow} onChange={e => setLiveClassShow(e.target.checked)} label="Is Live Class Show" />
+              </div>
+              <div className="mt-3">
+                <label className="block text-[13px] font-bold text-slate-800 mb-1">Card Badge Text</label>
+                <p className="text-xs text-slate-500 mb-1">Shown as a small ribbon on the nav menu's course card — any text (e.g. "Popular", "New", "50% Off"). Leave empty for no ribbon.</p>
+                <input type="text" maxLength={40} placeholder="e.g. Popular" value={badgeText} onChange={e => setBadgeText(e.target.value)} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
               </div>
             </div>
             <div>

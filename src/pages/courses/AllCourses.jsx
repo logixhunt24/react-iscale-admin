@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Eye, Edit2, Trash2, Book, X } from 'lucide-react'
+import { Eye, Edit2, Trash2, Book, X, Check } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -20,6 +20,11 @@ export default function AllCourses() {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentVideoUrl, setCurrentVideoUrl] = useState('')
+
+  // Draft text per course id for the inline "Card Badge" editor below,
+  // separate from `courses` so typing doesn't need a round-trip per
+  // keystroke - only saved (and courses re-synced) on click.
+  const [badgeDrafts, setBadgeDrafts] = useState({})
 
   const getYouTubeId = (url) => {
     if (!url || typeof url !== 'string') return null;
@@ -121,6 +126,7 @@ const fetchCategoriesDropdown = async () => {
           console.log("=== FIRST COURSE RAW DATA ===", allCourses[0]);
         }
         setCourses(allCourses)
+        setBadgeDrafts(Object.fromEntries(allCourses.map((c) => [c._id, c.badge_text || ''])))
         setTotalEntries(response.data.pagination?.total || 0)
         setTotalPages(response.data.pagination?.totalPages || 1)
       } else {
@@ -153,24 +159,26 @@ const fetchCategoriesDropdown = async () => {
     }
   }
 
-  // No dedicated popular-toggle endpoint exists (unlike LMS status), so this
-  // reuses update-course with just the one field - updateCourse only writes
-  // fields actually present in the body, so it's a safe partial update.
-  const handleTogglePopular = async (id, currentlyPopular) => {
+  // Free-text badge shown on the nav mega-menu's course card (e.g.
+  // "Popular", "New", "50% Off") - any text, not a fixed label. No
+  // dedicated endpoint, so this reuses update-course with just the one
+  // field - updateCourse only writes fields actually present in the body,
+  // so it's a safe partial update.
+  const handleSaveBadgeText = async (id) => {
     try {
       const token = localStorage.getItem('token')
       const response = await axios.put(
         `${BASE_URL}/myadmin/course/update-course/${id}`,
-        { m_course_popular: currentlyPopular ? 0 : 1 },
+        { m_course_badge_text: badgeDrafts[id] ?? '' },
         { headers: { Authorization: `Bearer ${token}` } }
       )
       if (response.data?.status) {
         fetchCourses()
       } else {
-        await window.customAlert(response.data?.message || 'Failed to update Popular status')
+        await window.customAlert(response.data?.message || 'Failed to update card badge')
       }
     } catch (error) {
-      await window.customAlert(error.response?.data?.message || 'Error updating Popular status')
+      await window.customAlert(error.response?.data?.message || 'Error updating card badge')
     }
   }
 
@@ -353,7 +361,7 @@ const fetchCategoriesDropdown = async () => {
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Training Highlights</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Status</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">LMS</th>
-                  <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Popular</th>
+                  <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Card Badge</th>
                   <th className="px-3 py-3 font-bold whitespace-nowrap">Action</th>
                 </tr>
               </thead>
@@ -469,13 +477,26 @@ const fetchCategoriesDropdown = async () => {
                       </button>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button
-                        onClick={() => handleTogglePopular(row._id, row.popular)}
-                        className={`px-3 py-1 rounded-full text-white text-xs whitespace-nowrap cursor-pointer transition-opacity hover:opacity-80 ${row.popular ? 'bg-[#144f36]' : 'bg-gray-500'}`}
-                        title={`Click to ${row.popular ? 'remove from' : 'mark as'} popular`}
-                      >
-                        {row.popular ? 'Popular' : 'Not Popular'}
-                      </button>
+                      <div className="flex items-center gap-1.5 w-36">
+                        <input
+                          type="text"
+                          maxLength={40}
+                          placeholder="e.g. Popular, New"
+                          value={badgeDrafts[row._id] ?? ''}
+                          onChange={(e) => setBadgeDrafts((prev) => ({ ...prev, [row._id]: e.target.value }))}
+                          onKeyDown={(e) => { if (e.key === 'Enter') handleSaveBadgeText(row._id) }}
+                          className="w-full border border-slate-300 dark:border-gray-700 rounded px-2 py-1 text-xs outline-none bg-white dark:bg-[#13111c] focus:border-[#144f36]"
+                        />
+                        {(badgeDrafts[row._id] ?? '') !== (row.badge_text || '') && (
+                          <button
+                            onClick={() => handleSaveBadgeText(row._id)}
+                            title="Save badge text"
+                            className="bg-[#144f36] text-white p-1 rounded hover:bg-[#0f3d2a] transition-colors shrink-0"
+                          >
+                            <Check size={12} />
+                          </button>
+                        )}
+                      </div>
                     </td>
                     <td className="px-3 py-3 align-middle">
                       <div className="flex gap-1.5">
