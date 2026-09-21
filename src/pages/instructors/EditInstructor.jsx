@@ -16,6 +16,7 @@ export default function EditInstructor() {
     m_instructor_status: '1',
     m_linkedin_profile: '',
     m_instructor_bio: '',
+    m_instructor_designation: '',
     m_instructor_experience: '',
     m_instructor_order: ''
   })
@@ -44,6 +45,7 @@ export default function EditInstructor() {
               m_instructor_status: inst.m_instructor_status !== undefined ? inst.m_instructor_status.toString() : '1',
               m_linkedin_profile: inst.m_linkedin_profile || '',
               m_instructor_bio: inst.m_instructor_bio || '',
+              m_instructor_designation: inst.m_instructor_designation || '',
               m_instructor_experience: inst.m_instructor_experience || '',
               m_instructor_order: inst.m_instructor_order || ''
             })
@@ -83,6 +85,7 @@ export default function EditInstructor() {
       payload.append('m_instructor_email', formData.m_instructor_email)
       payload.append('m_instructor_phone', formData.m_instructor_phone)
       payload.append('m_instructor_bio', formData.m_instructor_bio)
+      payload.append('m_instructor_designation', formData.m_instructor_designation)
       payload.append('m_linkedin_profile', formData.m_linkedin_profile)
       payload.append('m_instructor_experience', formData.m_instructor_experience)
       payload.append('m_instructor_skills', JSON.stringify(skillsArray))
@@ -190,8 +193,19 @@ export default function EditInstructor() {
               />
             </div>
             <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Designation</label>
+              <input
+                type="text"
+                name="m_instructor_designation"
+                value={formData.m_instructor_designation}
+                onChange={handleChange}
+                placeholder="e.g. Senior Data Scientist at Google"
+                className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+              />
+            </div>
+            <div>
               <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Bio</label>
-              <textarea 
+              <textarea
                 name="m_instructor_bio"
                 value={formData.m_instructor_bio}
                 onChange={handleChange}

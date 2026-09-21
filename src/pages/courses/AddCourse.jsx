@@ -33,6 +33,9 @@ export default function AddCourse() {
   const [ratings, setRatings] = useState('0');
   const [durationApp, setDurationApp] = useState('');
   const [durationWeb, setDurationWeb] = useState('');
+  const [commencementDate, setCommencementDate] = useState('');
+  const [deliveryMode, setDeliveryMode] = useState('');
+  const [jobAssistance, setJobAssistance] = useState('');
   const [appLink, setAppLink] = useState('');
   const [webLink, setWebLink] = useState('');
   const [graphyInstruction, setGraphyInstruction] = useState('');
@@ -138,6 +141,9 @@ export default function AddCourse() {
       payload.append('m_course_video_link', document.getElementById('course_video_link')?.value || '');
       payload.append('m_course_duration_app', durationApp || '');
       payload.append('m_course_duration_web', durationWeb || '');
+      payload.append('m_course_commencement_date', commencementDate || '');
+      payload.append('m_course_delivery_mode', deliveryMode || '');
+      payload.append('m_course_job_assistance', jobAssistance || '');
       payload.append('m_course_order', order || '');
       payload.append('m_course_view', views || '0');
       payload.append('m_course_reviews', reviews || '0');
@@ -313,6 +319,23 @@ export default function AddCourse() {
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Duration (Web)</label>
               <input type="number" min="0" step="any" placeholder="Course Duration In Web" value={durationWeb} onChange={e => setDurationWeb(e.target.value)} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Date of Commencement</label>
+              <p className="text-xs text-slate-500 mb-1">Shown as a hero stat on the course page (e.g. "5th Jan 2026" or "Batch Starts Soon").</p>
+              <input type="text" placeholder="e.g. 5th Jan 2026" value={commencementDate} onChange={e => setCommencementDate(e.target.value)} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Delivery Mode</label>
+              <p className="text-xs text-slate-500 mb-1">e.g. Live, Self-Paced, Hybrid.</p>
+              <input type="text" placeholder="e.g. Live" value={deliveryMode} onChange={e => setDeliveryMode(e.target.value)} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Job Assistance</label>
+              <p className="text-xs text-slate-500 mb-1">e.g. Included, Not Included, 100% Placement Support.</p>
+              <input type="text" placeholder="e.g. Included" value={jobAssistance} onChange={e => setJobAssistance(e.target.value)} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">

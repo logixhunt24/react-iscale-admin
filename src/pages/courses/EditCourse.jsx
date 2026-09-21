@@ -30,6 +30,9 @@ export default function EditCourse() {
     m_course_video_link: '',
     m_course_duration_app: '',
     m_course_duration_web: '',
+    m_course_commencement_date: '',
+    m_course_delivery_mode: '',
+    m_course_job_assistance: '',
     m_course_order: '',
     m_course_view: '0',
     m_course_reviews: '0',
@@ -160,6 +163,9 @@ export default function EditCourse() {
         m_course_video_link: course.video_link ?? course.m_course_video_link ?? '',
         m_course_duration_app: course.duration_app ?? course.m_course_duration_app ?? '',
         m_course_duration_web: course.duration_web ?? course.m_course_duration_web ?? '',
+        m_course_commencement_date: course.commencement_date ?? course.m_course_commencement_date ?? '',
+        m_course_delivery_mode: course.delivery_mode ?? course.m_course_delivery_mode ?? '',
+        m_course_job_assistance: course.job_assistance ?? course.m_course_job_assistance ?? '',
         m_course_order: course.order ?? course.m_course_order ?? '',
         m_course_view: course.view ?? course.m_course_view ?? '0',
         m_course_reviews: course.reviews ?? course.m_course_reviews ?? '0',
@@ -391,6 +397,24 @@ export default function EditCourse() {
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Duration (Web)</label>
               <input id="m_course_duration_web" type="number" min="0" step="any" value={courseData.m_course_duration_web} onChange={handleChange} placeholder="Course Duration In Web" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Date of Commencement</label>
+              <p className="text-xs text-slate-500 mb-1">Shown as a hero stat on the course page (e.g. "5th Jan 2026" or "Batch Starts Soon").</p>
+              <input id="m_course_commencement_date" type="text" value={courseData.m_course_commencement_date} onChange={handleChange} placeholder="e.g. 5th Jan 2026" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Delivery Mode</label>
+              <p className="text-xs text-slate-500 mb-1">e.g. Live, Self-Paced, Hybrid.</p>
+              <input id="m_course_delivery_mode" type="text" value={courseData.m_course_delivery_mode} onChange={handleChange} placeholder="e.g. Live" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Job Assistance</label>
+              <p className="text-xs text-slate-500 mb-1">e.g. Included, Not Included, 100% Placement Support.</p>
+              <input id="m_course_job_assistance" type="text" value={courseData.m_course_job_assistance} onChange={handleChange} placeholder="e.g. Included" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
             </div>
           </div>
 

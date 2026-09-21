@@ -13,7 +13,10 @@ export default function AddInstructor() {
     m_instructor_phone: '',
     m_instructor_skills: '',
     m_instructor_status: '1',
-    m_linkedin_profile: ''
+    m_linkedin_profile: '',
+    m_instructor_designation: '',
+    m_instructor_bio: '',
+    m_instructor_experience: ''
   })
   const [profileFile, setProfileFile] = useState(null)
 
@@ -47,6 +50,9 @@ export default function AddInstructor() {
       payload.append('m_instructor_skills', JSON.stringify(skillsArray))
       payload.append('m_instructor_status', formData.m_instructor_status)
       payload.append('m_linkedin_profile', formData.m_linkedin_profile)
+      payload.append('m_instructor_designation', formData.m_instructor_designation)
+      payload.append('m_instructor_bio', formData.m_instructor_bio)
+      payload.append('m_instructor_experience', formData.m_instructor_experience)
       
       if (profileFile) {
         payload.append('m_instructor_profile', profileFile)
@@ -139,12 +145,45 @@ export default function AddInstructor() {
             </div>
             <div>
               <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Linkedin Url</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="m_linkedin_profile"
                 value={formData.m_linkedin_profile}
                 onChange={handleChange}
                 placeholder="Linkedin URL"
+                className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Designation</label>
+              <input
+                type="text"
+                name="m_instructor_designation"
+                value={formData.m_instructor_designation}
+                onChange={handleChange}
+                placeholder="e.g. Senior Data Scientist at Google"
+                className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Bio</label>
+              <textarea
+                name="m_instructor_bio"
+                value={formData.m_instructor_bio}
+                onChange={handleChange}
+                placeholder="Instructor Bio"
+                rows="1"
+                className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Experience</label>
+              <input
+                type="text"
+                name="m_instructor_experience"
+                value={formData.m_instructor_experience}
+                onChange={handleChange}
+                placeholder="e.g. 5 Years"
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
               />
             </div>
