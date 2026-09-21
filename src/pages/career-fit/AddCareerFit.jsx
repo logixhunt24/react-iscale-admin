@@ -1,8 +1,20 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { Plus, Trash2 } from 'lucide-react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
+import IconPicker from '../../components/common/IconPicker'
+
+// Same 3 chips the section originally hardcoded - used to pre-fill new
+// goals and any existing goal that hasn't set its own chips yet, so the
+// form always shows what will actually render (the frontend falls back to
+// these same 3 whenever a goal's m_cf_feature_chips is empty).
+const DEFAULT_FEATURE_CHIPS = [
+  { label: 'Live Mentor Support', icon: 'Users' },
+  { label: 'Hands-on Projects', icon: 'Rocket' },
+  { label: 'Certificate Included', icon: 'BadgeCheck' },
+]
 
 export default function AddCareerFit() {
   const navigate = useNavigate()
@@ -27,6 +39,8 @@ export default function AddCareerFit() {
 
   const [allDestinations, setAllDestinations] = useState([])
   const [selectedDestinationIds, setSelectedDestinationIds] = useState([])
+
+  const [featureChips, setFeatureChips] = useState(DEFAULT_FEATURE_CHIPS)
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -74,6 +88,18 @@ export default function AddCareerFit() {
     )
   }
 
+  const updateChip = (index, field, value) => {
+    setFeatureChips((prev) => prev.map((c, i) => (i === index ? { ...c, [field]: value } : c)))
+  }
+
+  const addChip = () => {
+    setFeatureChips((prev) => [...prev, { label: '', icon: 'Sparkles' }])
+  }
+
+  const removeChip = (index) => {
+    setFeatureChips((prev) => prev.filter((_, i) => i !== index))
+  }
+
   const populate = (cf) => {
     setFormData({
       m_cf_title: cf.m_cf_title || '',
@@ -87,6 +113,7 @@ export default function AddCareerFit() {
     // - just the ids are needed here for the checkbox lists.
     setSelectedCourseIds((cf.m_cf_courses || []).map((c) => c._id || c))
     setSelectedDestinationIds((cf.m_cf_hiring_destinations || []).map((d) => d._id || d))
+    setFeatureChips(cf.m_cf_feature_chips?.length > 0 ? cf.m_cf_feature_chips : DEFAULT_FEATURE_CHIPS)
   }
 
   useEffect(() => {
@@ -137,6 +164,7 @@ export default function AddCareerFit() {
       payload.append('m_cf_keywords', formData.m_cf_keywords)
       payload.append('m_cf_courses', JSON.stringify(selectedCourseIds))
       payload.append('m_cf_hiring_destinations', JSON.stringify(selectedDestinationIds))
+      payload.append('m_cf_feature_chips', JSON.stringify(featureChips.filter((c) => c.label.trim())))
       payload.append('m_cf_order', Number(formData.m_cf_order) || 0)
       payload.append('m_cf_status', formData.m_cf_status)
       if (iconFile) payload.append('m_cf_icon', iconFile)
@@ -314,6 +342,42 @@ export default function AddCareerFit() {
             {selectedDestinationIds.length > 0 && (
               <p className="text-xs text-slate-500 mt-1">{selectedDestinationIds.length} logo(s) selected</p>
             )}
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Feature Chips</label>
+            <p className="text-xs text-slate-500 mb-2">The small value-prop chips under the description (e.g. "Live Mentor Support"). Each has its own icon, picked from the icon list.</p>
+            <div className="space-y-2">
+              {featureChips.map((chip, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <div className="w-40">
+                    <IconPicker value={chip.icon} onChange={(icon) => updateChip(index, 'icon', icon)} />
+                  </div>
+                  <input
+                    type="text"
+                    value={chip.label}
+                    onChange={(e) => updateChip(index, 'label', e.target.value)}
+                    placeholder="Chip text"
+                    className="flex-1 border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeChip(index)}
+                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition-colors flex-shrink-0"
+                    title="Remove chip"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addChip}
+              className="mt-2 flex items-center gap-1 text-sm font-semibold text-[#144f36] hover:underline"
+            >
+              <Plus size={14} /> Add Chip
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
