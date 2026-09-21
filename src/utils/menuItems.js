@@ -207,7 +207,8 @@ export const menuItems = [
       { id: 'news-updates', label: 'News & Updates', path: '/news-updates' },
       { id: 'our-allied', label: 'Our Allied', path: '/our-allied' },
       { id: 'our-clients', label: 'Our Clients', path: '/our-clients' },
-      { id: 'career-fit', label: 'Career Fit', path: '/career-fit' }
+      { id: 'career-fit', label: 'Career Fit', path: '/career-fit' },
+      { id: 'hiring-destinations', label: 'Hiring Destinations', path: '/career-fit/hiring-destinations' }
     ]
   },
   {

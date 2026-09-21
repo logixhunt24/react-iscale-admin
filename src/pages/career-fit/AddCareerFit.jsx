@@ -21,8 +21,34 @@ export default function AddCareerFit() {
     m_cf_status: '1'
   })
 
+  const [allCourses, setAllCourses] = useState([])
+  const [selectedCourseIds, setSelectedCourseIds] = useState([])
+  const [courseSearch, setCourseSearch] = useState('')
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const response = await axios.get(`${BASE_URL}/myadmin/course/dropdown`, {
+          params: { limit: 500 },
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setAllCourses(response.data?.data || [])
+      } catch (err) {
+        console.error('Error fetching course dropdown', err)
+      }
+    }
+    fetchCourses()
+  }, [])
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const toggleCourse = (courseId) => {
+    setSelectedCourseIds((prev) =>
+      prev.includes(courseId) ? prev.filter((id) => id !== courseId) : [...prev, courseId]
+    )
   }
 
   const populate = (cf) => {
@@ -34,6 +60,9 @@ export default function AddCareerFit() {
       m_cf_status: (cf.m_cf_status ?? 1).toString()
     })
     setExistingIcon(cf.m_cf_icon || '')
+    // m_cf_courses arrives populated ({_id, m_course_title, ...}) from the
+    // API - just the ids are needed here for the checkbox list.
+    setSelectedCourseIds((cf.m_cf_courses || []).map((c) => c._id || c))
   }
 
   useEffect(() => {
@@ -82,6 +111,7 @@ export default function AddCareerFit() {
       payload.append('m_cf_title', formData.m_cf_title.trim())
       payload.append('m_cf_desc', formData.m_cf_desc)
       payload.append('m_cf_keywords', formData.m_cf_keywords)
+      payload.append('m_cf_courses', JSON.stringify(selectedCourseIds))
       payload.append('m_cf_order', Number(formData.m_cf_order) || 0)
       payload.append('m_cf_status', formData.m_cf_status)
       if (iconFile) payload.append('m_cf_icon', iconFile)
@@ -197,6 +227,40 @@ export default function AddCareerFit() {
               placeholder="e.g. ai, ml, machine learning"
               className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
             />
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Courses</label>
+            <p className="text-xs text-slate-500 mb-1">Pick specific courses to show under this goal. If none are picked, the Keywords match above is used instead.</p>
+            <input
+              type="text"
+              value={courseSearch}
+              onChange={(e) => setCourseSearch(e.target.value)}
+              placeholder="Search courses..."
+              className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] mb-2"
+            />
+            <div className="border border-slate-300 dark:border-gray-700 rounded max-h-48 overflow-y-auto bg-white dark:bg-[#13111c]">
+              {allCourses.length === 0 ? (
+                <p className="text-xs text-slate-400 p-3">Loading courses...</p>
+              ) : (
+                allCourses
+                  .filter((c) => c.m_course_title?.toLowerCase().includes(courseSearch.toLowerCase()))
+                  .map((c) => (
+                    <label key={c._id} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-gray-800 last:border-b-0 hover:bg-slate-50 dark:hover:bg-[#1f1b2e]/50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedCourseIds.includes(c._id)}
+                        onChange={() => toggleCourse(c._id)}
+                        className="accent-[#144f36]"
+                      />
+                      {c.m_course_title}
+                    </label>
+                  ))
+              )}
+            </div>
+            {selectedCourseIds.length > 0 && (
+              <p className="text-xs text-slate-500 mt-1">{selectedCourseIds.length} course(s) selected</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
