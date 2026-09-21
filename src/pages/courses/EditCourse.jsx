@@ -46,6 +46,7 @@ export default function EditCourse() {
   });
 
   const [bannerFile, setBannerFile] = useState(null);
+  const [megaBannerFile, setMegaBannerFile] = useState(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [feeStructureFile, setFeeStructureFile] = useState(null);
 
@@ -255,6 +256,7 @@ export default function EditCourse() {
       }
 
       if (bannerFile) payload.append('m_course_banner', bannerFile);
+      if (megaBannerFile) payload.append('m_course_mega_banner', megaBannerFile);
       if (pdfFile) payload.append('m_course_pdf', pdfFile);
       if (String(courseData.m_course_type) === '2' && feeStructureFile) payload.append('m_course_feestructure', feeStructureFile);
       newPartnerLogoFiles.forEach(file => payload.append('m_course_partner_logos', file));
@@ -441,6 +443,11 @@ export default function EditCourse() {
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Image (Thumbnail)</label>
               <input type="file" accept="image/*" onChange={(e) => setBannerFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Nav Menu Card Image</label>
+              <p className="text-xs text-slate-500 mb-1">Shown in the site nav's course dropdown cards instead of the banner above. Optional — falls back to the Course Image if left empty.</p>
+              <input type="file" accept="image/*" onChange={(e) => setMegaBannerFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
             </div>
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Course PDF</label>
