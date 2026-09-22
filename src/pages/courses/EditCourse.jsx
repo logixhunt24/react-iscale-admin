@@ -60,9 +60,11 @@ export default function EditCourse() {
     { tier_name: 'Premium', price: '', offer_price: '' },
     { tier_name: 'Pro', price: '', offer_price: '' },
   ]);
-  // Positional against feeTiers above (included[0] -> feeTiers[0], etc).
+  // Positional against feeTiers above (included[0]/values[0] -> feeTiers[0],
+  // etc). row_type "check" uses `included` (checkmark/cross per tier);
+  // row_type "text" uses `values` (free text per tier, e.g. a duration).
   const [feeFeatures, setFeeFeatures] = useState([
-    { label: '', included: [false, false, false] },
+    { label: '', row_type: 'check', included: [false, false, false], values: ['', '', ''] },
   ]);
   const [existingPartnerLogos, setExistingPartnerLogos] = useState([]); // [{url, public_id}]
   const [removedPartnerLogoIds, setRemovedPartnerLogoIds] = useState([]);
@@ -90,8 +92,19 @@ export default function EditCourse() {
       return { ...f, included }
     }))
   }
+  const updateFeatureRowType = (idx, row_type) => {
+    setFeeFeatures((prev) => prev.map((f, i) => (i === idx ? { ...f, row_type } : f)))
+  }
+  const updateFeatureValue = (idx, tierIdx, value) => {
+    setFeeFeatures((prev) => prev.map((f, i) => {
+      if (i !== idx) return f
+      const values = [...(f.values || ['', '', ''])]
+      values[tierIdx] = value
+      return { ...f, values }
+    }))
+  }
   const addFeatureRow = () => {
-    setFeeFeatures((prev) => [...prev, { label: '', included: [false, false, false] }])
+    setFeeFeatures((prev) => [...prev, { label: '', row_type: 'check', included: [false, false, false], values: ['', '', ''] }])
   }
   const removeFeatureRow = (idx) => {
     setFeeFeatures((prev) => prev.filter((_, i) => i !== idx))
@@ -219,7 +232,9 @@ export default function EditCourse() {
       if (Array.isArray(savedFeatures) && savedFeatures.length > 0) {
         setFeeFeatures(savedFeatures.map((f) => ({
           label: f.label || '',
+          row_type: f.row_type === 'text' ? 'text' : 'check',
           included: [0, 1, 2].map((i) => !!(f.included && f.included[i])),
+          values: [0, 1, 2].map((i) => (f.values && f.values[i]) || ''),
         })));
       }
     };
@@ -425,23 +440,44 @@ export default function EditCourse() {
 
               <div className="mt-5">
                 <label className="block text-[13px] font-bold text-slate-800 mb-1">Fee Feature Comparison</label>
-                <p className="text-xs text-slate-500 mb-2">Shown on the course page's pricing cards. Every feature shows under all 3 tiers - check the ones a tier includes, and the rest show struck through for that tier.</p>
+                <p className="text-xs text-slate-500 mb-2">Shown on the course page's pricing table. A "Yes/No" row shows a check or cross per tier (unchecked ones show struck through). A "Text" row shows different text per tier instead - e.g. a duration like "6 Months" vs "2 Year".</p>
                 <div className="space-y-2">
                   {feeFeatures.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-3 border border-slate-200 rounded p-2">
+                    <div key={idx} className="flex items-center gap-3 border border-slate-200 rounded p-2 flex-wrap">
                       <input
                         type="text"
                         value={feature.label}
                         onChange={e => updateFeatureLabel(idx, e.target.value)}
                         placeholder="Feature name"
-                        className="flex-1 border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]"
+                        className="flex-1 min-w-[160px] border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]"
                       />
-                      {feeTiers.map((tier, tIdx) => (
-                        <label key={tIdx} className="flex items-center gap-1 text-xs font-bold text-slate-700 whitespace-nowrap">
-                          <input type="checkbox" checked={feature.included[tIdx]} onChange={() => toggleFeatureIncluded(idx, tIdx)} />
-                          {tier.tier_name || `Tier ${tIdx + 1}`}
-                        </label>
-                      ))}
+                      <select
+                        value={feature.row_type || 'check'}
+                        onChange={e => updateFeatureRowType(idx, e.target.value)}
+                        className="border border-slate-300 rounded px-2 py-1.5 text-xs font-semibold outline-none focus:border-[#144f36]"
+                      >
+                        <option value="check">Yes/No</option>
+                        <option value="text">Text</option>
+                      </select>
+                      {feature.row_type === 'text' ? (
+                        feeTiers.map((tier, tIdx) => (
+                          <input
+                            key={tIdx}
+                            type="text"
+                            value={feature.values?.[tIdx] || ''}
+                            onChange={e => updateFeatureValue(idx, tIdx, e.target.value)}
+                            placeholder={tier.tier_name || `Tier ${tIdx + 1}`}
+                            className="w-28 border border-slate-300 rounded px-2 py-1.5 text-xs outline-none focus:border-[#144f36]"
+                          />
+                        ))
+                      ) : (
+                        feeTiers.map((tier, tIdx) => (
+                          <label key={tIdx} className="flex items-center gap-1 text-xs font-bold text-slate-700 whitespace-nowrap">
+                            <input type="checkbox" checked={feature.included[tIdx]} onChange={() => toggleFeatureIncluded(idx, tIdx)} />
+                            {tier.tier_name || `Tier ${tIdx + 1}`}
+                          </label>
+                        ))
+                      )}
                       <button type="button" onClick={() => removeFeatureRow(idx)} className="text-red-500 hover:text-red-700 text-xs font-bold px-2">✕</button>
                     </div>
                   ))}
