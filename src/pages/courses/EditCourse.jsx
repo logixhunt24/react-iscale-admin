@@ -44,7 +44,6 @@ export default function EditCourse() {
     m_course_web_g_link: '',
     m_course_graphy_instruction: '',
     m_course_fee_structure: '',
-    m_course_trainee: '',
     m_course_price: '',
     m_course_offer_price: ''
   });
@@ -66,6 +65,8 @@ export default function EditCourse() {
   const [feeFeatures, setFeeFeatures] = useState([
     { label: '', row_type: 'check', included: [false, false, false], values: ['', '', ''] },
   ]);
+  const [selectedInstructorIds, setSelectedInstructorIds] = useState([]);
+  const [instructorSearch, setInstructorSearch] = useState('');
   const [existingPartnerLogos, setExistingPartnerLogos] = useState([]); // [{url, public_id}]
   const [removedPartnerLogoIds, setRemovedPartnerLogoIds] = useState([]);
   const [newPartnerLogoFiles, setNewPartnerLogoFiles] = useState([]);
@@ -108,6 +109,11 @@ export default function EditCourse() {
   }
   const removeFeatureRow = (idx) => {
     setFeeFeatures((prev) => prev.filter((_, i) => i !== idx))
+  }
+  const toggleInstructor = (instructorId) => {
+    setSelectedInstructorIds((prev) =>
+      prev.includes(instructorId) ? prev.filter((id) => id !== instructorId) : [...prev, instructorId]
+    )
   }
 
   useEffect(() => {
@@ -212,10 +218,16 @@ export default function EditCourse() {
         m_course_web_g_link: course.web_g_link ?? course.m_course_web_g_link ?? '',
         m_course_graphy_instruction: course.graphy_instruction ?? course.m_course_graphy_instruction ?? '',
         m_course_fee_structure: course.fee_structure ?? course.m_course_fee_structure ?? '',
-        m_course_trainee: course.trainees?.[0]?.trainee_id ?? course.m_course_trainee?.[0]?._id ?? course.m_course_trainee?.[0] ?? '',
         m_course_price: course.price ?? course.m_course_price ?? '',
         m_course_offer_price: course.offer_price ?? course.m_course_offer_price ?? ''
       });
+
+      const trainees = course.trainees ?? course.m_course_trainee ?? [];
+      setSelectedInstructorIds(
+        (Array.isArray(trainees) ? trainees : [])
+          .map((t) => t.trainee_id ?? t._id ?? t)
+          .filter(Boolean)
+      );
 
       const tiers = course.fee_tiers ?? course.m_course_fee_tiers ?? [];
       setPricingMode(String(course.pricing_mode ?? course.m_course_pricing_mode ?? 1));
@@ -309,6 +321,15 @@ export default function EditCourse() {
       }
       const validFeatures = feeFeatures.filter(f => f.label.trim())
       payload.append('m_course_fee_features', JSON.stringify(validFeatures))
+
+      // Always resend this field, even with nothing selected (as an empty
+      // string) - the backend treats a present-but-empty value as "clear
+      // the instructor list", vs. an absent field as "leave it alone".
+      if (selectedInstructorIds.length > 0) {
+        selectedInstructorIds.forEach((instructorId) => payload.append('m_course_trainee', instructorId));
+      } else {
+        payload.append('m_course_trainee', '');
+      }
 
       if (bannerFile) payload.append('m_course_banner', bannerFile);
       if (megaBannerFile) payload.append('m_course_mega_banner', megaBannerFile);
@@ -593,13 +614,36 @@ export default function EditCourse() {
                 </div>
               )}
               <div>
-                <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Instructor</label>
-                <select id="m_course_trainee" value={courseData.m_course_trainee} onChange={handleChange} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm bg-white outline-none">
-                  <option value="">- - - Select - - -</option>
-                  {instructors.map((ins) => (
-                    <option key={ins._id} value={ins._id}>{ins.name}</option>
-                  ))}
-                </select>
+                <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Instructor(s)</label>
+                <input
+                  type="text"
+                  value={instructorSearch}
+                  onChange={(e) => setInstructorSearch(e.target.value)}
+                  placeholder="Search instructors..."
+                  className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36] mb-2"
+                />
+                <div className="border border-slate-300 rounded max-h-48 overflow-y-auto bg-white">
+                  {instructors.length === 0 ? (
+                    <p className="text-xs text-slate-400 p-3">Loading instructors...</p>
+                  ) : (
+                    instructors
+                      .filter((ins) => ins.name?.toLowerCase().includes(instructorSearch.toLowerCase()))
+                      .map((ins) => (
+                        <label key={ins._id} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedInstructorIds.includes(ins._id)}
+                            onChange={() => toggleInstructor(ins._id)}
+                            className="accent-[#144f36]"
+                          />
+                          {ins.name}
+                        </label>
+                      ))
+                  )}
+                </div>
+                {selectedInstructorIds.length > 0 && (
+                  <p className="text-xs text-slate-500 mt-1">{selectedInstructorIds.length} instructor(s) selected</p>
+                )}
               </div>
             </div>
           </div>

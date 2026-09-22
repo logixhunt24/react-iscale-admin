@@ -19,7 +19,8 @@ export default function AddCourse() {
 
   // Form state
   const [description, setDescription] = useState('');
-  const [selectedInstructor, setSelectedInstructor] = useState('');
+  const [selectedInstructorIds, setSelectedInstructorIds] = useState([]);
+  const [instructorSearch, setInstructorSearch] = useState('');
   const [courseType, setCourseType] = useState('1');
   const [pricingMode, setPricingMode] = useState('1'); // 1 = single price, 2 = 3-tier pricing
   const [feeTiers, setFeeTiers] = useState([
@@ -113,6 +114,11 @@ export default function AddCourse() {
   const removeFeatureRow = (idx) => {
     setFeeFeatures((prev) => prev.filter((_, i) => i !== idx))
   }
+  const toggleInstructor = (instructorId) => {
+    setSelectedInstructorIds((prev) =>
+      prev.includes(instructorId) ? prev.filter((id) => id !== instructorId) : [...prev, instructorId]
+    )
+  }
 
   const handleSubmit = async () => {
     const titleVal = document.getElementById('course_title')?.value?.trim();
@@ -159,9 +165,7 @@ export default function AddCourse() {
       const validFeatures = feeFeatures.filter(f => f.label.trim())
       payload.append('m_course_fee_features', JSON.stringify(validFeatures))
 
-      if (selectedInstructor) {
-        payload.append('m_course_trainee', selectedInstructor);
-      }
+      selectedInstructorIds.forEach((instructorId) => payload.append('m_course_trainee', instructorId));
       // Backend expects inconsistent formats
       payload.append('m_course_status', statusApp.toLowerCase() === '1' ? '1' : '0');
       payload.append('m_course_status_web', statusWeb.toLowerCase() === '1' ? '1' : '0');
@@ -499,13 +503,36 @@ export default function AddCourse() {
                 </div>
               )}
               <div>
-                <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Instructor</label>
-                <select id="course_instructor" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm bg-white outline-none" value={selectedInstructor} onChange={e => setSelectedInstructor(e.target.value)}>
-                  <option value="">- - - Select - - -</option>
-                  {instructors.map(ins => (
-                    <option key={ins._id} value={ins._id}>{ins.name}</option>
-                  ))}
-                </select>
+                <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Instructor(s)</label>
+                <input
+                  type="text"
+                  value={instructorSearch}
+                  onChange={(e) => setInstructorSearch(e.target.value)}
+                  placeholder="Search instructors..."
+                  className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36] mb-2"
+                />
+                <div className="border border-slate-300 rounded max-h-48 overflow-y-auto bg-white">
+                  {instructors.length === 0 ? (
+                    <p className="text-xs text-slate-400 p-3">Loading instructors...</p>
+                  ) : (
+                    instructors
+                      .filter((ins) => ins.name?.toLowerCase().includes(instructorSearch.toLowerCase()))
+                      .map((ins) => (
+                        <label key={ins._id} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedInstructorIds.includes(ins._id)}
+                            onChange={() => toggleInstructor(ins._id)}
+                            className="accent-[#144f36]"
+                          />
+                          {ins.name}
+                        </label>
+                      ))
+                  )}
+                </div>
+                {selectedInstructorIds.length > 0 && (
+                  <p className="text-xs text-slate-500 mt-1">{selectedInstructorIds.length} instructor(s) selected</p>
+                )}
               </div>
             </div>
           </div>
