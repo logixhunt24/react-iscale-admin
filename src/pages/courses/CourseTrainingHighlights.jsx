@@ -91,6 +91,8 @@ export default function CourseTrainingHighlights() {
         // UPDATE
         const payload = new FormData()
         payload.append('title', formData.title)
+        payload.append('description', formData.description)
+        payload.append('active', formData.active)
         if (iconFile) {
           payload.append('th_icon', iconFile)
         }
@@ -163,7 +165,7 @@ export default function CourseTrainingHighlights() {
       {/* Top Header */}
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden max-w-6xl mx-auto mb-5">
         <div className="p-4 flex justify-between items-center flex-wrap gap-4 bg-[#144f36] text-white rounded-t-2xl">
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Course Training Highlights</h2>
+          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Course Highlights</h2>
           <button 
             onClick={() => navigate('/courses/all')}
             className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30"
