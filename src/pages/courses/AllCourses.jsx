@@ -446,7 +446,7 @@ const fetchCategoriesDropdown = async () => {
                       </button>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/training-highlights/${row._id}`, { state: { courseTitle: row.m_course_title } })} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap" title="Manage this course's Course Highlights section">
+                      <button onClick={() => navigate(`/courses/training-highlights/${row._id}`, { state: { courseTitle: row.title } })} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap" title="Manage this course's Course Highlights section">
                         <Book size={12} /> Highlights
                       </button>
                     </td>

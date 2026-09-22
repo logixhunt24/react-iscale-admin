@@ -9,7 +9,8 @@ export default function CourseTrainingHighlights() {
   const navigate = useNavigate()
   const { id } = useParams()
   const location = useLocation()
-  const courseTitle = location.state?.courseTitle || location.state?.course_title || 'Course'
+  const [fetchedCourseTitle, setFetchedCourseTitle] = useState('')
+  const courseTitle = location.state?.courseTitle || location.state?.course_title || fetchedCourseTitle || 'Course'
 
   const [highlights, setHighlights] = useState([])
   const [loading, setLoading] = useState(true)
@@ -26,6 +27,29 @@ export default function CourseTrainingHighlights() {
   useEffect(() => {
     fetchHighlights()
   }, [id])
+
+  // location.state only carries the title when this page was reached via
+  // an in-app navigate() click (e.g. the course list's Highlights button).
+  // A direct URL visit, bookmark, or refresh has no state at all, so it
+  // always fell back to the generic word "Course" - fetch the real course
+  // record in that case instead.
+  useEffect(() => {
+    if (location.state?.courseTitle || location.state?.course_title) return
+    const fetchCourse = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const response = await axios.get(`${BASE_URL}/myadmin/course/course/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        if (response.data?.status && response.data.data?.title) {
+          setFetchedCourseTitle(response.data.data.title)
+        }
+      } catch (error) {
+        console.error('Error fetching course title:', error)
+      }
+    }
+    fetchCourse()
+  }, [id, location.state])
 
   const fetchHighlights = async () => {
     try {
