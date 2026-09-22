@@ -466,7 +466,33 @@ export default function AddCourse() {
             </div>
           </div>
           {/* Additional Options */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          {/* Uploads: kept as their own compact row so every cell is a
+              similarly-short file input - mixing these with the taller
+              toggle/instructor-list cells below (in one stretched grid row)
+              was leaving large blank areas under the short cells. */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 items-start">
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Image (Thumbnail)</label>
+              <input type="file" accept="image/*" onChange={e => setBannerFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Nav Menu Card Image</label>
+              <p className="text-xs text-slate-500 mb-1">Shown in the site nav's course dropdown cards instead of the banner above. Optional — falls back to the Course Image if left empty.</p>
+              <input type="file" accept="image/*" onChange={e => setMegaBannerFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Course PDF</label>
+              <input type="file" accept=".pdf" onChange={e => setPdfFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
+            </div>
+            {courseType === '2' && (
+              <div>
+                <label className="block text-[13px] font-bold text-slate-800 mb-1">Fee Structure</label>
+                <input type="file" accept=".pdf,image/*,.doc,.docx,.xls,.xlsx" onChange={e => setFeeStructureFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 items-start">
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-2">Add to</label>
               <div className="flex flex-col gap-2">
@@ -483,57 +509,36 @@ export default function AddCourse() {
               </div>
             </div>
             <div>
-              <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Image (Thumbnail)</label>
-              <input type="file" accept="image/*" onChange={e => setBannerFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
-            </div>
-            <div>
-              <label className="block text-[13px] font-bold text-slate-800 mb-1">Nav Menu Card Image</label>
-              <p className="text-xs text-slate-500 mb-1">Shown in the site nav's course dropdown cards instead of the banner above. Optional — falls back to the Course Image if left empty.</p>
-              <input type="file" accept="image/*" onChange={e => setMegaBannerFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
-            </div>
-            <div>
-              <label className="block text-[13px] font-bold text-slate-800 mb-1">Course PDF</label>
-              <input type="file" accept=".pdf" onChange={e => setPdfFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
-            </div>
-            <div>
-              {courseType === '2' && (
-                <div className="mb-4">
-                  <label className="block text-[13px] font-bold text-slate-800 mb-1">Fee Structure</label>
-                  <input type="file" accept=".pdf,image/*,.doc,.docx,.xls,.xlsx" onChange={e => setFeeStructureFile(e.target.files[0])} className="w-full border border-slate-300 rounded px-3 py-1 text-sm outline-none bg-white focus:border-[#144f36]" />
-                </div>
-              )}
-              <div>
-                <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Instructor(s)</label>
-                <input
-                  type="text"
-                  value={instructorSearch}
-                  onChange={(e) => setInstructorSearch(e.target.value)}
-                  placeholder="Search instructors..."
-                  className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36] mb-2"
-                />
-                <div className="border border-slate-300 rounded max-h-48 overflow-y-auto bg-white">
-                  {instructors.length === 0 ? (
-                    <p className="text-xs text-slate-400 p-3">Loading instructors...</p>
-                  ) : (
-                    instructors
-                      .filter((ins) => ins.name?.toLowerCase().includes(instructorSearch.toLowerCase()))
-                      .map((ins) => (
-                        <label key={ins._id} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={selectedInstructorIds.includes(ins._id)}
-                            onChange={() => toggleInstructor(ins._id)}
-                            className="accent-[#144f36]"
-                          />
-                          {ins.name}
-                        </label>
-                      ))
-                  )}
-                </div>
-                {selectedInstructorIds.length > 0 && (
-                  <p className="text-xs text-slate-500 mt-1">{selectedInstructorIds.length} instructor(s) selected</p>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Instructor(s)</label>
+              <input
+                type="text"
+                value={instructorSearch}
+                onChange={(e) => setInstructorSearch(e.target.value)}
+                placeholder="Search instructors..."
+                className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36] mb-2"
+              />
+              <div className="border border-slate-300 rounded max-h-48 overflow-y-auto bg-white">
+                {instructors.length === 0 ? (
+                  <p className="text-xs text-slate-400 p-3">Loading instructors...</p>
+                ) : (
+                  instructors
+                    .filter((ins) => ins.name?.toLowerCase().includes(instructorSearch.toLowerCase()))
+                    .map((ins) => (
+                      <label key={ins._id} className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedInstructorIds.includes(ins._id)}
+                          onChange={() => toggleInstructor(ins._id)}
+                          className="accent-[#144f36]"
+                        />
+                        {ins.name}
+                      </label>
+                    ))
                 )}
               </div>
+              {selectedInstructorIds.length > 0 && (
+                <p className="text-xs text-slate-500 mt-1">{selectedInstructorIds.length} instructor(s) selected</p>
+              )}
             </div>
           </div>
 
