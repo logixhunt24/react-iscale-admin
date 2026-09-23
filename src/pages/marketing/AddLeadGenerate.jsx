@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -201,12 +201,12 @@ export default function AddLeadGenerate() {
             >
               Submit
             </button>
-            <button 
-              onClick={() => navigate('/leads')}
-              className="bg-[#d87025] text-white px-10 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors flex-1 shadow-md"
+            <Link 
+              to={'/leads'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors flex-1 shadow-md"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Trash2, Edit2, Eye, User, Mail, Phone, Calendar, MessageCircle, MapPin, Cake, Hash } from 'lucide-react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -227,12 +227,12 @@ export default function AppUserDetails({ userId, onClose }) {
       <div className="bg-[#144f36] rounded-2xl shadow-md border border-white/10 p-5 mb-5 flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">User Details</h2>
-          <button 
-            onClick={() => navigate('/app-users')}
+          <Link 
+            to={'/app-users'}
             className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30"
           >
             <span>↩ Back</span>
-          </button>
+          </Link>
         </div>
         
         <div className="flex gap-4 border-b border-white/20 pb-2">

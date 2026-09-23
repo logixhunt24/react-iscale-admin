@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -101,9 +101,9 @@ export default function EditAppUser() {
     <div className="h-full animate-fade-in-up">
       <div className="bg-[#144f36] rounded-2xl shadow-md border border-white/10 p-5 mb-5 flex justify-between items-center relative overflow-hidden group">
         <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Edit App User</h2>
-        <button onClick={() => navigate('/app-users')} className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30">
+        <Link to={'/app-users'} className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30">
           <span>↩ Back</span>
-        </button>
+        </Link>
       </div>
 
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
@@ -172,9 +172,9 @@ export default function EditAppUser() {
           </div>
           
           <div className="mt-8 flex justify-end gap-3 border-t border-slate-200 pt-5">
-            <button type="button" onClick={() => navigate('/app-users')} className="px-5 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm">
+            <Link to={'/app-users'} className="inline-block px-5 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm">
               Cancel
-            </button>
+            </Link>
             <button type="submit" className="px-5 py-2.5 bg-[#144f36] text-white rounded-lg hover:bg-[#0f3d2a] transition-colors font-medium text-sm">
               Update User
             </button>

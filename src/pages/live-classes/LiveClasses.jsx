@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -139,7 +139,7 @@ export default function LiveClasses() {
       <div className="bg-[#144f36] rounded-t-2xl p-5 flex justify-between items-center shadow-md relative overflow-hidden group mb-5">
         <h2 className="text-white font-bold tracking-tight text-xl font-medium">Live Classes</h2>
         <div className="flex gap-2">
-          <button className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5" onClick={() => navigate('/live-classes/add')}>Create Live Class</button>
+          <Link className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5" to={'/live-classes/add'}>Create Live Class</Link>
         </div>
       </div>
 
@@ -245,12 +245,12 @@ export default function LiveClasses() {
                   </td>
                   <td className="px-4 py-4 align-top">
                     <div className="flex flex-row gap-2">
-                      <button 
-                        onClick={() => navigate(`/live-classes/edit/${row._id}`)}
-                        className="bg-orange-500 text-white p-2 rounded-lg hover:bg-orange-600 transition-colors w-fit"
+                      <Link 
+                        to={`/live-classes/edit/${row._id}`}
+                        className="inline-block bg-orange-500 text-white p-2 rounded-lg hover:bg-orange-600 transition-colors w-fit"
                       >
                         <Edit2 size={14} />
-                      </button>
+                      </Link>
                       <button 
                         onClick={() => handleDelete(row._id)}
                         className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-colors w-fit"

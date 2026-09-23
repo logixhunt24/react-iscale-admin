@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function TopCourses({ apiData }) {
   const navigate = useNavigate()
@@ -27,12 +27,12 @@ export default function TopCourses({ apiData }) {
     <div className="bg-gradient-to-b from-white to-[#fcfcfd] rounded-2xl border border-white ring-1 ring-black/[0.02] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.04)] p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-bold text-slate-800 text-[15px]">Top Selling Courses</h3>
-        <button 
-          onClick={() => navigate('/courses/all')}
-          className="text-[#22c55e] hover:text-[#16a34a] text-xs font-bold transition-colors"
+        <Link 
+          to={'/courses/all'}
+          className="inline-block text-[#22c55e] hover:text-[#16a34a] text-xs font-bold transition-colors"
         >
           View All
-        </button>
+        </Link>
       </div>
 
       <div className="flex flex-col gap-6">

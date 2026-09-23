@@ -1,5 +1,5 @@
 import Button from '../../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Camera } from 'lucide-react'
 import { useState } from 'react'
 import axios from 'axios'
@@ -97,12 +97,12 @@ export default function AddEventCategory() {
             <div className="w-1.5 h-6 bg-white rounded-full mr-3"></div>
             <h2 className="text-xl font-bold text-white tracking-tight">Add New Event Category</h2>
           </div>
-          <button 
-            onClick={() => navigate('/events/category')}
+          <Link 
+            to={'/events/category'}
             className="bg-white text-[#144f36] px-5 py-2 rounded-full flex items-center gap-2 text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm"
           >
             📄 List
-          </button>
+          </Link>
         </div>
 
         <div className="p-6">
@@ -190,12 +190,12 @@ export default function AddEventCategory() {
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
-            <button 
-              onClick={() => navigate('/events/category')}
-              className="bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
+            <Link 
+              to={'/events/category'}
+              className="inline-block bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Eye, EyeOff, X } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import ThemeButton from '../../components/common/ThemeButton'
@@ -155,7 +155,7 @@ export default function BrandVideoList() {
     <div className="h-full animate-fade-in-up">
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 overflow-hidden flex flex-col h-full w-full">
         <CardHeader title="Brand Videos List">
-          <ThemeButton variant="white-add" onClick={() => navigate('/master/brand-video/add')}>
+          <ThemeButton variant="white-add" to={'/master/brand-video/add'}>
             + Add New
           </ThemeButton>
         </CardHeader>
@@ -285,13 +285,13 @@ export default function BrandVideoList() {
                         </td>
                         <td className="px-4 py-4 align-middle">
                           <div className="flex gap-2 justify-center">
-                            <button 
-                              onClick={() => navigate(`/master/brand-video/edit/${id}`, { state: { videoData: row } })}
-                              className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
+                            <Link 
+                              to={`/master/brand-video/edit/${id}`} state={{ videoData: row }}
+                              className="inline-block bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
                               title="Edit"
                             >
                               <Edit2 size={16} />
-                            </button>
+                            </Link>
                             <button 
                               onClick={() => handleDelete(id)}
                               className="bg-red-500 text-white p-1.5 rounded hover:bg-red-600 transition-colors"

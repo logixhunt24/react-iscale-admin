@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -98,13 +98,12 @@ export default function AddCourseTestSeries() {
           <h2 className="text-xl font-bold tracking-tight text-white">
             {isEditing ? 'Edit Package' : 'Add New Package'} - {courseTitle}
           </h2>
-          <button 
-            type="button"
-            onClick={() => navigate(`/courses/test-series/${id}`)}
+          <Link
+            to={`/courses/test-series/${id}`}
             className="bg-white text-[#144f36] px-4 py-1.5 rounded-full text-sm font-bold hover:bg-slate-100 transition-colors shadow-sm flex items-center gap-1"
           >
             ↩ Back
-          </button>
+          </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
@@ -254,13 +253,12 @@ export default function AddCourseTestSeries() {
             >
               {loading ? 'Saving...' : 'Submit'}
             </button>
-            <button 
-              type="button"
-              onClick={() => navigate(`/courses/test-series/${id}`)}
-              className="flex-1 bg-[#d87025] text-white px-8 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors shadow-md"
+            <Link
+              to={`/courses/test-series/${id}`}
+              className="inline-block flex-1 bg-[#d87025] text-white px-8 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors shadow-md"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

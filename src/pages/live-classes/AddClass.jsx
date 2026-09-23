@@ -1,5 +1,5 @@
 import Button from '../../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function AddClass() {
   const navigate = useNavigate()
@@ -9,12 +9,12 @@ export default function AddClass() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden max-w-6xl mx-auto">
         <div className="p-4 border-b border-slate-200 dark:border-gray-800/50 bg-[#f6f6ff] dark:bg-[#1f1b2e] flex justify-between items-center">
           <h2 className="text-xl font-medium text-indigo-900 dark:text-indigo-300 font-bold tracking-tight">Add New Class</h2>
-          <button 
-            onClick={() => navigate('/classes')}
+          <Link 
+            to={'/classes'}
             className="bg-[#428bca] text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-[#3071a9] transition-colors flex items-center gap-1"
           >
             <span>↩ Back</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-6">
@@ -81,12 +81,12 @@ export default function AddClass() {
             <button className="bg-[#428bca] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#3071a9] transition-colors flex-1">
               Submit
             </button>
-            <button 
-              onClick={() => navigate('/classes')}
-              className="bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
+            <Link 
+              to={'/classes'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

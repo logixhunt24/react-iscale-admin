@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -122,12 +122,12 @@ export default function AddQuiz() {
         {/* Header */}
         <div className="p-4 flex justify-between items-center bg-white border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-800">{isEditing ? 'Edit Quiz' : 'Add New Quiz'}</h2>
-          <button
-            onClick={() => navigate(`/quiz/list/${packageId}`, { state: { packageTitle, courseId } })}
+          <Link
+            to={`/quiz/list/${packageId}`} state={{ packageTitle, courseId }}
             className="bg-[#144f36] hover:bg-[#0f3d2a] text-white px-4 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-1"
           >
             ↩ Back
-          </button>
+          </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
@@ -339,13 +339,12 @@ export default function AddQuiz() {
             >
               {loading ? 'Saving...' : (isEditing ? 'Update Quiz' : 'Submit')}
             </button>
-            <button
-              type="button"
-              onClick={() => navigate(`/quiz/list/${packageId}`, { state: { packageTitle, courseId } })}
-              className="w-full bg-[#d87025] text-white px-8 py-3 rounded-lg text-sm font-semibold hover:bg-[#b55d1f] transition-colors"
+            <Link
+              to={`/quiz/list/${packageId}`} state={{ packageTitle, courseId }}
+              className="inline-block w-full bg-[#d87025] text-white px-8 py-3 rounded-lg text-sm font-semibold hover:bg-[#b55d1f] transition-colors"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

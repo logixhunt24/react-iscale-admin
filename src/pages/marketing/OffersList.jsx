@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -74,9 +74,9 @@ export default function OffersList() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden flex flex-col h-full">
         <div className="p-4 flex justify-between items-center bg-[#144f36] dark:bg-[#0f3d2a] rounded-t-2xl">
           <h2 className="text-xl font-bold tracking-tight text-white">Offers List</h2>
-          <button onClick={() => navigate('/offers/add')} className="bg-white text-[#144f36] px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-100 transition-colors flex items-center gap-2 shadow-sm">
+          <Link to={'/offers/add'} className="bg-white text-[#144f36] px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-100 transition-colors flex items-center gap-2 shadow-sm">
             <span>+ Add New</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -139,7 +139,7 @@ export default function OffersList() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <button onClick={() => navigate(`/offers/edit/${item._id}`)} className="p-1.5 bg-[#d87025] text-white rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit"><Edit2 size={16} /></button>
+                        <Link to={`/offers/edit/${item._id}`} className="inline-block p-1.5 bg-[#d87025] text-white rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit"><Edit2 size={16} /></Link>
                         <button onClick={() => handleDelete(item._id)} className="p-1.5 bg-red-600 text-white rounded hover:bg-red-700 transition-colors shadow-sm" title="Delete"><Trash2 size={16} /></button>
                       </div>
                     </td>

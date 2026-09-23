@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -104,12 +104,12 @@ export default function EditCoupon() {
             <div className="w-1.5 h-6 bg-white rounded-full mr-3"></div>
             <h2 className="text-xl font-bold text-white tracking-tight">Edit Coupon</h2>
           </div>
-          <button 
-            onClick={() => navigate('/master/coupons')}
+          <Link 
+            to={'/master/coupons'}
             className="bg-white text-[#144f36] px-5 py-2 rounded-full flex items-center gap-2 text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm"
           >
             📄 List
-          </button>
+          </Link>
         </div>
 
         <div className="p-6">
@@ -245,12 +245,12 @@ export default function EditCoupon() {
             >
               {loading ? 'Updating...' : 'Update'}
             </button>
-            <button 
-              onClick={() => navigate('/master/coupons')}
-              className="bg-slate-50 text-slate-700 border border-slate-200 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors flex-1 shadow-sm"
+            <Link 
+              to={'/master/coupons'}
+              className="inline-block bg-slate-50 text-slate-700 border border-slate-200 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors flex-1 shadow-sm"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import * as Icons from 'lucide-react';
 import Button from '../../components/common/Button';
 import ToggleSwitch from '../../components/common/ToggleSwitch';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../config/api';
@@ -270,9 +270,9 @@ export default function AddCourse() {
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Add New Course</h2>
           </div>
-          <button onClick={() => navigate('/courses/all')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
+          <Link to={'/courses/all'} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
             <span>↩ Back</span>
-          </button>
+          </Link>
         </div>
         <div className="p-6">
           {/* Basic Info */}
@@ -434,15 +434,15 @@ export default function AddCourse() {
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Status (App)</label>
               <select id="course_status_app" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm bg-white outline-none focus:border-[#144f36]">
-                <option>1</option>
-                <option>0</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
               </select>
             </div>
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Status (Web)</label>
               <select id="course_status_web" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm bg-white outline-none focus:border-[#144f36]">
-                <option>1</option>
-                <option>0</option>  
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
               </select>
             </div>
             <div>
@@ -587,7 +587,7 @@ export default function AddCourse() {
           </div>
           {/* Action Buttons */}
           <div className="flex justify-end gap-3 border-t border-slate-200 pt-4 mt-8">
-            <button onClick={() => navigate('/courses/all')} className="px-6 py-1.5 border border-slate-300 text-slate-600 rounded text-sm hover:bg-slate-50">Cancel</button>
+            <Link to={'/courses/all'} className="inline-block px-6 py-1.5 border border-slate-300 text-slate-600 rounded text-sm hover:bg-slate-50">Cancel</Link>
             <button onClick={handleSubmit} disabled={loading} className="px-6 py-1.5 bg-[#144f36] text-white rounded text-sm hover:bg-[#0f3d2a] disabled:opacity-70">
               {loading ? 'Submitting...' : 'Submit'}
             </button>

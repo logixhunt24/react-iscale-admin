@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Eye, Edit2, Trash2, Copy, FileSpreadsheet, FileText, Printer } from 'lucide-react'
 import * as Icons from 'lucide-react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -11,6 +11,7 @@ export default function CourseTopics() {
 const location = useLocation()
 
 const courseId =
+  new URLSearchParams(location.search).get('course') ||
   location.state?.courseId ||
   localStorage.getItem('currentCourseId')
 
@@ -62,14 +63,15 @@ console.log("COURSE TOPICS COURSE ID:", courseId)
     fetchMetadata()
   }, [subjectId])
 
-  const fetchTopics = async () => {
+  const fetchTopics = async (showLoading = true) => {
     try {
-      setLoading(true); 
+      if (showLoading) setLoading(true)
       const token = localStorage.getItem('token')
       const response = await axios.get(`${BASE_URL}/myadmin/topics/get-topics/${subjectId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       if (response.data?.status && response.data.data?.length > 0) {
+        savedSeq.current = Object.fromEntries(response.data.data.map(t => [t._id, t.ml_seq ?? '']))
         setTopics(response.data.data)
       } else {
         setTopics([])
@@ -79,6 +81,49 @@ console.log("COURSE TOPICS COURSE ID:", courseId)
       setTopics([])
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Remember the saved sequence so blur only hits the API when it actually changed
+  const savedSeq = useRef({})
+
+  const handleSequenceInput = (topicId, value) => {
+    setTopics(prev => prev.map(t => t._id === topicId ? { ...t, ml_seq: value === '' ? '' : Number(value) } : t))
+  }
+
+  const handleSequenceSave = async (row, value) => {
+    if (value === '' || String(savedSeq.current[row._id]) === String(value)) return
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.put(`${BASE_URL}/myadmin/topics/update-topic/${row._id}`, {
+        ml_seq: Number(value)
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (!response.data?.status) throw new Error(response.data?.message)
+      fetchTopics(false)
+    } catch (error) {
+      console.error('Error updating sequence:', error)
+      await window.customAlert(error.response?.data?.message || error.message || 'Failed to update sequence')
+      fetchTopics(false)
+    }
+  }
+
+  const handleStatusToggle = async (row) => {
+    const newStatus = row.ml_status === 1 ? 0 : 1
+    setTopics(prev => prev.map(t => t._id === row._id ? { ...t, ml_status: newStatus } : t))
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.put(`${BASE_URL}/myadmin/topics/update-topic/${row._id}`, {
+        ml_status: newStatus
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (!response.data?.status) throw new Error(response.data?.message)
+    } catch (error) {
+      console.error('Error updating status:', error)
+      await window.customAlert(error.response?.data?.message || error.message || 'Failed to update status')
+      fetchTopics(false)
     }
   }
 
@@ -156,22 +201,14 @@ console.log("COURSE TOPICS COURSE ID:", courseId)
             <button onClick={() => navigate(-1)} className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1.5">
               <span>↩ Courses</span>
             </button>
-            <button
-              onClick={async () => {
-                localStorage.setItem('currentCourseId', courseId)
-                navigate(`/courses/topics/add/${subjectId}`, {
-                  state: { 
-                    courseId,
-                    courseTitle: headerData.course,
-                    categoryTitle: headerData.category,
-                    subjectTitle: headerData.subject
-                  }
-                })   
-              }}
+            <Link
+              to={`/courses/topics/add/${subjectId}?course=${courseId}`}
+              state={{ courseId, courseTitle: headerData.course, categoryTitle: headerData.category, subjectTitle: headerData.subject }}
+              onClick={() => localStorage.setItem('currentCourseId', courseId)}
               className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:shadow hover:-translate-y-0.5"
             >
               <span>+ Add New Topic</span>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -315,27 +352,33 @@ console.log("COURSE TOPICS COURSE ID:", courseId)
                       </td>
                       <td className="px-3 py-3 border-r border-slate-200 align-middle">{row.questions || ''}</td>
                       <td className="px-3 py-3 border-r border-slate-200 align-middle"></td>
-                      <td className="px-3 py-3 border-r border-slate-200 align-middle">
-                        <input type="text" defaultValue={row.ml_status !== undefined ? row.ml_status : "0"} className="w-16 border border-slate-300 rounded px-2 py-1 text-center bg-white outline-none focus:border-[#144f36]" />
-                      </td>
                       <td className="px-3 py-3 border-r border-slate-200 align-middle text-center">
-                        <button className="bg-[#144f36] text-white px-4 py-1 rounded-full text-xs hover:bg-[#0f3d2a] transition-colors">
+                        <button onClick={() => handleStatusToggle(row)} className={`text-white px-4 py-1 rounded-full text-xs transition-colors whitespace-nowrap ${row.ml_status === 1 ? 'bg-[#144f36] hover:bg-[#0f3d2a]' : 'bg-slate-400 hover:bg-slate-500'}`}>
                           {row.ml_status === 1 ? 'Active' : 'In-Active'}
                         </button>
                       </td>
+                      <td className="px-3 py-3 border-r border-slate-200 align-middle">
+                        <input
+                          type="number"
+                          value={row.ml_seq ?? ''}
+                          placeholder="0"
+                          onChange={(e) => handleSequenceInput(row._id, e.target.value)}
+                          onBlur={(e) => handleSequenceSave(row, e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
+                          className="w-16 border border-slate-300 rounded px-2 py-1 text-center bg-white outline-none focus:border-[#144f36]"
+                        />
+                      </td>
                       <td className="px-3 py-3 align-middle">
                         <div className="flex gap-1">
-                          <button onClick={() => navigate(`/courses/topics/add/${subjectId}`, { 
-                            state: { 
+                          <Link to={`/courses/topics/add/${subjectId}`} state={{ 
                               editTopic: row, 
                               courseId,
                               courseTitle: headerData.course,
                               categoryTitle: headerData.category,
                               subjectTitle: headerData.subject
-                            } 
-                          })} className="bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#c2621f] transition-colors">
+                            }} className="inline-block bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#c2621f] transition-colors">
                             <Edit2 size={12} />
-                          </button>
+                          </Link>
                           <button onClick={() => handleDelete(row._id)} className="bg-[#d9534f] text-white p-1.5 rounded-full hover:bg-[#c9302c] transition-colors">
                             <Trash2 size={12} />
                           </button>

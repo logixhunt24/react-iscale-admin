@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Lock, ArrowLeft } from 'lucide-react'
 
 export default function ModuleSubModuleList() {
@@ -28,13 +28,13 @@ export default function ModuleSubModuleList() {
         </p>
 
         {/* Back Button */}
-        <button
-          onClick={() => navigate('/dashboard')}
+        <Link
+          to={'/dashboard'}
           className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-[#144f36] dark:text-slate-400 dark:hover:text-emerald-400 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           <span>Back to Dashboard</span>
-        </button>
+        </Link>
 
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Button from '../../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function AddUserReview() {
   const navigate = useNavigate()
@@ -9,12 +9,12 @@ export default function AddUserReview() {
       <div className="bg-[#eef5fa] p-4 min-h-screen">
         <div className="bg-white dark:bg-[#13111c] rounded-lg p-4 mb-4 shadow-sm border border-slate-100 flex justify-between items-center">
           <h2 className="text-xl font-medium text-slate-700 dark:text-slate-300">Add User Review</h2>
-          <button 
-            onClick={() => navigate('/home-page-reviews')}
+          <Link 
+            to={'/home-page-reviews'}
             className="bg-[#428bca] text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-[#3071a9] transition-colors flex items-center gap-1"
           >
             <span>↩ Back</span>
-          </button>
+          </Link>
         </div>
 
         <div className="bg-white dark:bg-[#13111c] rounded-lg shadow-sm border border-slate-100 p-6">
@@ -79,12 +79,12 @@ export default function AddUserReview() {
             <button className="bg-[#428bca] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#3071a9] transition-colors flex-1">
               Submit
             </button>
-            <button 
-              onClick={() => navigate('/home-page-reviews')}
-              className="bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
+            <Link 
+              to={'/home-page-reviews'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

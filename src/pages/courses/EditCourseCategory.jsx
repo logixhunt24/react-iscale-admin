@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Save } from 'lucide-react'
 import * as Icons from 'lucide-react'
 import axios from 'axios'
@@ -161,9 +161,9 @@ export default function EditCourseCategory() {
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Edit Category</h2>
           </div>
-          <button onClick={() => navigate('/courses/categories')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
+          <Link to={'/courses/categories'} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
             <span>↩ Back to List</span>
-          </button>
+          </Link>
         </div>
 
         {/* Form */}
@@ -287,13 +287,12 @@ export default function EditCourseCategory() {
             </div>
 
             <div className="pt-4 border-t border-slate-200 dark:border-[#1f1b2e] flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => navigate('/courses/categories')}
-                className="px-6 py-2 border border-slate-300 dark:border-[#1f1b2e] text-slate-700 dark:text-slate-300 rounded-md hover:bg-slate-50 dark:bg-[#1f1b2e]/50 transition-colors font-medium"
+              <Link
+                to={'/courses/categories'}
+                className="inline-block px-6 py-2 border border-slate-300 dark:border-[#1f1b2e] text-slate-700 dark:text-slate-300 rounded-md hover:bg-slate-50 dark:bg-[#1f1b2e]/50 transition-colors font-medium"
               >
                 Cancel
-              </button>
+              </Link>
               <button
                 type="submit"
                 disabled={loading}

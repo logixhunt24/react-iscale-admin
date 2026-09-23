@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -190,12 +190,12 @@ export default function CourseTrainingHighlights() {
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden max-w-6xl mx-auto mb-5">
         <div className="p-4 flex justify-between items-center flex-wrap gap-4 bg-[#144f36] text-white rounded-t-2xl">
           <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Course Highlights</h2>
-          <button 
-            onClick={() => navigate('/courses/all')}
+          <Link 
+            to={'/courses/all'}
             className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30"
           >
             <span>↩ Back To Course List</span>
-          </button>
+          </Link>
         </div>
         <div className="p-4 bg-white">
           <div className="mb-1 text-sm text-slate-500 font-bold">Course:</div>
@@ -278,13 +278,12 @@ export default function CourseTrainingHighlights() {
                 Cancel Edit
               </button>
             )}
-            <button 
-              type="button"
-              onClick={() => navigate('/courses/all')}
-              className="bg-slate-500 text-white px-8 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-600 transition-colors"
+            <Link
+              to={'/courses/all'}
+              className="inline-block bg-slate-500 text-white px-8 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-600 transition-colors"
             >
               Back
-            </button>
+            </Link>
           </div>
         </form>
       </div>

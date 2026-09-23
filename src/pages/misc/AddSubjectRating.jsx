@@ -1,5 +1,5 @@
 import Button from '../../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function AddSubjectRating() {
   const navigate = useNavigate()
@@ -45,12 +45,12 @@ export default function AddSubjectRating() {
             <button className="bg-[#428bca] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#3071a9] transition-colors flex-1">
               Submit
             </button>
-            <button 
-              onClick={() => navigate('/subject-ratings')}
-              className="bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
+            <Link 
+              to={'/subject-ratings'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

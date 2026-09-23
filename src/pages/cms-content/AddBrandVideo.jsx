@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -60,12 +60,12 @@ export default function AddBrandVideo() {
             <div className="w-1.5 h-6 bg-white rounded-full mr-3"></div>
             <h2 className="text-xl font-bold text-white tracking-tight">Add New Brand Video</h2>
           </div>
-          <button 
-            onClick={() => navigate('/master/brand-video')}
+          <Link 
+            to={'/master/brand-video'}
             className="bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-full flex items-center gap-2 text-sm font-bold transition-colors"
           >
             <span>📄 List</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-6">
@@ -130,13 +130,12 @@ export default function AddBrandVideo() {
               >
                 {loading ? 'Submitting...' : 'Submit'}
               </button>
-              <button 
-                type="button" 
-                onClick={() => navigate('/master/brand-video')}
-                className="bg-slate-100 text-slate-600 px-8 py-2.5 rounded hover:bg-slate-200 font-medium transition-colors"
+              <Link 
+                to={'/master/brand-video'}
+                className="inline-block bg-slate-100 text-slate-600 px-8 py-2.5 rounded hover:bg-slate-200 font-medium transition-colors"
               >
                 Cancel
-              </button>
+              </Link>
             </div>
           </form>
         </div>

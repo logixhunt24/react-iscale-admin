@@ -1,14 +1,17 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
+import withListRow from '../components/common/withListRow'
 import WebinarRegistrations from '../pages/events-webinars/WebinarRegistrations'
 import EventRegistrations from '../pages/events-webinars/EventRegistrations'
 import WebinarWishlist from '../pages/events-webinars/WebinarWishlist'
 import EventCategoryList from '../pages/events-webinars/EventCategoryList'
 import AddEventCategory from '../pages/events-webinars/AddEventCategory'
-import EditEventCategory from '../pages/events-webinars/EditEventCategory'
+import EditEventCategoryPage from '../pages/events-webinars/EditEventCategory'
+const EditEventCategory = withListRow(EditEventCategoryPage, { endpoint: '/myadmin/event-category/get-event-categories', stateKey: 'categoryData' })
 import EventList from '../pages/events-webinars/EventList'
 import AddEvent from '../pages/events-webinars/AddEvent'
-import EditEvent from '../pages/events-webinars/EditEvent'
+import EditEventPage from '../pages/events-webinars/EditEvent'
+const EditEvent = withListRow(EditEventPage, { endpoint: '/myadmin/event/get-events', stateKey: 'eventData' })
 
 const eventsWebinarsRoutes = [
   <Route key="registrations-event" path="/registrations/event" element={<EventRegistrations />} />,

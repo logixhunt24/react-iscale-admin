@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import * as Icons from 'lucide-react'
 import { Copy, FileSpreadsheet, FileText, Printer } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -131,12 +131,12 @@ export default function CourseSubjects() {
           </div>
           
           <div className="flex gap-4 relative z-10">
-            <button onClick={() => navigate('/courses/all')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
+            <Link to={'/courses/all'} className="inline-block bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
               Back To Courses
-            </button>
-            <button onClick={() => navigate(`/courses/subjects/add/${id}`)} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5">
+            </Link>
+            <Link to={`/courses/subjects/add/${id}`} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5">
               <span>+ Add New</span>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -275,9 +275,9 @@ export default function CourseSubjects() {
                       {row.total_topics || 0}
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
-                      <button onClick={async () => { localStorage.setItem('currentCourseId', id); navigate(`/courses/topics/${row._id}`, { state: { courseId: id } }) }} className="bg-[#144f36] text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-[#0f3d2a] transition-colors inline-flex items-center gap-1.5">
+                      <Link to={`/courses/topics/${row._id}?course=${id}`} state={{ courseId: id }} onClick={() => localStorage.setItem('currentCourseId', id)} className="bg-[#144f36] text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-[#0f3d2a] transition-colors inline-flex items-center gap-1.5">
                         <Icons.Monitor size={12} /> Topic
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
                       <button className="bg-[#144f36] text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-[#0f3d2a] transition-colors inline-flex items-center gap-1">
@@ -300,9 +300,9 @@ export default function CourseSubjects() {
                     </td>
                     <td className="px-3 py-3 align-middle text-center">
                       <div className="flex gap-2 justify-center">
-                        <button onClick={() => navigate(`/courses/subjects/add/${id}`, { state: { editSubject: row } })} className="bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#c2621f] transition-colors" title="Edit">
+                        <Link to={`/courses/subjects/add/${id}`} state={{ editSubject: row }} className="inline-block bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#c2621f] transition-colors" title="Edit">
                           <Icons.Edit2 size={12} />
-                        </button>
+                        </Link>
                         <button onClick={() => handleDelete(row._id)} className="bg-[#d9534f] text-white rounded-full p-1.5 hover:bg-[#b52b27] transition-colors" title="Delete">
                           <Icons.Trash2 size={12} />
                         </button>

@@ -1,5 +1,5 @@
 import Button from '../../components/common/Button'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation, useParams, Link } from 'react-router-dom'
 import { Camera } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -149,12 +149,12 @@ export default function EditEvent() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden max-w-[1200px]">
         <div className="p-4 border-b border-slate-200 dark:border-gray-800/50 bg-[#f6f6ff] dark:bg-[#1f1b2e] flex justify-between items-center">
           <h2 className="text-xl font-medium text-indigo-900 dark:text-indigo-300 font-bold tracking-tight">Edit Event</h2>
-          <button 
-            onClick={() => navigate('/events/list')}
+          <Link 
+            to={'/events/list'}
             className="bg-[#428bca] text-white px-4 py-2 rounded flex items-center gap-2 text-sm font-medium hover:bg-[#3071a9] transition-colors"
           >
             📄 List
-          </button>
+          </Link>
         </div>
 
         <div className="p-6">
@@ -483,12 +483,12 @@ export default function EditEvent() {
             <Button fullWidth className="py-2" onClick={handleSubmit} disabled={loading}>
               {loading ? 'Submitting...' : 'Submit'}
             </Button>
-            <button 
-              onClick={() => navigate('/events/list')}
-              className="bg-[#d35400] text-white px-6 py-2.5 rounded text-sm font-medium hover:bg-[#b04500] transition-colors flex-1 shadow-sm"
+            <Link 
+              to={'/events/list'}
+              className="inline-block bg-[#d35400] text-white px-6 py-2.5 rounded text-sm font-medium hover:bg-[#b04500] transition-colors flex-1 shadow-sm"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

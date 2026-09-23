@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -178,13 +178,12 @@ export default function AddTestSeriesCategory() {
             >
               {loading ? 'Saving...' : 'Submit'}
             </button>
-            <button 
-              type="button"
-              onClick={() => navigate('/test-series/category')}
-              className="bg-[#d87025] text-white px-8 py-2.5 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
+            <Link
+              to={'/test-series/category'}
+              className="inline-block bg-[#d87025] text-white px-8 py-2.5 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Eye, Edit2, Trash2, Book, X, Check } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -255,7 +255,7 @@ const fetchCategoriesDropdown = async () => {
     <div className="h-full animate-fade-in-up">
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden flex flex-col h-full">
         <CardHeader title="All Courses List">
-          <ThemeButton variant="white-add" onClick={() => navigate('/courses/all/add')}>
+          <ThemeButton variant="white-add" to={'/courses/all/add'}>
             + Add New Course
           </ThemeButton>
         </CardHeader>
@@ -421,34 +421,34 @@ const fetchCategoriesDropdown = async () => {
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">{row.price}</td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">{row.offer_price}</td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/faq/${row._id}`)} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Link to={`/courses/faq/${row._id}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} /> Faq
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/features/${row._id}`)} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Link to={`/courses/features/${row._id}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} /> Features
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/tools/${row._id}`)} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Link to={`/courses/tools/${row._id}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} /> Tools
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/subjects/${row._id}`)} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Link to={`/courses/subjects/${row._id}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} /> Subject
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/test-series/${row._id}`, { state: { courseTitle: row.title } })} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Link to={`/courses/test-series/${row._id}`} state={{ courseTitle: row.title }} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} /> Test Package
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/training-highlights/${row._id}`, { state: { courseTitle: row.title } })} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap" title="Manage this course's Course Highlights section">
+                      <Link to={`/courses/training-highlights/${row._id}`} state={{ courseTitle: row.title }} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap" title="Manage this course's Course Highlights section">
                         <Book size={12} /> Highlights
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
                       {(() => {
@@ -500,12 +500,12 @@ const fetchCategoriesDropdown = async () => {
                     </td>
                     <td className="px-3 py-3 align-middle">
                       <div className="flex gap-1.5">
-                      <button onClick={() => navigate(`/courses/view/${row._id}`, { state: { courseData: row } })} className="bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors">
+                      <Link to={`/courses/view/${row._id}`} state={{ courseData: row }} className="inline-block bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors">
                         <Eye size={14} />
-                      </button>
-                        <button onClick={() => navigate(`/courses/all/edit/${row._id || row.id}`, { state: { courseData: row } })} className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#c2621f] transition-colors">
+                      </Link>
+                        <Link to={`/courses/all/edit/${row._id || row.id}`} state={{ courseData: row }} className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#c2621f] transition-colors">
                           <Edit2 size={14} />
-                        </button>
+                        </Link>
                         <button onClick={() => handleDelete(row._id || row.id)} className="bg-red-600 text-white p-1.5 rounded hover:bg-red-700 transition-colors">
                           <Trash2 size={14} />
                         </button>

@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
+const MotionLink = motion.create(Link)
 
 export default function QuickActions() {
-  const navigate = useNavigate()
 
   const actions = [
     { label: 'Create Course', icon: 'PlusCircle', color: 'bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-500 hover:text-white hover:border-emerald-500', path: '/courses/all/add' },
@@ -17,9 +18,9 @@ export default function QuickActions() {
       {actions.map((action, index) => {
         const Icon = Icons[action.icon]
         return (
-          <motion.button
+          <MotionLink
             key={action.label}
-            onClick={() => navigate(action.path)}
+            to={action.path}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -27,7 +28,7 @@ export default function QuickActions() {
           >
             <Icon size={18} strokeWidth={2.5} />
             {action.label}
-          </motion.button>
+          </MotionLink>
         )
       })}
     </div>

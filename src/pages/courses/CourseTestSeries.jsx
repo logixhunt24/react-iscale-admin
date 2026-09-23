@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -99,12 +99,12 @@ export default function CourseTestSeries() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden flex flex-col h-full">
         <div className="p-4 flex justify-between items-center bg-[#144f36] dark:bg-[#0f3d2a] rounded-t-2xl">
           <h2 className="text-xl font-bold tracking-tight text-white">Packages - {courseTitle}</h2>
-          <button 
-            onClick={() => navigate(`/courses/test-series/add/${id}`, { state: { courseTitle } })} 
+          <Link 
+            to={`/courses/test-series/add/${id}`} state={{ courseTitle }} 
             className="bg-white text-[#144f36] px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-100 transition-colors flex items-center gap-2 shadow-sm"
           >
             <span>+ Add New Package</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -169,9 +169,9 @@ export default function CourseTestSeries() {
                       )}
                     </td>
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
-                      <button onClick={() => navigate(`/quiz/list/${row._id}`, { state: { packageTitle: row.m_package_title } })} className="bg-[#144f36] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-[#0f3d2a] transition-colors shadow-sm">
+                      <Link to={`/quiz/list/${row._id}`} state={{ packageTitle: row.m_package_title }} className="inline-block bg-[#144f36] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-[#0f3d2a] transition-colors shadow-sm">
                         Quiz
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
                       <button className="bg-[#144f36] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-[#0f3d2a] transition-colors shadow-sm">
@@ -185,12 +185,12 @@ export default function CourseTestSeries() {
                     </td>
                     <td className="px-4 py-3 align-middle text-center">
                       <div className="flex justify-center gap-2">
-                        <button onClick={() => navigate(`/test-series/packages/view/${row._id}`, { state: { packageData: row } })} className="bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors shadow-sm" title="View">
+                        <Link to={`/test-series/packages/view/${row._id}`} state={{ packageData: row }} className="inline-block bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors shadow-sm" title="View">
                           <Eye size={14} />
-                        </button>
-                        <button onClick={() => navigate(`/courses/test-series/add/${id}`, { state: { editPackage: row, courseTitle } })} className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit">
+                        </Link>
+                        <Link to={`/courses/test-series/add/${id}`} state={{ editPackage: row, courseTitle }} className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit">
                           <Edit2 size={14} />
-                        </button>
+                        </Link>
                         <button onClick={() => handleDelete(row._id)} className="bg-red-600 text-white p-1.5 rounded hover:bg-red-700 transition-colors shadow-sm" title="Delete">
                           <Trash2 size={14} />
                         </button>

@@ -1,19 +1,16 @@
 import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
+const MotionLink = motion.create(Link)
 
 export default function HeroBanner({ cardsData = [] }) {
-  const navigate = useNavigate();
 
-  const handleCardClick = (card) => {
-    if (!card?.key) return;
-    if (['totalRegistration', 'totalNotesSale', 'totalPackageSale', 'totalCourseSale', 'totalEarnings'].includes(card.key)) {
-      navigate('/registrations');
-    } else if (card.key === 'totalCourses') {
-      navigate('/courses/all');
-    } else if (card.key === 'totalQuizs') {
-      navigate('/quiz/list/all');
-    }
+  const getCardPath = (key) => {
+    if (['totalRegistration', 'totalNotesSale', 'totalPackageSale', 'totalCourseSale', 'totalEarnings'].includes(key)) return '/registrations';
+    if (key === 'totalCourses') return '/courses/all';
+    if (key === 'totalQuizs') return '/quiz/list/all';
+    return null;
   };
   return (
     <motion.div 
@@ -41,12 +38,12 @@ export default function HeroBanner({ cardsData = [] }) {
         
         <div className="flex gap-4">
 
-          <button 
-            onClick={() => navigate('/analytics')}
+          <Link 
+            to={'/analytics'}
             className="bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold py-2.5 px-6 rounded-full hover:bg-white/20 transition-all flex items-center gap-2 hover:-translate-y-0.5"
           >
             <Icons.BarChart2 size={18} strokeWidth={2.5} /> View Analytics
-          </button>
+          </Link>
         </div>
       </div>
       
@@ -55,11 +52,12 @@ export default function HeroBanner({ cardsData = [] }) {
         {cardsData.map((card, i) => {
           const Icon = Icons[card?.icon] || Icons.Activity;
           return (
-            <motion.div 
+            <MotionLink 
               key={card?.id || i}
-              onClick={() => handleCardClick(card)}
+              to={getCardPath(card?.key) || '#'}
+              onClick={(e) => { if (!getCardPath(card?.key)) e.preventDefault() }}
               whileHover={{ y: -5 }}
-              className={`cursor-pointer flex-1 xl:w-48 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.1)] ${i === 1 ? 'xl:-mt-6 xl:mb-6' : ''}`}
+              className={`block cursor-pointer flex-1 xl:w-48 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.1)] ${i === 1 ? 'xl:-mt-6 xl:mb-6' : ''}`}
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
@@ -68,7 +66,7 @@ export default function HeroBanner({ cardsData = [] }) {
                 <span className="text-white/80 text-[11px] font-bold uppercase tracking-wider">{String(card?.title || 'Stat')}</span>
               </div>
               <h3 className="text-white text-2xl font-black tracking-tight">{String(card?.value || '0')}</h3>
-            </motion.div>
+            </MotionLink>
           );
         })}
       </div>

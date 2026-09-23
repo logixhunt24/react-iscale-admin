@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Camera } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -91,18 +91,18 @@ export default function HiringDestinationsList() {
           </div>
 
           <div className="flex gap-2 relative z-10">
-            <button
-              onClick={() => navigate('/career-fit')}
+            <Link
+              to={'/career-fit'}
               className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5"
             >
               <span>« Career Fit</span>
-            </button>
-            <button
-              onClick={() => navigate('/career-fit/hiring-destinations/add')}
+            </Link>
+            <Link
+              to={'/career-fit/hiring-destinations/add'}
               className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:shadow hover:-translate-y-0.5"
             >
               <span>+ Add Logo</span>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -173,13 +173,13 @@ export default function HiringDestinationsList() {
                       </td>
                       <td className="px-4 py-4 align-middle">
                         <div className="flex gap-2">
-                          <button
-                            onClick={() => navigate(`/career-fit/hiring-destinations/edit/${row._id}`, { state: { destination: row } })}
-                            className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
+                          <Link
+                            to={`/career-fit/hiring-destinations/edit/${row._id}`} state={{ destination: row }}
+                            className="inline-block bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
                             title="Edit"
                           >
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button
                             onClick={() => handleDelete(row._id)}
                             className="bg-red-500 text-white p-1.5 rounded hover:bg-red-600 transition-colors"

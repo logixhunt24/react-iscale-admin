@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -146,12 +146,12 @@ export default function AddNotes() {
       <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden w-full mx-auto">
         <div className="p-4 border-b border-slate-200 bg-[#144f36] flex justify-between items-center">
           <h2 className="text-xl font-bold tracking-tight text-white">{isEditing ? 'Edit Notes' : 'Add New Notes'}</h2>
-          <button 
-            onClick={() => navigate('/notes/all')}
+          <Link 
+            to={'/notes/all'}
             className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30"
           >
             <span>↩ Back</span>
-          </button>
+          </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
@@ -358,13 +358,12 @@ export default function AddNotes() {
             >
               {loading ? 'Saving...' : 'Submit'}
             </button>
-            <button 
-              type="button"
-              onClick={() => navigate('/notes/all')}
-              className="bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
+            <Link
+              to={'/notes/all'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

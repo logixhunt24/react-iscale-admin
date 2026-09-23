@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation, useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -123,12 +123,12 @@ export default function EditPPT() {
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Edit Pre-Placement Talk</h2>
           </div>
           
-          <button 
-            onClick={() => navigate('/placement-talks')}
+          <Link 
+            to={'/placement-talks'}
             className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5"
           >
             « Back
-          </button>
+          </Link>
         </div>
 
         <div className="p-6 overflow-y-auto flex-1">

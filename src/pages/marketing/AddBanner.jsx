@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -144,12 +144,12 @@ export default function AddBanner() {
             >
               Submit
             </button>
-            <button 
-              onClick={() => navigate('/banners')}
-              className="bg-[#d87025] text-white px-10 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors shadow-md"
+            <Link 
+              to={'/banners'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors shadow-md"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

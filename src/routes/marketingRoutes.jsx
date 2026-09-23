@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
+import withListRow from '../components/common/withListRow'
 import OffersList from '../pages/marketing/OffersList'
 import BannersList from '../pages/marketing/BannersList'
 import AddBanner from '../pages/marketing/AddBanner'
@@ -9,7 +10,8 @@ import LeadGeneratePreview from '../pages/marketing/LeadGeneratePreview'
 import PublicLeadForm from '../pages/marketing/PublicLeadForm'
 import CouponsList from '../pages/marketing/CouponsList'
 import AddCoupon from '../pages/marketing/AddCoupon'
-import EditCoupon from '../pages/marketing/EditCoupon'
+import EditCouponPage from '../pages/marketing/EditCoupon'
+const EditCoupon = withListRow(EditCouponPage, { endpoint: '/myadmin/coupons/all', stateKey: 'couponData' })
 import AddOffer from '../pages/marketing/AddOffer'
 
 const marketingRoutes = {

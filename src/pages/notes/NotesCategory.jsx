@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -117,9 +117,9 @@ export default function NotesCategory() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md border border-slate-100 overflow-hidden flex flex-col h-full">
         <div className="p-4 flex justify-between items-center bg-[#144f36] text-white">
           <h2 className="text-xl font-bold tracking-tight text-white">Notes Category List</h2>
-          <button onClick={() => navigate('/notes/category/add')} className="bg-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-2 border border-white/30">
+          <Link to={'/notes/category/add'} className="bg-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-2 border border-white/30">
             <span>+ Add New</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col bg-white">
@@ -203,9 +203,9 @@ export default function NotesCategory() {
                       </td>
                       <td className="px-4 py-3 align-middle">
                         <div className="flex gap-1.5">
-                          <button onClick={() => navigate(`/notes/category/add`, { state: { editCategory: row } })} className="bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors">
+                          <Link to={`/notes/category/add`} state={{ editCategory: row }} className="inline-block bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors">
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button onClick={() => handleDelete(row._id)} className="bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#b55d1f] transition-colors">
                             <Trash2 size={14} />
                           </button>

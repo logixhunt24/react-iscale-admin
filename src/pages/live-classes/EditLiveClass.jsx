@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -107,12 +107,12 @@ export default function EditLiveClass() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md border border-slate-100 overflow-hidden w-full">
         <div className="bg-[#144f36] p-5 flex justify-between items-center rounded-t-2xl shadow-md relative overflow-hidden group">
           <h2 className="text-xl font-bold text-white tracking-tight">Edit Live Class</h2>
-          <button 
-            onClick={() => navigate('/live-classes')}
-            className="bg-green-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-green-700 transition-colors"
+          <Link 
+            to={'/live-classes'}
+            className="inline-block bg-green-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-green-700 transition-colors"
           >
             Go Back
-          </button>
+          </Link>
         </div>
 
         {fetching ? (

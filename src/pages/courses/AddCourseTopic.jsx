@@ -36,7 +36,7 @@ export default function AddCourseTopic() {
   
   const editTopic = location.state?.editTopic
   const isEditing = !!editTopic
-  const courseId = editTopic?.ml_course || location.state?.courseId || localStorage.getItem('currentCourseId')
+  const courseId = editTopic?.ml_course || new URLSearchParams(location.search).get('course') || location.state?.courseId || localStorage.getItem('currentCourseId')
 
   console.log("COURSE ID RECEIVED:", courseId)
   console.log("editTopic object on load:", editTopic)

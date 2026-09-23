@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Camera } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import ThemeButton from '../../components/common/ThemeButton'
@@ -104,7 +104,7 @@ export default function PPTList() {
     <div className="h-full animate-fade-in-up">
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden flex flex-col h-full min-h-0">
         <CardHeader title="Pre-Placement Talks">
-          <ThemeButton variant="white-add" onClick={() => navigate('/placement-talks/add')}>
+          <ThemeButton variant="white-add" to={'/placement-talks/add'}>
             + Add New
           </ThemeButton>
         </CardHeader>
@@ -216,13 +216,13 @@ export default function PPTList() {
                       </td>
                       <td className="px-4 py-4 align-middle">
                         <div className="flex gap-2">
-                          <button 
-                            onClick={() => navigate(`/placement-talks/edit/${row._id}`, { state: { ppt: row } })}
-                            className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors shadow-sm"
+                          <Link 
+                            to={`/placement-talks/edit/${row._id}`} state={{ ppt: row }}
+                            className="inline-block bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors shadow-sm"
                             title="Edit"
                           >
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button 
                             onClick={() => handleDelete(row._id)}
                             className="bg-red-500 text-white p-1.5 rounded hover:bg-red-600 transition-colors shadow-sm"

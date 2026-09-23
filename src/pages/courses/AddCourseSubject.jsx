@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import * as Icons from 'lucide-react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -131,13 +131,12 @@ export default function AddCourseSubject() {
             >
               {isEditing ? 'Update Subject' : 'Submit Subject'}
             </button>
-            <button 
-              type="button"
-              onClick={() => navigate(`/courses/subjects/${id}`)}
-              className="flex-1 bg-[#144f36] text-white px-8 py-2 rounded-lg text-sm font-medium hover:bg-[#0f3d2a] transition-colors"
+            <Link
+              to={`/courses/subjects/${id}`}
+              className="inline-block flex-1 bg-[#144f36] text-white px-8 py-2 rounded-lg text-sm font-medium hover:bg-[#0f3d2a] transition-colors"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

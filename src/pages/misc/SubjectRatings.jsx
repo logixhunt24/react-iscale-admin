@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { subjectRatingsData } from '../../utils/mockData'
 
 const TOTAL_ENTRIES = subjectRatingsData.length
@@ -43,9 +43,9 @@ export default function SubjectRatings() {
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Subject Rating List</h2>
           </div>
-          <button onClick={() => navigate('/subject-ratings/add')} className="bg-[#428bca] text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-[#3071a9] transition-colors flex items-center gap-2">
+          <Link to={'/subject-ratings/add'} className="bg-[#428bca] text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-[#3071a9] transition-colors flex items-center gap-2">
             <span>+ Add New</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">

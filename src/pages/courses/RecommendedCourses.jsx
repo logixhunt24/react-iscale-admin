@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Eye, Edit2, Trash2, Book } from 'lucide-react'
 import * as Icons from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -142,9 +142,9 @@ const handleDelete = async (id) => {
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Recommended Courses List</h2>
           </div>
           
-          <button onClick={() => navigate('/courses/all/add')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
+          <Link to={'/courses/all/add'} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
             <span>+ Add New Course</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -282,19 +282,19 @@ const handleDelete = async (id) => {
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">₹{price}</td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">₹{offerPrice}</td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
-                      <button onClick={() => navigate(`/courses/subjects/${courseId}`)} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                      <Link to={`/courses/subjects/${courseId}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} />
                         Subject
-                      </button>
+                      </Link>
                     </td>
                     <td className="px-3 py-3 align-middle">
                       <div className="flex gap-1.5">
-                        <button onClick={() => navigate(`/courses/view/${courseId}`, { state: { courseData: row } })} className="bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors">
+                        <Link to={`/courses/view/${courseId}`} state={{ courseData: row }} className="inline-block bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors">
                           <Eye size={14} />
-                        </button>
-                        <button onClick={() => navigate(`/courses/all/edit/${courseId}`, { state: { courseData: row } })} className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#c2621f] transition-colors">
+                        </Link>
+                        <Link to={`/courses/all/edit/${courseId}`} state={{ courseData: row }} className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#c2621f] transition-colors">
                           <Edit2 size={14} />
-                        </button>
+                        </Link>
                         <button onClick={() => handleDelete(courseId)} className="bg-[#d9534f] text-white p-1.5 rounded hover:bg-[#d9534f] transition-colors">
                           <Trash2 size={14} />
                         </button>

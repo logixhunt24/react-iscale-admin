@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { User, Eye, EyeOff } from 'lucide-react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -154,13 +154,13 @@ export default function AddUser() {
               {isEditing ? 'Edit User' : 'Add New User'}
             </h2>
           </div>
-          <button 
-            onClick={() => navigate('/user-role')}
+          <Link 
+            to={'/user-role'}
             className="bg-[#144f36] text-white px-5 py-2 rounded flex items-center gap-2 text-sm font-bold hover:bg-[#0f3d2a] transition-colors shadow-sm"
           >
             <User size={16} />
             <span>View All Users</span>
-          </button>
+          </Link>
         </div>
 
         {/* Form Body */}
@@ -306,13 +306,12 @@ export default function AddUser() {
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>
-              <button 
-                type="button" 
-                onClick={() => navigate('/user-role')}
-                className="flex-1 bg-[#d97706] text-white px-6 py-2.5 rounded font-medium hover:bg-amber-600 transition-colors shadow-sm"
+              <Link 
+                to={'/user-role'}
+                className="inline-block flex-1 bg-[#d97706] text-white px-6 py-2.5 rounded font-medium hover:bg-amber-600 transition-colors shadow-sm"
               >
                 Cancel
-              </button>
+              </Link>
             </div>
 
           </form>

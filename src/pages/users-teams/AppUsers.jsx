@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import AppUserDetails from './AppUserDetails'
@@ -285,7 +285,7 @@ export default function AppUsers() {
   return (
     <div className="h-full animate-fade-in-up">
       <CardHeader title="App Users List" className="rounded-2xl mb-5">
-        <ThemeButton variant="white-add" onClick={() => navigate('/app-users/add')}>
+        <ThemeButton variant="white-add" to={'/app-users/add'}>
           + Add Student
         </ThemeButton>
         <ThemeButton variant="white-add" onClick={handleExport}>
@@ -387,9 +387,9 @@ export default function AppUsers() {
                           <button onClick={() => setSelectedUserId(row._id)} className="bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors" title="View Details">
                             <Eye size={14} />
                           </button>
-                          <button onClick={() => navigate(`/app-users/edit/${row._id}`)} className="bg-green-600 text-white p-1.5 rounded hover:bg-green-700 transition-colors" title="Edit User">
+                          <Link to={`/app-users/edit/${row._id}`} className="inline-block bg-green-600 text-white p-1.5 rounded hover:bg-green-700 transition-colors" title="Edit User">
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button onClick={() => handleDelete(row._id)} className="btn-glossy-red icon-only" title="Delete User">
                             <Trash2 size={14} />
                           </button>

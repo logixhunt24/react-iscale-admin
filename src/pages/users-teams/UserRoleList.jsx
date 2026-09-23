@@ -3,7 +3,7 @@ import { Edit2, Trash2 } from 'lucide-react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function UserRoleList() {
   const navigate = useNavigate()
@@ -182,12 +182,12 @@ export default function UserRoleList() {
             <div className="w-1.5 h-6 bg-white rounded-full mr-3"></div>
             <h2 className="text-xl font-bold text-white tracking-tight">All Users List</h2>
           </div>
-          <button 
-            onClick={handleAddNewClick}
+          <Link 
+            to="/user-role/add"
             className="bg-white text-[#144f36] px-5 py-2 rounded-full flex items-center gap-2 text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm"
           >
             <span>+ Add New User</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col lg:flex-row gap-6 overflow-y-auto">
@@ -294,13 +294,13 @@ export default function UserRoleList() {
                           </td>
                           <td className="px-4 py-4 align-middle text-slate-800">
                             <div className="flex gap-2 justify-center">
-                              <button 
-                                onClick={() => handleEditClick(row)}
-                                className="bg-[#5cb85c] text-white p-1.5 rounded hover:bg-[#4cae4c] transition-colors shadow-sm"
+                              <Link 
+                                to={`/user-role/edit/${row._id || row.id}`}
+                                className="inline-block bg-[#5cb85c] text-white p-1.5 rounded hover:bg-[#4cae4c] transition-colors shadow-sm"
                                 title="Edit"
                               >
                                 <Edit2 size={16} />
-                              </button>
+                              </Link>
                               <button 
                                 onClick={() => handleDelete(id)}
                                 className="bg-[#d9534f] text-white p-1.5 rounded hover:bg-[#c9302c] transition-colors shadow-sm"

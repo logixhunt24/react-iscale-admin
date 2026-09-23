@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Eye, EyeOff } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -164,12 +164,12 @@ export default function CouponsList() {
             <div className="w-1.5 h-6 bg-white rounded-full mr-3"></div>
             <h2 className="text-xl font-bold text-white tracking-tight">Coupons List</h2>
           </div>
-          <button 
-            onClick={() => navigate('/master/coupons/add')}
+          <Link 
+            to={'/master/coupons/add'}
             className="bg-white text-[#144f36] px-5 py-2 rounded-full flex items-center gap-2 text-sm font-bold hover:bg-slate-50 transition-colors shadow-sm"
           >
             <span>+ Add New</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -289,13 +289,13 @@ export default function CouponsList() {
                         </td>
                         <td className="px-4 py-4 align-middle">
                           <div className="flex gap-2 justify-center">
-                            <button 
-                              onClick={() => navigate(`/master/coupons/edit/${id}`, { state: { couponData: row } })}
-                              className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
+                            <Link 
+                              to={`/master/coupons/edit/${id}`} state={{ couponData: row }}
+                              className="inline-block bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
                               title="Edit"
                             >
                               <Edit2 size={16} />
-                            </button>
+                            </Link>
                             <button 
                               onClick={() => handleDelete(id)}
                               className="bg-red-500 text-white p-1.5 rounded hover:bg-red-600 transition-colors"

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -107,12 +107,12 @@ export default function QuizList() {
       <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4 mb-5 flex justify-between items-center">
         <h2 className="text-slate-800 font-bold text-xl">Quizzes - {packageTitle}</h2>
         <div className="flex gap-2">
-          <button
-            onClick={() => navigate(`/quiz/add/${packageId}`, { state: { packageTitle } })}
+          <Link
+            to={`/quiz/add/${packageId}`} state={{ packageTitle }}
             className="bg-[#144f36] hover:bg-[#0f3d2a] text-white px-4 py-2 rounded text-sm font-semibold shadow-sm transition-colors flex items-center gap-1"
           >
             <span>+ Add New Quiz</span>
-          </button>
+          </Link>
           <button
             onClick={() => navigate(-1)}
             className="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded text-sm font-semibold shadow-sm transition-colors"
@@ -191,13 +191,13 @@ export default function QuizList() {
                         >
                           <Eye size={14} />
                         </button>
-                        <button
-                          onClick={() => navigate(`/quiz/add/${packageId}`, { state: { editQuiz: row, packageTitle } })}
-                          className="bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors"
+                        <Link
+                          to={`/quiz/add/${packageId}`} state={{ editQuiz: row, packageTitle }}
+                          className="inline-block bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors"
                           title="Edit"
                         >
                           <Edit2 size={14} />
-                        </button>
+                        </Link>
                         <button
                           onClick={() => handleDelete(row._id)}
                           className="bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#b55d1f] transition-colors"

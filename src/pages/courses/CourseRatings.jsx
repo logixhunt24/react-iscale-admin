@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Star } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
@@ -97,12 +97,12 @@ export default function CourseRatings() {
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">All Testimonials / Course Ratings</h2>
           </div>
 
-          <button
-            onClick={() => navigate('/courses/ratings/add')}
+          <Link
+            to={'/courses/ratings/add'}
             className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5"
           >
             <span>+ Add New</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col min-h-0">
@@ -192,13 +192,13 @@ export default function CourseRatings() {
                       </td>
                       <td className="px-4 py-4 align-top">
                         <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => navigate(`/courses/ratings/edit/${row._id}`, { state: { review: row } })}
-                            className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
+                          <Link
+                            to={`/courses/ratings/edit/${row._id}`} state={{ review: row }}
+                            className="inline-block bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
                             title="Edit"
                           >
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button
                             onClick={() => handleDelete(row._id)}
                             className="bg-red-500 text-white p-1.5 rounded hover:bg-red-600 transition-colors"

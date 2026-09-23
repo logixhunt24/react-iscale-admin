@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Plus, Trash2 } from 'lucide-react'
 import axios from 'axios'
@@ -208,12 +208,12 @@ export default function AddCareerFit() {
             </h2>
           </div>
 
-          <button
-            onClick={() => navigate('/career-fit')}
+          <Link
+            to={'/career-fit'}
             className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5"
           >
             « Back
-          </button>
+          </Link>
         </div>
 
         <div className="p-6 overflow-y-auto flex-1">
@@ -318,7 +318,7 @@ export default function AddCareerFit() {
 
           <div className="mb-6">
             <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Prime Hiring Destinations</label>
-            <p className="text-xs text-slate-500 mb-1">Pick which logos show in this goal's "Prime Hiring Destinations" strip. If none are picked, the full logo gallery is shown instead. Manage the gallery itself under <button type="button" onClick={() => navigate('/career-fit/hiring-destinations')} className="underline text-[#144f36] font-semibold">Hiring Destinations</button>.</p>
+            <p className="text-xs text-slate-500 mb-1">Pick which logos show in this goal's "Prime Hiring Destinations" strip. If none are picked, the full logo gallery is shown instead. Manage the gallery itself under <Link to={'/career-fit/hiring-destinations'} className="inline-block underline text-[#144f36] font-semibold">Hiring Destinations</Link>.</p>
             <div className="border border-slate-300 dark:border-gray-700 rounded max-h-48 overflow-y-auto bg-white dark:bg-[#13111c]">
               {allDestinations.length === 0 ? (
                 <p className="text-xs text-slate-400 p-3">No logos in the gallery yet.</p>
@@ -414,12 +414,12 @@ export default function AddCareerFit() {
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
-            <button
-              onClick={() => navigate('/career-fit')}
-              className="bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
+            <Link
+              to={'/career-fit'}
+              className="inline-block bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

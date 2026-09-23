@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { Edit2, Trash2 } from 'lucide-react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -153,9 +153,9 @@ export default function CourseFeatures() {
           </div>
           
           <div className="flex gap-4 relative z-10">
-            <button onClick={() => navigate('/courses/all')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5 flex items-center gap-2">
+            <Link to={'/courses/all'} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5 flex items-center gap-2">
               <span>Back To Courses</span>
-            </button>
+            </Link>
           </div>
         </div>
 

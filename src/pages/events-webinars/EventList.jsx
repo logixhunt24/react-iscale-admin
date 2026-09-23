@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2, Camera } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -108,12 +108,12 @@ export default function EventList() {
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Event List</h2>
           </div>
-          <button 
-            onClick={() => navigate('/events/list/add')}
+          <Link 
+            to={'/events/list/add'}
             className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5"
           >
             <span>+ Add New</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -291,13 +291,13 @@ export default function EventList() {
                         </td>
                         <td className="px-4 py-4 align-middle">
                           <div className="flex gap-2 justify-center">
-                            <button 
-                              onClick={() => navigate(`/events/list/edit/${id}`, { state: { eventData: row } })}
-                              className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
+                            <Link 
+                              to={`/events/list/edit/${id}`} state={{ eventData: row }}
+                              className="inline-block bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors"
                               title="Edit"
                             >
                               <Edit2 size={16} />
-                            </button>
+                            </Link>
                             <button 
                               onClick={() => handleDelete(id)}
                               className="bg-red-500 text-white p-1.5 rounded hover:bg-red-600 transition-colors"

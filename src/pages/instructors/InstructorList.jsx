@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -94,9 +94,9 @@ export default function InstructorList() {
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Instructors List</h2>
           </div>
-          <button onClick={() => navigate('/instructors/add')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
+          <Link to={'/instructors/add'} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5">
             <span>+ Add Instructor</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -165,13 +165,13 @@ export default function InstructorList() {
                     </td>
                     <td className="px-4 py-3 align-top">
                       <div className="flex gap-2">
-                        <button 
-                          onClick={() => navigate(`/instructors/edit/${row._id}`)}
-                          className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm"
+                        <Link 
+                          to={`/instructors/edit/${row._id}`}
+                          className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm"
                           title="Edit"
                         >
                           <Edit2 size={14} />
-                        </button>
+                        </Link>
                         <button 
                           onClick={() => handleDelete(row._id)}
                           className="btn-glossy-red icon-only"

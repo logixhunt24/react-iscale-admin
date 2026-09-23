@@ -1,8 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ThemeButton({
   children,
   onClick,
+  to,
+  state,
+  replace,
   type = 'button',
   variant = 'solid-green', // 'solid-green' | 'outline-green' | 'white-add' | 'pill-green'
   className = '',
@@ -20,13 +24,24 @@ export default function ThemeButton({
   };
 
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";
+  const classes = `${baseStyles} ${variants[variant] || variants['solid-green']} ${disabledStyles} ${className}`;
+
+  // A real link (not a button) when `to` is given, so it can be opened in a new tab.
+  if (to) {
+    return (
+      <Link to={to} state={state} replace={replace} onClick={onClick} aria-disabled={disabled || undefined} className={classes} {...props}>
+        {icon && <span>{icon}</span>}
+        {children}
+      </Link>
+    );
+  }
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variants[variant] || variants['solid-green']} ${disabledStyles} ${className}`}
+      className={classes}
       {...props}
     >
       {icon && <span>{icon}</span>}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -111,12 +111,12 @@ export default function BannersList() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden flex flex-col h-full">
         <div className="p-4 flex justify-between items-center bg-[#144f36] dark:bg-[#0f3d2a] rounded-t-2xl">
           <h2 className="text-xl font-bold tracking-tight text-white">Banners List</h2>
-          <button 
-            onClick={() => navigate('/banners/add')}
+          <Link 
+            to={'/banners/add'}
             className="bg-white text-[#144f36] px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-100 transition-colors flex items-center gap-2 shadow-sm"
           >
             <span>+ Add New Banner</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col">
@@ -192,9 +192,9 @@ export default function BannersList() {
                       </td>
                       <td className="px-4 py-3 align-middle text-center">
                         <div className="flex justify-center gap-2">
-                          <button onClick={() => navigate(`/banners/edit/${row._id}`)} className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit">
+                          <Link to={`/banners/edit/${row._id}`} className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit">
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button onClick={() => handleDelete(row._id)} className="bg-red-600 text-white p-1.5 rounded hover:bg-red-700 transition-colors shadow-sm" title="Delete">
                             <Trash2 size={14} />
                           </button>

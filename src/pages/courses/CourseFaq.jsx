@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { Edit2, Trash2 } from 'lucide-react'
 import * as Icons from 'lucide-react'
 
@@ -169,9 +169,9 @@ const handleDeleteFaq = async (faqId) => {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md border border-slate-100 flex flex-col min-h-[600px]">
         <div className="p-4 flex justify-between items-center flex-wrap gap-4 bg-[#144f36] text-white rounded-t-2xl">
           <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">Courses FAQ</h2>
-          <button onClick={() => navigate('/courses/all')} className="bg-white text-[#144f36] shadow-sm hover:shadow hover:bg-emerald-50 px-4 py-2 rounded-full text-sm font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-2">
+          <Link to={'/courses/all'} className="bg-white text-[#144f36] shadow-sm hover:shadow hover:bg-emerald-50 px-4 py-2 rounded-full text-sm font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-2">
             <span>+ Back To Course List</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-4 flex-1 flex flex-col gap-4">

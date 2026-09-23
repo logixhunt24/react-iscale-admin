@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -79,12 +79,12 @@ export default function EditAllied() {
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">Edit Allied College</h2>
           </div>
           
-          <button 
-            onClick={() => navigate('/our-allied')}
+          <Link 
+            to={'/our-allied'}
             className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5"
           >
             « Back
-          </button>
+          </Link>
         </div>
 
         <div className="p-6 overflow-y-auto flex-1">
@@ -158,12 +158,12 @@ export default function EditAllied() {
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
-            <button 
-              onClick={() => navigate('/our-allied')}
-              className="bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
+            <Link 
+              to={'/our-allied'}
+              className="inline-block bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

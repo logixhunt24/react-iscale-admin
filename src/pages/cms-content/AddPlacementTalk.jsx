@@ -1,5 +1,5 @@
 import Button from '../../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function AddPlacementTalk() {
   const navigate = useNavigate()
@@ -9,12 +9,12 @@ export default function AddPlacementTalk() {
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors overflow-hidden max-w-5xl">
         <div className="p-4 border-b border-slate-200 dark:border-gray-800/50 bg-[#f6f6ff] dark:bg-[#1f1b2e] flex justify-between items-center">
           <h2 className="text-xl font-medium text-indigo-900 dark:text-indigo-300 font-bold tracking-tight">Add Placement Talk List</h2>
-          <button 
-            onClick={() => navigate('/placement-talks')}
+          <Link 
+            to={'/placement-talks'}
             className="bg-[#428bca] text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-[#3071a9] transition-colors flex items-center gap-1"
           >
             « Back
-          </button>
+          </Link>
         </div>
 
         <div className="p-6">
@@ -80,12 +80,12 @@ export default function AddPlacementTalk() {
 
           <div className="flex gap-4">
             <Button fullWidth className="py-2">Submit</Button>
-            <button 
-              onClick={() => navigate('/placement-talks')}
-              className="bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
+            <Link 
+              to={'/placement-talks'}
+              className="inline-block bg-slate-50 dark:bg-[#13111c] text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-gray-800 px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#152a4a] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

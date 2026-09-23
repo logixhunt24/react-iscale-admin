@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Eye, Edit2, Trash2 } from 'lucide-react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -138,9 +138,9 @@ export default function TestSeriesCategory() {
       {/* Title Card */}
       <div className="bg-[#144f36] rounded-t-2xl p-5 flex justify-between items-center shadow-md relative overflow-hidden group mb-5">
         <h2 className="text-white font-bold tracking-tight text-xl relative z-10">Test Series Category List</h2>
-        <button onClick={() => navigate('/test-series/category/add')} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2">
+        <Link to={'/test-series/category/add'} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2">
           <span>+ Add New</span>
-        </button>
+        </Link>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl overflow-hidden p-4">
@@ -237,9 +237,9 @@ export default function TestSeriesCategory() {
                     </td>
                     <td className="px-4 py-3 align-middle">
                       <div className="flex gap-1.5">
-                        <button onClick={() => navigate(`/test-series/category/add`, { state: { editCategory: row } })} className="bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors">
+                        <Link to={`/test-series/category/add`} state={{ editCategory: row }} className="inline-block bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors">
                           <Edit2 size={14} />
-                        </button>
+                        </Link>
                         <button onClick={() => handleDelete(row._id)} className="bg-[#d87025] text-white p-1.5 rounded-full hover:bg-[#b55d1f] transition-colors">
                           <Trash2 size={14} />
                         </button>

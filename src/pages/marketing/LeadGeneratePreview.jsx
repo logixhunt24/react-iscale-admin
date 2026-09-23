@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -351,12 +351,12 @@ export default function LeadGeneratePreview() {
         </div>
         
         {/* Return to Admin Button (for preview convenience) */}
-        <button 
-          onClick={() => navigate('/leads')} 
-          className="absolute top-4 left-4 bg-white/20 hover:bg-white/40 text-black px-4 py-1.5 rounded-full text-xs font-bold transition-colors"
+        <Link 
+          to={'/leads'} 
+          className="inline-block absolute top-4 left-4 bg-white/20 hover:bg-white/40 text-black px-4 py-1.5 rounded-full text-xs font-bold transition-colors"
         >
           ← Back to Admin
-        </button>
+        </Link>
         
       </div>
     </div>

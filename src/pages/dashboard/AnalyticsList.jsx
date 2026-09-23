@@ -2,7 +2,7 @@ import IconButton from '../../components/common/IconButton'
 import { useState, useMemo, useEffect } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Eye, Trash2, Search, Download, Copy, FileSpreadsheet, FileText, Printer } from 'lucide-react'
 
 const TOTAL_ENTRIES_MOCK = 53547
@@ -317,13 +317,13 @@ export default function AnalyticsList() {
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">{row.createdAt}</td>
                     <td className="px-4 py-3 align-middle">
                       <div className="flex gap-2">
-                        <button 
-                          onClick={() => navigate(`/analytics/details/${row._id}`)}
-                          className="bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors shadow-sm" 
+                        <Link 
+                          to={`/analytics/details/${row._id}`}
+                          className="inline-block bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors shadow-sm" 
                           title="View"
                         >
                           <Eye size={14} />
-                        </button>
+                        </Link>
                         <button 
                           onClick={() => handleDelete(row._id)}
                           className="bg-red-600 text-white p-1.5 rounded hover:bg-red-700 transition-colors shadow-sm" 

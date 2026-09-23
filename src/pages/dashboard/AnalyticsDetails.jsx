@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 import PageHeader from '../../components/ui/PageHeader'
@@ -43,12 +43,12 @@ export default function AnalyticsDetails() {
     return (
       <div className="h-full flex flex-col items-center justify-center">
         <p className="text-xl text-slate-600 dark:text-slate-400">Record not found.</p>
-        <button 
-          onClick={() => navigate('/analytics')}
-          className="mt-4 bg-[#144f36] text-white px-6 py-2 rounded-full font-bold hover:bg-[#0f3d2a] transition-colors"
+        <Link 
+          to={'/analytics'}
+          className="inline-block mt-4 bg-[#144f36] text-white px-6 py-2 rounded-full font-bold hover:bg-[#0f3d2a] transition-colors"
         >
           Back to Analytics
-        </button>
+        </Link>
       </div>
     )
   }
@@ -56,12 +56,12 @@ export default function AnalyticsDetails() {
   return (
     <div className="h-full animate-fade-in-up flex flex-col gap-6">
       <div className="flex items-center gap-4 mb-2">
-        <button 
-          onClick={() => navigate('/analytics')}
-          className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
+        <Link 
+          to={'/analytics'}
+          className="inline-block p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
         >
           <ArrowLeft size={24} />
-        </button>
+        </Link>
         <PageHeader
           title="Analytics Details"
           subtitle="View complete lead information"

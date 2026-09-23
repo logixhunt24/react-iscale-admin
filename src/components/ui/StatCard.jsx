@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
+const MotionLink = motion.create(Link)
 
 function AnimatedCounter({ value, duration = 1500 }) {
   const [count, setCount] = useState(0)
@@ -42,19 +44,15 @@ function AnimatedCounter({ value, duration = 1500 }) {
 }
 
 export default function StatCard({ card, index }) {
-  const navigate = useNavigate();
   const LucideIcon = Icons[card?.icon] || Icons.Activity
   
-  const handleCardClick = () => {
-    if (!card?.key) return;
-    if (['totalRegistration', 'totalNotesSale', 'totalPackageSale', 'totalCourseSale', 'totalEarnings'].includes(card.key)) {
-      navigate('/registrations');
-    } else if (card.key === 'totalCourses') {
-      navigate('/courses/all');
-    } else if (card.key === 'totalQuizs') {
-      navigate('/quiz/list/all');
-    }
+  const getCardPath = (key) => {
+    if (['totalRegistration', 'totalNotesSale', 'totalPackageSale', 'totalCourseSale', 'totalEarnings'].includes(key)) return '/registrations';
+    if (key === 'totalCourses') return '/courses/all';
+    if (key === 'totalQuizs') return '/quiz/list/all';
+    return null;
   };
+  const cardPathTo = getCardPath(card?.key);
   
   // Generating a simple random looking SVG line based on index
   const paths = [
@@ -67,13 +65,14 @@ export default function StatCard({ card, index }) {
   const path = paths[index % 5]
 
   return (
-    <motion.div
-      onClick={handleCardClick}
+    <MotionLink
+      to={cardPathTo || '#'}
+      onClick={(e) => { if (!cardPathTo) e.preventDefault() }}
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -8, scale: 1.02 }}
       transition={{ duration: 0.4, delay: index * 0.08, type: 'spring', stiffness: 300 }}
-      className="cursor-pointer bg-gradient-to-b from-white to-[#fcfcfd] rounded-2xl p-4 border-t-4 border-t-[#22c55e] border-x border-b border-slate-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_30px_-12px_rgba(0,0,0,0.12)] transition-all duration-300 relative overflow-hidden"
+      className="block cursor-pointer bg-gradient-to-b from-white to-[#fcfcfd] rounded-2xl p-4 border-t-4 border-t-[#22c55e] border-x border-b border-slate-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_30px_-12px_rgba(0,0,0,0.12)] transition-all duration-300 relative overflow-hidden"
     >
       <div className="flex justify-between items-start mb-3 relative z-10">
         <div className="flex flex-col">
@@ -109,6 +108,6 @@ export default function StatCard({ card, index }) {
           </svg>
         </div>
       </div>
-    </motion.div>
+    </MotionLink>
   )
 }

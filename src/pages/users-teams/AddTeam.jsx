@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -110,12 +110,12 @@ export default function AddTeam() {
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">{isEdit ? 'Edit Team' : 'Add Team'}</h2>
           </div>
-          <button 
-            onClick={() => navigate('/teams/all')}
+          <Link 
+            to={'/teams/all'}
             className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 relative z-10 hover:shadow hover:-translate-y-0.5"
           >
             <span>Back</span>
-          </button>
+          </Link>
         </div>
 
         <div className="p-6 bg-white dark:bg-[#13111c]">
@@ -250,12 +250,12 @@ export default function AddTeam() {
             >
               Submit
             </button>
-            <button 
-              onClick={() => navigate('/teams/all')}
-              className="bg-[#d87025] text-white px-10 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors shadow-md"
+            <Link 
+              to={'/teams/all'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2.5 rounded-lg text-sm font-bold hover:bg-[#b55d1f] transition-colors shadow-md"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </div>
       </div>

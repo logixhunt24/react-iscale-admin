@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -151,12 +151,12 @@ export default function AddTestSeriesPackage() {
           <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
             {isEditing ? 'Edit Package' : 'Add New Package'}
           </h2>
-          <button 
-            onClick={() => navigate('/test-series/packages')}
+          <Link 
+            to={'/test-series/packages'}
             className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 border border-white/30"
           >
             <span>↩ Back</span>
-          </button>
+          </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6">
@@ -324,13 +324,12 @@ export default function AddTestSeriesPackage() {
             >
               {loading ? 'Saving...' : (isEditing ? 'Update Package' : 'Submit')}
             </button>
-            <button 
-              type="button"
-              onClick={() => navigate('/test-series/packages')}
-              className="flex-1 bg-[#d87025] text-white px-8 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#b55d1f] transition-colors"
+            <Link
+              to={'/test-series/packages'}
+              className="inline-block flex-1 bg-[#d87025] text-white px-8 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#b55d1f] transition-colors"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

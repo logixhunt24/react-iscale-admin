@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -218,13 +218,12 @@ export default function AddNotesSubCategory() {
             >
               {loading ? 'Saving...' : 'Submit'}
             </button>
-            <button 
-              type="button"
-              onClick={() => navigate('/notes/sub-category')}
-              className="bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
+            <Link
+              to={'/notes/sub-category'}
+              className="inline-block bg-[#d87025] text-white px-10 py-2 rounded-lg text-sm font-medium hover:bg-[#c2621f] transition-colors flex-1"
             >
               Cancel
-            </button>
+            </Link>
           </div>
         </form>
       </div>

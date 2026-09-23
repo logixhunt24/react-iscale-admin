@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Edit2, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import ThemeButton from '../../components/common/ThemeButton'
 import CardHeader from '../../components/ui/CardHeader'
@@ -117,7 +117,7 @@ export default function TeamsList() {
         <CardHeader title="Teams List">
           <ThemeButton 
             variant="white-add"
-            onClick={() => navigate('/teams/add')}
+            to={'/teams/add'}
           >
             + Add Team
           </ThemeButton>
@@ -245,9 +245,9 @@ export default function TeamsList() {
                       </td>
                       <td className="px-4 py-3 align-middle text-center">
                         <div className="flex justify-center gap-2">
-                          <button onClick={() => navigate(`/teams/edit/${row._id}`)} className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit">
+                          <Link to={`/teams/edit/${row._id}`} className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#b55d1f] transition-colors shadow-sm" title="Edit">
                             <Edit2 size={14} />
-                          </button>
+                          </Link>
                           <button onClick={() => handleDelete(row._id)} className="bg-red-600 text-white p-1.5 rounded hover:bg-red-700 transition-colors shadow-sm" title="Delete">
                             <Trash2 size={14} />
                           </button>

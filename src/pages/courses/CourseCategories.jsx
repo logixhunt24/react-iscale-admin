@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Edit2, Trash2 } from 'lucide-react'
 import * as Icons from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
 import ThemeButton from '../../components/common/ThemeButton'
@@ -128,7 +128,7 @@ export default function CourseCategories() {
     <div className="animate-fade-in-up">
       <div className="bg-[#f6f6ff] rounded-2xl shadow-md hover:shadow-[0_8px_30px_rgba(99,102,241,0.15)] transition-shadow border border-slate-100 transition-colors flex flex-col min-h-[600px]">
         <CardHeader title="Category List">
-          <ThemeButton variant="white-add" onClick={() => navigate('/courses/categories/add')}>
+          <ThemeButton variant="white-add" to={'/courses/categories/add'}>
             + Add New
           </ThemeButton>
         </CardHeader>
@@ -250,9 +250,9 @@ export default function CourseCategories() {
                         </td>
                         <td className="px-4 py-3 align-top">
                           <div className="flex gap-2">
-                            <button onClick={() => navigate(`/courses/categories/edit/${row._id}`)} className="bg-[#d87025] text-white p-1.5 rounded hover:bg-[#c2621f] transition-colors">
+                            <Link to={`/courses/categories/edit/${row._id}`} className="inline-block bg-[#d87025] text-white p-1.5 rounded hover:bg-[#c2621f] transition-colors">
                               <Edit2 size={14} />
-                            </button>
+                            </Link>
                             <button onClick={() => handleDelete(row._id)} className="btn-glossy-red icon-only">
                               <Trash2 size={14} />
                             </button>
