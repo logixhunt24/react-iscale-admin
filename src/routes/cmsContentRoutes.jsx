@@ -21,8 +21,10 @@ import StudentTestimonialList from '../pages/cms-content/StudentTestimonialList'
 import AddStudentTestimonial from '../pages/cms-content/AddStudentTestimonial'
 import EditStudentTestimonial from '../pages/cms-content/EditStudentTestimonial'
 import AddUserReview from '../pages/cms-content/AddUserReview'
+import WhoWeAre from '../pages/homepage/WhoWeAre'
 
 const cmsContentRoutes = [
+  <Route key="who-we-are" path="/master/who-we-are" element={<WhoWeAre />} />,
   <Route key="ratings-home-page" path="/ratings/home-page" element={<HomePageReviews />} />,
   <Route key="home-page-reviews-add" path="/home-page-reviews/add" element={<AddUserReview />} />,
   <Route key="success-story" path="/success-story" element={<SuccessStoryList />} />,

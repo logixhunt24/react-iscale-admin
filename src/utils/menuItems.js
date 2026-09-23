@@ -202,6 +202,7 @@ export const menuItems = [
     icon: 'Menu',
     path: '/more',
     children: [
+      { id: 'who-we-are', label: 'Who We Are (Homepage)', path: '/master/who-we-are' },
       { id: 'job-updates', label: 'Job Updates', path: '/job-updates' },
       { id: 'success-story', label: 'Success Story', path: '/success-story' },
       { id: 'placement-talks', label: 'Placement Talks', path: '/placement-talks' },
