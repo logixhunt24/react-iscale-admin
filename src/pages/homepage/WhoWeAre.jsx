@@ -14,6 +14,8 @@ export default function WhoWeAre() {
   const [pillText, setPillText] = useState('')
   const [heading, setHeading] = useState('')
   const [description, setDescription] = useState('')
+  const [newsPillText, setNewsPillText] = useState('')
+  const [newsHeading, setNewsHeading] = useState('')
   const [cards, setCards] = useState([
     { title: '', link: '', image: '' },
     { title: '', link: '', image: '' },
@@ -33,6 +35,8 @@ export default function WhoWeAre() {
           setPillText(data.pill_text || '')
           setHeading(data.heading || '')
           setDescription(data.description || '')
+          setNewsPillText(data.news_pill_text || '')
+          setNewsHeading(data.news_heading || '')
           const loadedCards = [0, 1, 2].map((i) => ({
             title: data.cards?.[i]?.title || '',
             link: data.cards?.[i]?.link || '',
@@ -67,6 +71,8 @@ export default function WhoWeAre() {
       payload.append('m_pill_text', pillText.trim())
       payload.append('m_heading', heading.trim())
       payload.append('m_description', description.trim())
+      payload.append('m_news_pill_text', newsPillText.trim())
+      payload.append('m_news_heading', newsHeading.trim())
       payload.append('m_cards', JSON.stringify(cards.map((c) => ({ title: c.title, link: c.link }))))
       cardFiles.forEach((file, i) => {
         if (file) payload.append(`card_image_${i}`, file)
@@ -81,6 +87,8 @@ export default function WhoWeAre() {
         setCardFiles([null, null, null])
         const data = response.data.data
         if (data) {
+          setNewsPillText(data.news_pill_text || '')
+          setNewsHeading(data.news_heading || '')
           const loadedCards = [0, 1, 2].map((i) => ({
             title: data.cards?.[i]?.title || '',
             link: data.cards?.[i]?.link || '',
@@ -109,7 +117,7 @@ export default function WhoWeAre() {
           <div className="flex items-center relative z-10">
             <div className="w-1.5 h-7 bg-white dark:bg-[#13111c]/90 rounded-full mr-4 shadow-[0_0_12px_rgba(255,255,255,0.9)] hidden sm:block"></div>
             <h2 className="text-white font-bold tracking-wide text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
-              Who We Are Section
+              Homepage Header Content
             </h2>
           </div>
         </div>
@@ -204,6 +212,34 @@ export default function WhoWeAre() {
                       />
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="mb-6 pt-4 border-t border-slate-200">
+                <label className="block text-sm font-bold text-slate-800 mb-1">iScale News Section</label>
+                <p className="text-xs text-slate-500 mb-3">Controls the pill and heading above the separate scrolling "iScale News" cards further down the homepage — the cards themselves are managed under News & Updates.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[13px] font-bold text-slate-800 mb-1">Pill Text</label>
+                    <input
+                      type="text"
+                      value={newsPillText}
+                      onChange={(e) => setNewsPillText(e.target.value)}
+                      placeholder="e.g. Our Journal & Insights"
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold text-slate-800 mb-1">Heading</label>
+                    <input
+                      type="text"
+                      value={newsHeading}
+                      onChange={(e) => setNewsHeading(e.target.value)}
+                      placeholder="e.g. From Our Blog"
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">The last word is highlighted in red on the homepage.</p>
+                  </div>
                 </div>
               </div>
 
