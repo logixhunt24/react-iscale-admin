@@ -23,6 +23,39 @@ export default function WhoWeAre() {
   ])
   const [cardFiles, setCardFiles] = useState([null, null, null])
 
+  // The active homepage video - "active" = the most recently added
+  // brand_video record (getAllBrandVideos sorts newest-first and the
+  // homepage takes the first result), so uploading here just adds a new one.
+  const [currentVideo, setCurrentVideo] = useState(null)
+  const [videoName, setVideoName] = useState('')
+  const [videoFile, setVideoFile] = useState(null)
+  const [videoUploading, setVideoUploading] = useState(false)
+
+  // Quick add/remove for the scrolling "iScale News" ticker cards (text +
+  // link, image optional) - a lighter alternative to the full News & Updates
+  // form for the common case of just adding a headline + outbound link.
+  const [newsItems, setNewsItems] = useState([])
+  const [newsItemsLoading, setNewsItemsLoading] = useState(true)
+  const [newNewsTitle, setNewNewsTitle] = useState('')
+  const [newNewsLink, setNewNewsLink] = useState('')
+  const [addingNewsItem, setAddingNewsItem] = useState(false)
+
+  const fetchNewsItems = async () => {
+    try {
+      setNewsItemsLoading(true)
+      const token = localStorage.getItem('token')
+      const response = await axios.get(`${BASE_URL}/myadmin/news/all-news`, {
+        params: { page: 1, limit: 100 },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setNewsItems(response.data?.data || [])
+    } catch (err) {
+      console.error('Error fetching news cards', err)
+    } finally {
+      setNewsItemsLoading(false)
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +84,99 @@ export default function WhoWeAre() {
       }
     }
     fetchData()
+
+    const fetchCurrentVideo = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const response = await axios.get(`${BASE_URL}/myadmin/brand-video/all`, {
+          params: { page: 1, limit: 1 },
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setCurrentVideo(response.data?.data?.[0] || null)
+      } catch (err) {
+        console.error('Error fetching current video', err)
+      }
+    }
+    fetchCurrentVideo()
+
+    fetchNewsItems()
   }, [])
+
+  const handleVideoUpload = async () => {
+    if (!videoName.trim() || !videoFile) {
+      await window.customAlert('Video title and a video file are both required')
+      return
+    }
+    try {
+      setVideoUploading(true)
+      const token = localStorage.getItem('token')
+      const payload = new FormData()
+      payload.append('name', videoName.trim())
+      payload.append('status', 'active')
+      payload.append('video_file', videoFile)
+
+      const response = await axios.post(`${BASE_URL}/myadmin/brand-video/add`, payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (response.data?.status !== false) {
+        setCurrentVideo(response.data?.data || { name: videoName.trim() })
+        setVideoName('')
+        setVideoFile(null)
+        await window.customAlert('Video uploaded - it is now the one shown on the homepage')
+      } else {
+        await window.customAlert(response.data?.message || 'Failed to upload video')
+      }
+    } catch (error) {
+      console.error(error)
+      await window.customAlert(error.response?.data?.message || 'Failed to upload video')
+    } finally {
+      setVideoUploading(false)
+    }
+  }
+
+  const handleAddNewsItem = async () => {
+    if (!newNewsTitle.trim()) {
+      await window.customAlert('Text is required')
+      return
+    }
+    try {
+      setAddingNewsItem(true)
+      const token = localStorage.getItem('token')
+      const payload = new FormData()
+      payload.append('m_snews_title', newNewsTitle.trim())
+      payload.append('m_snews_url', newNewsLink.trim())
+
+      const response = await axios.post(`${BASE_URL}/myadmin/news/add-news`, payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (response.data?.status) {
+        setNewNewsTitle('')
+        setNewNewsLink('')
+        fetchNewsItems()
+      } else {
+        await window.customAlert(response.data?.message || 'Failed to add card')
+      }
+    } catch (error) {
+      console.error(error)
+      await window.customAlert(error.response?.data?.message || 'Failed to add card')
+    } finally {
+      setAddingNewsItem(false)
+    }
+  }
+
+  const handleDeleteNewsItem = async (id) => {
+    if (!await window.customConfirm('Delete this news card?')) return
+    try {
+      const token = localStorage.getItem('token')
+      await axios.delete(`${BASE_URL}/myadmin/news/delete-news/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      fetchNewsItems()
+    } catch (error) {
+      console.error(error)
+      await window.customAlert(error.response?.data?.message || 'Failed to delete card')
+    }
+  }
 
   const updateCardField = (idx, field, value) => {
     setCards((prev) => prev.map((c, i) => (i === idx ? { ...c, [field]: value } : c)))
@@ -136,7 +261,8 @@ export default function WhoWeAre() {
             <>
               <p className="text-xs text-slate-500 mb-4">
                 Controls the "Know About iScale Learning" block on the homepage — the small pill above the
-                heading, the heading and paragraph, and the 3 press/media highlight cards shown below it.
+                heading, the heading and paragraph, the video, the 3 press/media highlight cards, and the
+                separate "iScale News" scrolling section further down.
               </p>
 
               <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -172,7 +298,43 @@ export default function WhoWeAre() {
                 />
               </div>
 
-              <div className="mb-6">
+              <div className="mb-6 pt-4 border-t border-slate-200">
+                <label className="block text-sm font-bold text-slate-800 mb-1">Homepage Video</label>
+                <p className="text-xs text-slate-500 mb-3">
+                  Uploading a new video here makes it the one shown on the homepage (newest upload wins).
+                  {currentVideo && <> Currently live: <strong>{currentVideo.name}</strong>.</>}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+                  <div>
+                    <label className="block text-[13px] font-bold text-slate-800 mb-1">Video Title</label>
+                    <input
+                      type="text"
+                      value={videoName}
+                      onChange={(e) => setVideoName(e.target.value)}
+                      placeholder="e.g. Computer Science Career Explorations"
+                      className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-bold text-slate-800 mb-1">Video File</label>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+                      className="w-full text-sm text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border file:border-slate-300 file:bg-white file:text-slate-700 hover:file:bg-slate-50 cursor-pointer"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={handleVideoUpload}
+                  disabled={videoUploading}
+                  className="mt-3 bg-[#144f36] text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-[#0f3d2a] transition-colors shadow-sm disabled:opacity-50"
+                >
+                  {videoUploading ? 'Uploading...' : 'Upload Video'}
+                </button>
+              </div>
+
+              <div className="mb-6 pt-4 border-t border-slate-200">
                 <label className="block text-sm font-bold text-slate-800 mb-2">Press / Media Highlight Cards</label>
                 <p className="text-xs text-slate-500 mb-3">Exactly 3 cards, shown as a row below the description. Each is an image with the title overlaid on top, linking out when clicked.</p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -217,7 +379,7 @@ export default function WhoWeAre() {
 
               <div className="mb-6 pt-4 border-t border-slate-200">
                 <label className="block text-sm font-bold text-slate-800 mb-1">iScale News Section</label>
-                <p className="text-xs text-slate-500 mb-3">Controls the pill and heading above the separate scrolling "iScale News" cards further down the homepage — the cards themselves are managed under News & Updates.</p>
+                <p className="text-xs text-slate-500 mb-3">Controls the pill and heading above the separate scrolling "iScale News" cards further down the homepage.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-[13px] font-bold text-slate-800 mb-1">Pill Text</label>
@@ -240,6 +402,58 @@ export default function WhoWeAre() {
                     />
                     <p className="text-xs text-slate-500 mt-1">The last word is highlighted in red on the homepage.</p>
                   </div>
+                </div>
+              </div>
+
+              <div className="mb-6 pt-4 border-t border-slate-200">
+                <label className="block text-sm font-bold text-slate-800 mb-1">iScale News Cards</label>
+                <p className="text-xs text-slate-500 mb-3">The cards themselves - just text and an outbound link (e.g. a press article, an image-hosted announcement, anywhere external). Image is optional; use the full News & Updates form if you want one.</p>
+
+                <div className="flex flex-col sm:flex-row gap-3 mb-4 max-w-3xl">
+                  <input
+                    type="text"
+                    value={newNewsTitle}
+                    onChange={(e) => setNewNewsTitle(e.target.value)}
+                    placeholder="Text (headline)"
+                    className="flex-1 border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                  />
+                  <input
+                    type="text"
+                    value={newNewsLink}
+                    onChange={(e) => setNewNewsLink(e.target.value)}
+                    placeholder="Link (e.g. https://ibb.co/...)"
+                    className="flex-1 border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                  />
+                  <button
+                    onClick={handleAddNewsItem}
+                    disabled={addingNewsItem}
+                    className="bg-[#144f36] text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-[#0f3d2a] transition-colors shadow-sm disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {addingNewsItem ? 'Adding...' : '+ Add Card'}
+                  </button>
+                </div>
+
+                <div className="border border-slate-200 rounded max-h-64 overflow-y-auto">
+                  {newsItemsLoading ? (
+                    <p className="text-xs text-slate-400 p-3">Loading...</p>
+                  ) : newsItems.length === 0 ? (
+                    <p className="text-xs text-slate-400 p-3">No news cards yet.</p>
+                  ) : (
+                    newsItems.map((item) => (
+                      <div key={item._id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm border-b border-slate-100 last:border-b-0">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-slate-700 truncate">{item.m_snews_title || item.m_snews_des || '(untitled)'}</p>
+                          {item.m_snews_url && <p className="text-xs text-slate-500 truncate">{item.m_snews_url}</p>}
+                        </div>
+                        <button
+                          onClick={() => handleDeleteNewsItem(item._id)}
+                          className="text-red-500 hover:text-red-700 text-xs font-bold px-2 flex-shrink-0"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
