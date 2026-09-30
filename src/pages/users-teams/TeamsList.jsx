@@ -214,7 +214,7 @@ export default function TeamsList() {
                       <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
                         <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden mx-auto border border-slate-300">
                           {row.member_image ? (
-                            <img src={`${BASE_URL}/uploads/team/${row.member_image}`} alt={row.member_name} className="w-full h-full object-cover" onError={(e) => {e.target.onerror = null; e.target.src = "https://via.placeholder.com/40"}} />
+                            <img src={row.member_image} alt={row.member_name} className="w-full h-full object-cover" onError={(e) => {e.target.onerror = null; e.target.src = "https://via.placeholder.com/40"}} />
                           ) : (
                             <span className="text-xs text-slate-500">Img</span>
                           )}

@@ -176,7 +176,7 @@ export default function BannersList() {
                       <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center">
                         {row.m_banner_image ? (
                           <div className="w-24 h-12 rounded overflow-hidden border border-slate-200 mx-auto bg-slate-100">
-                            <img src={`${BASE_URL}/${row.m_banner_image.replace(/\\/g, '/')}`} alt="Banner" className="w-full h-full object-cover" onError={(e) => {e.target.onerror=null; e.target.src="https://via.placeholder.com/100x50?text=No+Image"}} />
+                            <img src={row.m_banner_image} alt="Banner" className="w-full h-full object-cover" onError={(e) => {e.target.onerror=null; e.target.src="https://via.placeholder.com/100x50?text=No+Image"}} />
                           </div>
                         ) : (
                           <span className="text-slate-400 text-xs">No Image</span>

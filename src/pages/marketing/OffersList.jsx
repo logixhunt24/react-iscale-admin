@@ -125,7 +125,7 @@ export default function OffersList() {
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 font-medium">{item.m_offer_title}</td>
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50">{item.m_offer_priority}</td>
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50">
-                      {item.m_offer_image ? <img src={`${BASE_URL}/${item.m_offer_image.replace(/\\/g, '/')}`} alt="offer" className="h-10 object-cover rounded" /> : 'N/A'}
+                      {item.m_offer_image ? <img src={item.m_offer_image} alt="offer" className="h-10 object-cover rounded" /> : 'N/A'}
                     </td>
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 max-w-[200px] truncate" title={item.m_offer_des}>{item.m_offer_des || 'N/A'}</td>
                     <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 max-w-[150px] truncate"><a href={item.m_offer_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">{item.m_offer_url || 'N/A'}</a></td>

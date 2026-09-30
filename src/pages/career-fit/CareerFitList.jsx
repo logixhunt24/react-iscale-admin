@@ -149,7 +149,6 @@ export default function CareerFitList() {
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">S.No.</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Icon</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Title</th>
-                  <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Keywords</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Order</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap text-center">Status</th>
                   <th className="px-4 py-3 font-bold whitespace-nowrap">Action</th>
@@ -157,9 +156,9 @@ export default function CareerFitList() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan="7" className="text-center py-8 text-slate-500">Loading...</td></tr>
+                  <tr><td colSpan="6" className="text-center py-8 text-slate-500">Loading...</td></tr>
                 ) : data.length === 0 ? (
-                  <tr><td colSpan="7" className="text-center py-8 text-slate-500">No career fit goals found</td></tr>
+                  <tr><td colSpan="6" className="text-center py-8 text-slate-500">No career fit goals found</td></tr>
                 ) : (
                   data.map((row, index) => (
                     <tr key={row._id} className="border-b border-slate-200 dark:border-gray-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -176,9 +175,6 @@ export default function CareerFitList() {
                       <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-top">
                         <p className="font-semibold text-slate-700 dark:text-slate-300">{row.m_cf_title}</p>
                         <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">{row.m_cf_desc}</p>
-                      </td>
-                      <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-top text-xs text-slate-500 max-w-xs">
-                        {row.m_cf_keywords || '-'}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-top">
                         {row.m_cf_order ?? 0}

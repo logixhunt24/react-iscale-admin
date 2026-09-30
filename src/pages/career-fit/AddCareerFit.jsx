@@ -28,7 +28,6 @@ export default function AddCareerFit() {
   const [formData, setFormData] = useState({
     m_cf_title: '',
     m_cf_desc: '',
-    m_cf_keywords: '',
     m_cf_order: '',
     m_cf_status: '1'
   })
@@ -104,7 +103,6 @@ export default function AddCareerFit() {
     setFormData({
       m_cf_title: cf.m_cf_title || '',
       m_cf_desc: cf.m_cf_desc || '',
-      m_cf_keywords: cf.m_cf_keywords || '',
       m_cf_order: (cf.m_cf_order ?? '').toString(),
       m_cf_status: (cf.m_cf_status ?? 1).toString()
     })
@@ -161,7 +159,6 @@ export default function AddCareerFit() {
       const payload = new FormData()
       payload.append('m_cf_title', formData.m_cf_title.trim())
       payload.append('m_cf_desc', formData.m_cf_desc)
-      payload.append('m_cf_keywords', formData.m_cf_keywords)
       payload.append('m_cf_courses', JSON.stringify(selectedCourseIds))
       payload.append('m_cf_hiring_destinations', JSON.stringify(selectedDestinationIds))
       payload.append('m_cf_feature_chips', JSON.stringify(featureChips.filter((c) => c.label.trim())))
@@ -270,21 +267,8 @@ export default function AddCareerFit() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Keywords</label>
-            <p className="text-xs text-slate-500 mb-1">Comma-separated. Courses whose title or category contains any of these words show under this goal (e.g. "data science, data scientist").</p>
-            <input
-              type="text"
-              name="m_cf_keywords"
-              value={formData.m_cf_keywords}
-              onChange={handleChange}
-              placeholder="e.g. ai, ml, machine learning"
-              className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
-            />
-          </div>
-
-          <div className="mb-6">
             <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Courses</label>
-            <p className="text-xs text-slate-500 mb-1">Pick specific courses to show under this goal. If none are picked, the Keywords match above is used instead.</p>
+            <p className="text-xs text-slate-500 mb-1">Pick specific courses to show under this goal.</p>
             <input
               type="text"
               value={courseSearch}
