@@ -393,7 +393,7 @@ export default function AddEvent() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Category Banner ( 800px X 450px )</label>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Event Banner ( 800px X 450px )</label>
               <div className="relative">
                 <input 
                   type="file"

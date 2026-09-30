@@ -404,9 +404,19 @@ export default function EditEvent() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Category Banner ( 800px X 450px )</label>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Event Banner ( 800px X 450px )</label>
+              {eventData.m_event_banner && !file && (
+                <div className="mb-2 w-full h-24 rounded overflow-hidden border border-slate-200">
+                  <img src={eventData.m_event_banner} alt="Current banner" className="w-full h-full object-cover" />
+                </div>
+              )}
+              {file && (
+                <div className="mb-2 w-full h-24 rounded overflow-hidden border border-slate-200">
+                  <img src={URL.createObjectURL(file)} alt="New banner" className="w-full h-full object-cover" />
+                </div>
+              )}
               <div className="relative">
-                <input 
+                <input
                   type="file"
                   onChange={(e) => setFile(e.target.files[0])}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -414,7 +424,7 @@ export default function EditEvent() {
                 />
                 <button className="bg-[#428bca] text-white px-6 py-2 rounded flex items-center justify-center gap-2 hover:bg-[#3071a9] transition-colors w-full">
                   <Camera size={18} />
-                  <span>{file ? file.name : 'Choose Banner'}</span>
+                  <span>{file ? file.name : (eventData.m_event_banner ? 'Change Banner' : 'Choose Banner')}</span>
                 </button>
               </div>
             </div>
