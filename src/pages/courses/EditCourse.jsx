@@ -31,6 +31,7 @@ export default function EditCourse() {
     m_course_duration_app: '',
     m_course_duration_web: '',
     m_course_commencement_date: '',
+    m_course_language_text: '',
     m_course_delivery_mode: '',
     m_course_job_assistance: '',
     m_course_order: '',
@@ -205,6 +206,7 @@ export default function EditCourse() {
         m_course_duration_app: course.duration_app ?? course.m_course_duration_app ?? '',
         m_course_duration_web: course.duration_web ?? course.m_course_duration_web ?? '',
         m_course_commencement_date: course.commencement_date ?? course.m_course_commencement_date ?? '',
+        m_course_language_text: course.language ?? course.m_course_language_text ?? '',
         m_course_delivery_mode: course.delivery_mode ?? course.m_course_delivery_mode ?? '',
         m_course_job_assistance: course.job_assistance ?? course.m_course_job_assistance ?? '',
         m_course_order: course.order ?? course.m_course_order ?? '',
@@ -385,6 +387,9 @@ export default function EditCourse() {
                 <option value="2">Hindi</option>
                 <option value="3">Hinglish</option>
               </select>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1 mt-3">Languages (shown on course page)</label>
+              <p className="text-xs text-slate-500 mb-1">Free text — separate multiple with commas (e.g. "English, Hindi"). Leave empty to hide it.</p>
+              <input id="m_course_language_text" type="text" value={courseData.m_course_language_text} onChange={handleChange} placeholder="e.g. English, Hindi" className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
             </div>
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Category</label>

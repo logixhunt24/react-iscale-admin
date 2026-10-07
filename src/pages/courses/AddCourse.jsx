@@ -43,6 +43,7 @@ export default function AddCourse() {
   const [durationApp, setDurationApp] = useState('');
   const [durationWeb, setDurationWeb] = useState('');
   const [commencementDate, setCommencementDate] = useState('');
+  const [languageText, setLanguageText] = useState('');
   const [deliveryMode, setDeliveryMode] = useState('');
   const [jobAssistance, setJobAssistance] = useState('');
   const [appLink, setAppLink] = useState('');
@@ -185,6 +186,7 @@ export default function AddCourse() {
       payload.append('m_course_duration_app', durationApp || '');
       payload.append('m_course_duration_web', durationWeb || '');
       payload.append('m_course_commencement_date', commencementDate || '');
+      payload.append('m_course_language_text', languageText.trim());
       payload.append('m_course_delivery_mode', deliveryMode || '');
       payload.append('m_course_job_assistance', jobAssistance || '');
       payload.append('m_course_order', order || '');
@@ -284,6 +286,9 @@ export default function AddCourse() {
                 <option value="2">Hindi</option>
                 <option value="3">Hinglish</option>
               </select>
+              <label className="block text-[13px] font-bold text-slate-800 mb-1 mt-3">Languages (shown on course page)</label>
+              <p className="text-xs text-slate-500 mb-1">Free text — separate multiple with commas (e.g. "English, Hindi"). Leave empty to hide it.</p>
+              <input type="text" placeholder="e.g. English, Hindi" value={languageText} onChange={e => setLanguageText(e.target.value)} className="w-full border border-slate-300 rounded px-3 py-1.5 text-sm outline-none focus:border-[#144f36]" />
             </div>
             <div>
               <label className="block text-[13px] font-bold text-slate-800 mb-1">Course Category</label>
