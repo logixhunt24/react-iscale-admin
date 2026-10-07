@@ -11,6 +11,8 @@ import CourseFeatures from '../pages/courses/CourseFeatures'
 import CourseTools from '../pages/courses/CourseTools'
 import CourseSubjects from '../pages/courses/CourseSubjects'
 import AddCourseSubject from '../pages/courses/AddCourseSubject'
+import CourseModules from '../pages/courses/CourseModules'
+import AddCourseModule from '../pages/courses/AddCourseModule'
 import CourseTopics from '../pages/courses/CourseTopics'
 import AddCourseTopic from '../pages/courses/AddCourseTopic'
 import CourseTestSeries from '../pages/courses/CourseTestSeries'
@@ -38,6 +40,8 @@ const coursesRoutes = [
   <Route key="courses-faq" path="/courses/faq/:id" element={<CourseFaq />} />,
   <Route key="courses-features" path="/courses/features/:id" element={<CourseFeatures />} />,
   <Route key="courses-tools" path="/courses/tools/:id" element={<CourseTools />} />,
+  <Route key="courses-modules" path="/courses/modules/:id" element={<CourseModules />} />,
+  <Route key="courses-modules-add" path="/courses/modules/add/:id" element={<AddCourseModule />} />,
   <Route key="courses-subjects" path="/courses/subjects/:id" element={<CourseSubjects />} />,
   <Route key="courses-subjects-add" path="/courses/subjects/add/:id" element={<AddCourseSubject />} />,
   <Route key="courses-topics" path="/courses/topics/:subjectId" element={<CourseTopics />} />,

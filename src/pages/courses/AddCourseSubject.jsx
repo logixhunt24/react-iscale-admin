@@ -16,6 +16,24 @@ export default function AddCourseSubject() {
   const [description, setDescription] = useState(editSubject?.m_subject_desc || '')
   const [status, setStatus] = useState(editSubject?.m_subject_status ?? 1)
   const [sequence, setSequence] = useState(editSubject?.m_subject_seq ?? 0)
+  const [moduleId, setModuleId] = useState(editSubject?.m_subject_module || '')
+  const [modules, setModules] = useState([])
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        const response = await axios.get(`${BASE_URL}/myadmin/module/module-dropdown`, {
+          params: { m_course_id: id },
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setModules(response.data?.data || [])
+      } catch (error) {
+        console.error('Error fetching modules:', error)
+      }
+    }
+    fetchModules()
+  }, [id])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -29,6 +47,7 @@ export default function AddCourseSubject() {
         updatePayload.append('m_subject_desc', description || '')
         updatePayload.append('m_subject_status', Number(status))
         updatePayload.append('m_subject_seq', Number(sequence))
+        updatePayload.append('m_subject_module', moduleId)
 
         response = await axios.put(`${BASE_URL}/myadmin/subject/update-subject/${editSubject._id}`, updatePayload, {
           headers: {
@@ -42,6 +61,7 @@ export default function AddCourseSubject() {
         addPayload.append('m_subject_desc', description || '')
         addPayload.append('m_subject_status', Number(status))
         addPayload.append('m_subject_seq', Number(sequence))
+        addPayload.append('m_subject_module', moduleId)
 
         response = await axios.post(`${BASE_URL}/myadmin/subject/add-subject`, addPayload, {
           headers: {
@@ -100,6 +120,20 @@ export default function AddCourseSubject() {
                 <option value={1}>Active</option>
                 <option value={0}>Inactive</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Module</label>
+              <select
+                value={moduleId}
+                onChange={(e) => setModuleId(e.target.value)}
+                className="w-full border border-slate-300 dark:border-gray-700 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] bg-white dark:bg-[#13111c] text-slate-800 dark:text-slate-200"
+              >
+                <option value="">- No module (ungrouped) -</option>
+                {modules.map((m) => (
+                  <option key={m._id} value={m._id}>{m.m_module_title}{m.m_module_status === 0 ? ' (inactive)' : ''}</option>
+                ))}
+              </select>
+              <p className="text-xs text-slate-500 mt-1">The module (top tab on the course page) this subject belongs to. Create modules from the course's Module button.</p>
             </div>
             <div>
               <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Sequence</label>

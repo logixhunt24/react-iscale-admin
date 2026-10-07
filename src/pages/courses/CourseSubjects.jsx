@@ -15,11 +15,28 @@ export default function CourseSubjects() {
   const [subjects, setSubjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [courseTitle, setCourseTitle] = useState('')
+  const [moduleTitles, setModuleTitles] = useState({})
 
   useEffect(() => {
     fetchSubjects()
     fetchCourseTitle()
+    fetchModuleTitles()
   }, [id])
+
+  const fetchModuleTitles = async () => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.get(`${BASE_URL}/myadmin/module/module-dropdown`, {
+        params: { m_course_id: id },
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const map = {}
+      ;(response.data?.data || []).forEach((m) => { map[m._id] = m.m_module_title })
+      setModuleTitles(map)
+    } catch (error) {
+      console.error('Error fetching modules:', error)
+    }
+  }
 
   const fetchCourseTitle = async () => {
     try {
@@ -133,6 +150,9 @@ export default function CourseSubjects() {
           <div className="flex gap-4 relative z-10">
             <Link to={'/courses/all'} className="inline-block bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
               Back To Courses
+            </Link>
+            <Link to={`/courses/modules/${id}`} className="inline-block bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all hover:-translate-y-0.5">
+              Modules
             </Link>
             <Link to={`/courses/subjects/add/${id}`} className="bg-white hover:bg-slate-50 text-[#144f36] px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5">
               <span>+ Add New</span>
@@ -251,6 +271,7 @@ export default function CourseSubjects() {
               <tr>
                 <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">S.No.</th>
                 <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Subject Title</th>
+                <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Module</th>
                 <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Icon</th>
                 <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap text-center">Total Topics</th>
                 <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap text-center">Topic</th>
@@ -263,13 +284,14 @@ export default function CourseSubjects() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="9" className="text-center py-8">Loading subjects...</td>
+                  <td colSpan="10" className="text-center py-8">Loading subjects...</td>
                 </tr>
               ) : filteredSubjects.length > 0 ? (
                 filteredSubjects.slice(0, entriesPerPage).map((row, index) => (
                   <tr key={row._id} className="border-b border-slate-200 dark:border-gray-800/50 hover:bg-[#eaf3f8]/60 dark:hover:bg-indigo-900/20 transition-all duration-200 group">
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-[#144f36]">{index + 1}</td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-slate-700 dark:text-slate-300 font-semibold">{row.m_subject_title}</td>
+                    <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-slate-600 dark:text-slate-300">{moduleTitles[row.m_subject_module] || '—'}</td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle"></td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle text-center text-slate-700 dark:text-slate-300 text-sm">
                       {row.total_topics || 0}
@@ -312,7 +334,7 @@ export default function CourseSubjects() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="text-center py-8 text-slate-500">No subjects found</td>
+                  <td colSpan="10" className="text-center py-8 text-slate-500">No subjects found</td>
                 </tr>
               )}
             </tbody>

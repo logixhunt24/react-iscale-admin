@@ -356,6 +356,7 @@ const fetchCategoriesDropdown = async () => {
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Faq</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Features</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Tools</th>
+                  <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Modules</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Subjects</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Test Package</th>
                   <th className="px-3 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Training Highlights</th>
@@ -368,7 +369,7 @@ const fetchCategoriesDropdown = async () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="18" className="text-center py-8">Loading...</td>
+                    <td colSpan="19" className="text-center py-8">Loading...</td>
                   </tr>
                 ) : currentData.map((row, index) => (
                   <tr key={row._id} className="border-b border-slate-200 dark:border-gray-800/50 hover:bg-[#eaf3f8]/60 dark:hover:bg-indigo-900/20 transition-all duration-200 group">
@@ -433,6 +434,11 @@ const fetchCategoriesDropdown = async () => {
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
                       <Link to={`/courses/tools/${row._id}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <Book size={12} /> Tools
+                      </Link>
+                    </td>
+                    <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
+                      <Link to={`/courses/modules/${row._id}`} className="bg-[#144f36] text-white px-3 py-1 rounded-full text-xs font-medium hover:bg-[#0f3d2a] transition-colors flex items-center gap-1.5 whitespace-nowrap" title="Manage this course's modules (top-level groups of subjects)">
+                        <Book size={12} /> Module
                       </Link>
                     </td>
                     <td className="px-3 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
@@ -515,7 +521,7 @@ const fetchCategoriesDropdown = async () => {
                 ))}
                 {currentData.length === 0 && (
                   <tr>
-                    <td colSpan="18" className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
+                    <td colSpan="19" className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
                       No Data Available In Table
                     </td>
                   </tr>
