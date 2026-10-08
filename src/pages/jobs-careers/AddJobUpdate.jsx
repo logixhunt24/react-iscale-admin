@@ -5,6 +5,13 @@ import { BASE_URL } from '../../config/api'
 import { getImageUrl } from '../../utils/imageUtils'
 import { Image, Play, Grid, MoreHorizontal } from 'lucide-react'
 
+// Experience is free text now (e.g. "0", "2", "1-3"); older records may
+// still hold a {min, max} object, so read either shape into the input.
+const experienceToText = (exp) => {
+  if (exp && typeof exp === 'object') return String(exp.max ?? exp.min ?? '')
+  return exp == null ? '' : String(exp)
+}
+
 export default function AddJobUpdate() {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -65,7 +72,7 @@ export default function AddJobUpdate() {
             job_title: job.job_title || '',
             company_name: job.company_name || '',
             location: job.job_locations?.[0] || '',
-            experience: job.experience?.max?.toString() || '',
+            experience: experienceToText(job.experience),
             salaryFrom: job.salary?.min?.toString() || '',
             salaryTo: job.salary?.max?.toString() || '',
             salary_type: normalizeSalaryType(job.salary_type),
@@ -91,7 +98,7 @@ export default function AddJobUpdate() {
           job_title: job.job_title || '',
           company_name: job.company_name || '',
           location: job.job_locations?.[0] || '',
-          experience: job.experience?.max?.toString() || '',
+          experience: experienceToText(job.experience),
           salaryFrom: job.salary?.min?.toString() || '',
           salaryTo: job.salary?.max?.toString() || '',
           salary_type: normalizeSalaryType(job.salary_type),
@@ -159,7 +166,7 @@ export default function AddJobUpdate() {
       payload.append('salary_from', Number(formData.salaryFrom) || 0)
       payload.append('salary_to', Number(formData.salaryTo) || 0)
       payload.append('salary_type', formData.salary_type)
-      payload.append('experience', formData.experience || '0')
+      payload.append('experience', formData.experience.trim())
       payload.append('job_description', formData.job_description || 'No description provided')
       payload.append('apply_link', formData.apply_link)
       payload.append('linkedin', formData.linkedin)
@@ -298,19 +305,18 @@ export default function AddJobUpdate() {
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
               />
             </div>
-{/* 
             <div>
-              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Experience (Max Years) <span className="text-red-500">*</span></label>
-              <input 
-                type="number" 
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Experience</label>
+              <input
+                type="text"
                 name="experience"
                 value={formData.experience}
                 onChange={handleChange}
-                placeholder="e.g. 5"
+                placeholder="e.g. 0 (Fresher), 2, 1-3, 3+"
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
               />
+              <p className="text-xs text-slate-500 mt-1">Years of experience required — 0 shows as "Fresher", a number or range (2, 1-3, 3+) as "Yrs Exp". Leave empty to hide it on the site.</p>
             </div>
-*/}
             <div>
               <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Location <span className="text-red-500">*</span></label>
               <input 

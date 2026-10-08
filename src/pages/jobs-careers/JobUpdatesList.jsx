@@ -187,7 +187,9 @@ export default function JobUpdatesList() {
                     <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle">{row.company_name}</td>
                     <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle w-32">{row.job_locations?.join(', ')}</td>
                     <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle whitespace-nowrap">
-                      {row.experience?.min}-{row.experience?.max} {row.experience?.label || row.experience?.unit}
+                      {typeof row.experience === 'object' && row.experience
+                        ? `${row.experience.min}-${row.experience.max} ${row.experience.label || row.experience.unit || ''}`
+                        : (row.experience === '0' ? 'Fresher' : row.experience || '-')}
                     </td>
                     <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle w-32">
                       {row.salary?.min}-{row.salary?.max}
