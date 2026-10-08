@@ -1,10 +1,25 @@
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { BASE_URL } from '../../config/api'
 
 const MotionLink = motion.create(Link)
 
 export default function HeroBanner({ cardsData = [] }) {
+  // The login response has no name, so read it from the admin profile
+  const [adminName, setAdminName] = useState('')
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) return
+    axios.get(`${BASE_URL}/myadmin/profile/my`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => {
+        const d = res.data?.data || res.data || {}
+        setAdminName(d.admin_name || d.name || '')
+      })
+      .catch(() => {})
+  }, [])
 
   const getCardPath = (key) => {
     if (['totalRegistration', 'totalNotesSale', 'totalPackageSale', 'totalCourseSale', 'totalEarnings'].includes(key)) return '/registrations';
@@ -30,7 +45,7 @@ export default function HeroBanner({ cardsData = [] }) {
       {/* Left side text */}
       <div className="relative z-10">
         <h2 className="text-white font-bold tracking-tight text-3xl mb-3 flex items-center gap-2">
-          Welcome back! <span className="text-3xl">👋</span>
+          Welcome back{adminName ? `, ${adminName}` : ''}! <span className="text-3xl">👋</span>
         </h2>
         <p className="text-white/80 font-medium text-[15px] mb-8">
           Here's what's happening with your LMS today.

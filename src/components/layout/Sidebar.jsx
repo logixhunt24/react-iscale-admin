@@ -107,12 +107,12 @@ function MenuItem({ item, collapsed }) {
 }
 
 export default function Sidebar() {
-  const { sidebarCollapsed, mobileSidebarOpen, setMobileSidebarOpen } = useTheme()
+  const { sidebarCollapsed, setSidebarCollapsed, mobileSidebarOpen, setMobileSidebarOpen } = useTheme()
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-[#144f36] text-white">
       {/* Logo */}
-      <div className={`flex items-center pt-6 pb-6 ${sidebarCollapsed ? 'justify-center px-2' : 'px-6 gap-3'}`}>
+      <div className={`flex pt-6 pb-6 ${sidebarCollapsed ? 'flex-col items-center gap-3 px-2' : 'items-center justify-between gap-3 px-4'}`}>
         {!sidebarCollapsed ? (
           <img src="/logo.png" alt="iScale Logo" className="h-10 object-contain bg-white rounded px-2 shadow-lg" />
         ) : (
@@ -120,6 +120,16 @@ export default function Sidebar() {
              <img src="/logo.png" alt="iScale" className="h-6 object-contain" />
           </div>
         )}
+
+        {/* Collapse toggle (desktop only; the mobile drawer has its own close button) */}
+        <button
+          onClick={() => setSidebarCollapsed(c => !c)}
+          title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className="hidden lg:flex shrink-0 w-8 h-8 items-center justify-center rounded-lg bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-colors"
+        >
+          {sidebarCollapsed ? <Icons.ChevronsRight size={18} /> : <Icons.ChevronsLeft size={18} />}
+        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto custom-scrollbar pt-2 pb-4">

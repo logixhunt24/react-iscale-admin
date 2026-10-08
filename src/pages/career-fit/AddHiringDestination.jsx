@@ -15,6 +15,7 @@ export default function AddHiringDestination() {
   const [existingLogo, setExistingLogo] = useState('')
   const [formData, setFormData] = useState({
     m_phd_name: '',
+    m_phd_experience: '',
     m_phd_order: '',
     m_phd_status: '1'
   })
@@ -26,6 +27,7 @@ export default function AddHiringDestination() {
   const populate = (d) => {
     setFormData({
       m_phd_name: d.m_phd_name || '',
+      m_phd_experience: d.m_phd_experience || '',
       m_phd_order: (d.m_phd_order ?? '').toString(),
       m_phd_status: (d.m_phd_status ?? 1).toString()
     })
@@ -73,6 +75,7 @@ export default function AddHiringDestination() {
 
       const payload = new FormData()
       payload.append('m_phd_name', formData.m_phd_name)
+      payload.append('m_phd_experience', formData.m_phd_experience.trim())
       payload.append('m_phd_order', Number(formData.m_phd_order) || 0)
       payload.append('m_phd_status', formData.m_phd_status)
       if (logoFile) payload.append('m_phd_logo', logoFile)
@@ -124,7 +127,14 @@ export default function AddHiringDestination() {
           </Link>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-6 overflow-y-auto flex-1"
+        onKeyDown={(e) => {
+          // Enter in a main text/number field submits (not textarea, search box, chips, selects)
+          if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && e.target.tagName === 'INPUT' && ['text', 'number'].includes(e.target.type) && e.target.name && !loading) {
+            e.preventDefault()
+            handleSubmit()
+          }
+        }}>
           {backendError && (
             <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg whitespace-pre-wrap font-mono text-sm shadow-sm">
               <strong className="font-bold">Error:</strong><br />
@@ -162,6 +172,21 @@ export default function AddHiringDestination() {
                   className="text-sm text-slate-500 dark:text-slate-400 file:mr-4 file:py-1 file:px-3 file:rounded file:border file:border-slate-300 dark:border-[#1f1b2e] file:bg-[#f6f6ff] file:text-slate-700 dark:text-slate-300 hover:file:bg-slate-50 dark:bg-[#1f1b2e]/50 cursor-pointer"
                 />
               </div>
+            </div>
+          </div>
+
+          <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Experience (years)</label>
+              <p className="text-xs text-slate-500 mb-1">Experience required, e.g. 0-1, 0-2 or 5.</p>
+              <input
+                type="text"
+                name="m_phd_experience"
+                value={formData.m_phd_experience}
+                onChange={handleChange}
+                placeholder="e.g. 0-2"
+                className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+              />
             </div>
           </div>
 

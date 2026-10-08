@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sidebar from '../components/layout/Sidebar'
-import Navbar from '../components/layout/Navbar'
+import { Menu } from 'lucide-react'
 import { useTheme } from '../store/ThemeContext'
 
 export default function MainLayout() {
-  const { sidebarCollapsed } = useTheme()
+  const { setMobileSidebarOpen } = useTheme()
   const location = useLocation()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024)
 
@@ -18,8 +18,15 @@ export default function MainLayout() {
 
   return (
     <div className="h-screen bg-[#f1f5f9] dark:bg-[#0b0914] text-slate-800 dark:text-slate-200 relative overflow-hidden transition-colors duration-300 font-sans flex flex-col">
-      <Navbar />
-      
+      {/* No header: on small screens the sidebar is opened with this button */}
+      <button
+        onClick={() => setMobileSidebarOpen(true)}
+        aria-label="Open menu"
+        className="lg:hidden fixed top-2 left-2 z-30 w-9 h-9 flex items-center justify-center rounded-lg bg-[#144f36] text-white shadow-md"
+      >
+        <Menu size={20} />
+      </button>
+
       <div className="flex-1 flex overflow-hidden relative">
         <Sidebar />
 

@@ -253,7 +253,6 @@ export const menuItems = [
     icon: 'Settings',
     path: '/general-setting',
     children: [
-      { id: 'my-profile', label: 'My Profile', path: '/general-setting/my-profile' },
       { id: 'application', label: 'Application', path: '/general-setting/application' },
       { id: 'send-notification', label: 'Send Notification', path: '/general-setting/send-notification' },
       { id: 'page-setting', label: 'Page Setting', path: '/general-setting/page-setting' }
@@ -269,6 +268,12 @@ export const menuItems = [
       { id: 'state', label: 'State', path: '/location-setting/state' },
       { id: 'city', label: 'City', path: '/location-setting/city' }
     ]
+  },
+  {
+    id: 'my-profile',
+    label: 'My Profile',
+    icon: 'User',
+    path: '/general-setting/my-profile'
   },
   {
     id: 'logout',

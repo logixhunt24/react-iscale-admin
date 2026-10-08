@@ -213,7 +213,14 @@ export default function AddCareerFit() {
           </Link>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-6 overflow-y-auto flex-1"
+        onKeyDown={(e) => {
+          // Enter in a main text/number field submits (not textarea, search box, chips, selects)
+          if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && e.target.tagName === 'INPUT' && ['text', 'number'].includes(e.target.type) && e.target.name && !loading) {
+            e.preventDefault()
+            handleSubmit()
+          }
+        }}>
           {backendError && (
             <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg whitespace-pre-wrap font-mono text-sm shadow-sm">
               <strong className="font-bold">Error:</strong><br />

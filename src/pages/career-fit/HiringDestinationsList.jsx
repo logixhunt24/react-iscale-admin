@@ -129,6 +129,7 @@ export default function HiringDestinationsList() {
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">S.No.</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Logo</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Name</th>
+                  <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Experience</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Order</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap text-center">Status</th>
                   <th className="px-4 py-3 font-bold whitespace-nowrap">Action</th>
@@ -136,9 +137,9 @@ export default function HiringDestinationsList() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan="6" className="text-center py-4">Loading...</td></tr>
+                  <tr><td colSpan="7" className="text-center py-4">Loading...</td></tr>
                 ) : data.length === 0 ? (
-                  <tr><td colSpan="6" className="text-center py-4">No logos found</td></tr>
+                  <tr><td colSpan="7" className="text-center py-4">No logos found</td></tr>
                 ) : (
                   data.map((row, index) => (
                     <tr key={row._id} className="border-b border-slate-200 dark:border-gray-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -159,6 +160,9 @@ export default function HiringDestinationsList() {
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle font-medium">
                         {row.m_phd_name || '-'}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle">
+                        {row.m_phd_experience || '-'}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-middle">
                         {row.m_phd_order ?? 0}
