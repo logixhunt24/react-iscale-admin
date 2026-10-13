@@ -3,6 +3,15 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
+// Stored as "09:30 AM"; <input type="time"> needs "09:30"
+const to24Hour = (t) => {
+  const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i.exec((t || '').trim())
+  if (!m) return ''
+  let h = parseInt(m[1], 10)
+  if (m[3]) h = (h % 12) + (m[3].toUpperCase() === 'PM' ? 12 : 0)
+  return `${String(h).padStart(2, '0')}:${m[2]}`
+}
+
 export default function EditLiveClass() {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -30,7 +39,7 @@ export default function EditLiveClass() {
         // Fetch dependencies
         const [batchesRes, instructorsRes, liveClassRes] = await Promise.all([
           axios.get(`${BASE_URL}/myadmin/batch/all?limit=1000`, { headers }),
-          axios.get(`${BASE_URL}/myadmin/team/all?limit=1000`, { headers }),
+          axios.get(`${BASE_URL}/myadmin/team/all?limit=1000&type=2`, { headers }),
           axios.get(`${BASE_URL}/myadmin/live-class/single/${id}`, { headers })
         ])
         
@@ -44,7 +53,7 @@ export default function EditLiveClass() {
             title: cls.title || '',
             class_date: cls.class_date ? cls.class_date.split('T')[0] : '',
             duration: cls.duration || '',
-            start_time: cls.start_time || '',
+            start_time: to24Hour(cls.start_time),
             meeting_link: cls.meeting_link || '',
             batch_id: cls.batch_id?._id || cls.batch_id || '',
             teacher_id: cls.teacher_id?._id || cls.teacher_id || ''

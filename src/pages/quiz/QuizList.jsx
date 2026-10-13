@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Eye, Edit2, Trash2 } from 'lucide-react'
+import { Eye, Edit2, Trash2, ListChecks, Trophy } from 'lucide-react'
 import { useNavigate, useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -191,6 +191,20 @@ export default function QuizList() {
                         >
                           <Eye size={14} />
                         </button>
+                        <Link
+                          to={`/leaderboard?package=${packageId}&quiz=${row._id}`}
+                          className="inline-block bg-[#7c3aed] text-white p-1.5 rounded-full hover:bg-[#6d28d9] transition-colors"
+                          title="Results"
+                        >
+                          <Trophy size={14} />
+                        </Link>
+                        <Link
+                          to={`/quiz/questions/${row._id}`} state={{ quizTitle: row.m_quiz_title }}
+                          className="inline-block bg-[#1f3f66] text-white p-1.5 rounded-full hover:bg-[#152c48] transition-colors"
+                          title="Questions"
+                        >
+                          <ListChecks size={14} />
+                        </Link>
                         <Link
                           to={`/quiz/add/${packageId}`} state={{ editQuiz: row, packageTitle }}
                           className="inline-block bg-[#28a745] text-white p-1.5 rounded-full hover:bg-[#218838] transition-colors"

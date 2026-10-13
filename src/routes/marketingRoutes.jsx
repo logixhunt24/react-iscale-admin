@@ -13,6 +13,9 @@ import AddCoupon from '../pages/marketing/AddCoupon'
 import EditCouponPage from '../pages/marketing/EditCoupon'
 const EditCoupon = withListRow(EditCouponPage, { endpoint: '/myadmin/coupons/all', stateKey: 'couponData' })
 import AddOffer from '../pages/marketing/AddOffer'
+import CompetitionsList from '../pages/marketing/CompetitionsList'
+import AddCompetition from '../pages/marketing/AddCompetition'
+import CompetitionQuizzes from '../pages/marketing/CompetitionQuizzes'
 
 const marketingRoutes = {
   public: [
@@ -21,6 +24,10 @@ const marketingRoutes = {
   ],
   protected: [
     <Route key="offers" path="/offers" element={<OffersList />} />,
+    <Route key="competitions" path="/competitions" element={<CompetitionsList />} />,
+    <Route key="competitions-add" path="/competitions/add" element={<AddCompetition />} />,
+    <Route key="competitions-edit" path="/competitions/edit/:id" element={<AddCompetition />} />,
+    <Route key="competitions-quizzes" path="/competitions/:id/quizzes" element={<CompetitionQuizzes />} />,
     <Route key="offers-add" path="/offers/add" element={<AddOffer />} />,
     <Route key="offers-edit" path="/offers/edit/:id" element={<AddOffer />} />,
     <Route key="banners" path="/banners" element={<BannersList />} />,

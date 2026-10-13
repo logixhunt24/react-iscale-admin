@@ -32,7 +32,7 @@ export default function LiveClasses() {
       const headers = { Authorization: `Bearer ${token}` }
       const [batchesRes, instructorsRes] = await Promise.all([
         axios.get(`${BASE_URL}/myadmin/batch/all?limit=1000`, { headers }),
-        axios.get(`${BASE_URL}/myadmin/team/all?limit=1000`, { headers })
+        axios.get(`${BASE_URL}/myadmin/team/all?limit=1000&type=2`, { headers })
       ])
       if (batchesRes.data.status) setBatches(batchesRes.data.data)
       if (instructorsRes.data.status) setTeachers(instructorsRes.data.data)

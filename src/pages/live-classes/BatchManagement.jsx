@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Edit2, Trash2 } from 'lucide-react'
+import { Edit2, Trash2, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -341,6 +342,9 @@ export default function BatchManagement() {
                       </td>
                       <td className="px-2 py-2 align-top">
                         <div className="flex gap-1.5">
+                          <Link to={`/batch/students/${row._id}`} title="Manage students" className="bg-blue-600 text-white p-1.5 rounded hover:bg-blue-700 transition-colors w-fit">
+                            <Users size={12} />
+                          </Link>
                           <button onClick={() => handleEdit(row._id)} className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors w-fit">
                             <Edit2 size={12} />
                           </button>

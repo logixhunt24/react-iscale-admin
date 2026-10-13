@@ -6,7 +6,7 @@ import Analytics from '../pages/dashboard/Analytics'
 import AnalyticsList from '../pages/dashboard/AnalyticsList'
 import AnalyticsDetails from '../pages/dashboard/AnalyticsDetails'
 import PlaceholderPage from '../pages/misc/PlaceholderPage'
-import LeaderBoard from '../pages/dashboard/LeaderBoard'
+import QuizResults from '../pages/quiz/QuizResults'
 import CertificateRequests from '../pages/misc/CertificateRequests'
 import SubjectRatings from '../pages/misc/SubjectRatings'
 import AddSubjectRating from '../pages/misc/AddSubjectRating'
@@ -19,7 +19,7 @@ const miscRoutes = [
   <Route key="registrations" path="/registrations" element={<Registrations />} />,
   <Route key="registrations-course" path="/registrations/course" element={<Registrations />} />,
   <Route key="registrations-certificate" path="/registrations/certificate" element={<CertificateRequests />} />,
-  <Route key="leaderboard" path="/leaderboard" element={<PlaceholderPage title="Test Series Leaderboard" subtitle="Coming Soon" icon="🏆" />} />,
+  <Route key="leaderboard" path="/leaderboard" element={<QuizResults />} />,
   <Route key="wishlist" path="/wishlist" element={<PlaceholderPage title="User Wishlist" subtitle="Courses saved by students" icon="❤️" />} />,
   <Route key="subject-ratings-add" path="/subject-ratings/add" element={<AddSubjectRating />} />,
   <Route key="send-notification" path="/general-setting/send-notification" element={<SendNotification />} />,

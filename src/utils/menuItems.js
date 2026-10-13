@@ -128,6 +128,12 @@ export const menuItems = [
     path: '/offers',
   },
   {
+    id: 'competitions',
+    label: 'Competitions',
+    icon: 'Trophy',
+    path: '/competitions',
+  },
+  {
     id: 'banners',
     label: 'Banners',
     icon: 'Image',
