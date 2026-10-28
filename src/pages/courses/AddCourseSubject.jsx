@@ -16,6 +16,7 @@ export default function AddCourseSubject() {
   const [description, setDescription] = useState(editSubject?.m_subject_desc || '')
   const [status, setStatus] = useState(editSubject?.m_subject_status ?? 1)
   const [sequence, setSequence] = useState(editSubject?.m_subject_seq ?? 0)
+  const [code, setCode] = useState(editSubject?.code || '')
   const [moduleId, setModuleId] = useState(editSubject?.m_subject_module || '')
   const [modules, setModules] = useState([])
 
@@ -47,6 +48,7 @@ export default function AddCourseSubject() {
         updatePayload.append('m_subject_desc', description || '')
         updatePayload.append('m_subject_status', Number(status))
         updatePayload.append('m_subject_seq', Number(sequence))
+        updatePayload.append('code', code)
         updatePayload.append('m_subject_module', moduleId)
 
         response = await axios.put(`${BASE_URL}/myadmin/subject/update-subject/${editSubject._id}`, updatePayload, {
@@ -61,6 +63,7 @@ export default function AddCourseSubject() {
         addPayload.append('m_subject_desc', description || '')
         addPayload.append('m_subject_status', Number(status))
         addPayload.append('m_subject_seq', Number(sequence))
+        addPayload.append('code', code)
         addPayload.append('m_subject_module', moduleId)
 
         response = await axios.post(`${BASE_URL}/myadmin/subject/add-subject`, addPayload, {
@@ -99,6 +102,10 @@ export default function AddCourseSubject() {
 
         <form onSubmit={handleSubmit} className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+            <div>
+              <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Label (shown above the title)</label>
+              <input type="text" value={code} onChange={(e) => setCode(e.target.value)} placeholder="e.g. Subject 1 — leave empty to hide" className="w-full border border-slate-300 dark:border-gray-700 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] bg-white dark:bg-[#13111c] text-slate-800 dark:text-slate-200" />
+            </div>
             <div>
               <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Subject Title <span className="text-red-500">*</span></label>
               <input 
