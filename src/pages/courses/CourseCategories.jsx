@@ -48,7 +48,7 @@ export default function CourseCategories() {
       }
     } catch (error) {
       console.error('Error fetching categories from real API:', error)
-      await window.customAlert("Failed to fetch from API. Please check console for 404 error if your backend is not ready!")
+      await window.customAlert(`Failed to load categories: ${error.response?.data?.message || error.message}`)
     } finally {
       setLoading(false)
     }

@@ -365,8 +365,7 @@ export default function AddCourseTopic() {
 
         {/* Form Body */}
         <div className="p-6 sm:p-8 bg-white">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
             {/* Topic Subject */}
             <div>
               <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Subject</label>
@@ -397,6 +396,33 @@ export default function AddCourseTopic() {
               >
                 <option value="Topic">Topic</option>
               </select>
+            </div>
+
+            {/* Topic Title */}
+            <div>
+              <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Title</label>
+              <input 
+                type="text" 
+                name="ml_title"
+                value={formData.ml_title}
+                onChange={handleChange}
+                placeholder="Enter Topic Title" 
+                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-white" 
+                required 
+              />
+            </div>
+
+            {/* Label shown above the topic title (stored as ml_code) */}
+            <div>
+              <label className="block text-sm font-bold text-slate-800 mb-1.5">Label (shown above the title)</label>
+              <input 
+                type="text" 
+                name="ml_code"
+                value={formData.ml_code}
+                onChange={handleChange}
+                placeholder="e.g. Topic 1 — leave empty to hide" 
+                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-white" 
+              />
             </div>
 
             {/* Duration */}
@@ -438,35 +464,22 @@ export default function AddCourseTopic() {
               </div>
             </div>
 
-            {/* Topic Title */}
+            {/* Topic Status */}
             <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Title</label>
-              <input 
-                type="text" 
-                name="ml_title"
-                value={formData.ml_title}
-                onChange={handleChange}
-                placeholder="Enter Topic Title" 
-                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-white" 
-                required 
-              />
-            </div>
-
-            {/* Topic Code */}
-            <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Code</label>
-              <input 
-                type="text" 
-                name="ml_code"
-                value={formData.ml_code}
-                onChange={handleChange}
-                placeholder="Enter Topic Code" 
-                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-white" 
-              />
+              <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Status</label>
+              <select 
+                name="ml_status" 
+                value={formData.ml_status} 
+                onChange={handleChange} 
+                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-white"
+              >
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
             </div>
 
             {/* Topic Type and Dynamic Topic Field */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
               {/* Topic Type */}
               <div>
                 <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Type</label>
@@ -537,7 +550,7 @@ export default function AddCourseTopic() {
             </div>
 
             {/* YouTube vs VdoCipher Radio Group */}
-            <div className="flex items-center gap-6 py-2">
+            <div className="flex items-center gap-6 py-2 md:self-end">
               <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-800 text-sm">
                 <input 
                   type="radio" 
@@ -600,22 +613,8 @@ export default function AddCourseTopic() {
               </div>
             </div>
 
-            {/* Topic Status */}
-            <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1.5">Topic Status</label>
-              <select 
-                name="ml_status" 
-                value={formData.ml_status} 
-                onChange={handleChange} 
-                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-white"
-              >
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
-              </select>
-            </div>
-
             {/* Action Buttons */}
-            <div className="flex gap-4 mt-6">
+            <div className="md:col-span-2 flex gap-4 mt-6">
               <button 
                 type="submit" 
                 disabled={loading}

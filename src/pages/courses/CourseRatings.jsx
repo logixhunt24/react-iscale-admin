@@ -142,6 +142,7 @@ export default function CourseRatings() {
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Photo</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Name</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Designation</th>
+                  <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Course</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Rating</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap">Review</th>
                   <th className="px-4 py-3 font-bold border-r border-slate-200 dark:border-gray-800/50 whitespace-nowrap text-center">Status</th>
@@ -150,9 +151,9 @@ export default function CourseRatings() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan="8" className="text-center py-8 text-slate-500">Loading...</td></tr>
+                  <tr><td colSpan="9" className="text-center py-8 text-slate-500">Loading...</td></tr>
                 ) : data.length === 0 ? (
-                  <tr><td colSpan="8" className="text-center py-8 text-slate-500">No reviews found</td></tr>
+                  <tr><td colSpan="9" className="text-center py-8 text-slate-500">No reviews found</td></tr>
                 ) : (
                   data.map((row, index) => (
                     <tr key={row._id} className="border-b border-slate-200 dark:border-gray-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -173,6 +174,10 @@ export default function CourseRatings() {
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-top">
                         {row.user_designation || '-'}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-top">
+                        {row.course_id?.m_course_title || <span className="text-slate-400">All courses</span>}
+                        {row.source_review_id && <span className="block text-[10px] font-semibold text-indigo-600 mt-0.5">From mobile app</span>}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 dark:border-gray-800/50 align-top whitespace-nowrap">
                         <span className="flex items-center gap-1 text-amber-500">

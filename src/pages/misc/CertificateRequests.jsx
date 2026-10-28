@@ -98,8 +98,7 @@ export default function CertificateRequests() {
       const payload = {
         status: statusInt,
         certificate_status: statusInt,
-        certificate_no: updateForm.certificate_no || '',
-        certificate_pdf: updateForm.certificate_pdf || ''
+        declined_reason: statusInt === 3 ? (updateForm.declined_reason || '') : undefined
       }
 
       // Use whichever ID field exists in the API response
@@ -415,23 +414,31 @@ export default function CertificateRequests() {
                   </select>
                 </div>
 
-                {/* Certificate Number */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Certificate Number</label>
-                  <input type="text" value={updateForm.certificate_no}
-                    onChange={e => setUpdateForm({ ...updateForm, certificate_no: e.target.value })}
-                    placeholder="Enter Certificate Number"
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]" />
-                </div>
+                {selectedReg?.certificate_pdf && (
+                  <div className="text-sm text-gray-700">
+                    Certificate No: <b>{selectedReg.certificate_no}</b>{' '}
+                    <a href={selectedReg.certificate_pdf} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View certificate</a>
+                  </div>
+                )}
 
-                {/* Certificate PDF */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Certificate PDF URL</label>
-                  <input type="text" value={updateForm.certificate_pdf}
-                    onChange={e => setUpdateForm({ ...updateForm, certificate_pdf: e.target.value })}
-                    placeholder="Enter PDF Link or Path"
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]" />
-                </div>
+                {updateForm.status === 'approved' && (
+                  <p className="text-xs text-gray-500">
+                    The certificate is created from the student's name and course. Its number is assigned automatically.
+                  </p>
+                )}
+
+                {updateForm.status === 'declined' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Decline Reason</label>
+                    <textarea
+                      value={updateForm.declined_reason || ''}
+                      onChange={e => setUpdateForm({ ...updateForm, declined_reason: e.target.value })}
+                      placeholder="Shown to the student"
+                      rows={3}
+                      className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Modal Footer */}

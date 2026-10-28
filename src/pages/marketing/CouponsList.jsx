@@ -3,6 +3,7 @@ import { Edit2, Trash2, Eye, EyeOff } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
+import { couponTypeLabel } from './CouponTargetFields'
 
 export default function CouponsList() {
   const navigate = useNavigate()
@@ -125,14 +126,7 @@ export default function CouponsList() {
     return '-'
   }
 
-  const getCouponTypeLabel = (typeVal) => {
-    const mapping = {
-      '1': 'Course',
-      '2': 'Notes',
-      '3': 'Test Series'
-    };
-    return mapping[String(typeVal)] || typeVal || '-';
-  };
+  const getCouponTypeLabel = couponTypeLabel;
 
   const filteredData = data.filter((row) => {
     if (!searchTerm) return true;
@@ -257,7 +251,10 @@ export default function CouponsList() {
                         <td className="px-4 py-4 border-r border-slate-200 align-middle text-center">{sno}</td>
                         <td className="px-4 py-4 border-r border-slate-200 align-middle font-bold text-[#144f36]">{code}</td>
                         <td className="px-4 py-4 border-r border-slate-200 align-middle">{title}</td>
-                        <td className="px-4 py-4 border-r border-slate-200 align-middle">{type}</td>
+                        <td className="px-4 py-4 border-r border-slate-200 align-middle">
+                          {type}
+                          <div className="text-xs text-slate-500 mt-0.5 max-w-[200px]">{row.type_name || 'All items'}</div>
+                        </td>
                         <td className="px-4 py-4 border-r border-slate-200 align-middle">
                            {discountType === 'Flat' || discountType === 'flat' ? '₹' : ''}{discount}{discountType === 'Percentage' || discountType === 'percentage' ? '%' : ''}
                         </td>

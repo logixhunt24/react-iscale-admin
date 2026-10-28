@@ -170,30 +170,17 @@ export default function Registrations() {
 
       const payload = {
         status: statusInt,
-        certificate_status: statusInt,
-        certificate_no: statusInt === 2 ? (certNo || '') : '',
-        certificate_pdf: statusInt === 2 ? (certPdf || '') : ''
+        certificate_status: statusInt
       }
       if (statusInt === 3) {
         payload.declined_reason = declineReason
       }
 
-      let response
-      try {
-        response = await axios.put(
-          `${BASE_URL}/myadmin/certificate/update-status/${statusModalRow.enrollment_id}`,
-          payload,
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-      } catch (err) {
-        console.warn('Backend API status update error (silently bypassed):', err)
-        response = {
-          data: {
-            status: true,
-            message: 'Status updated successfully'
-          }
-        }
-      }
+      const response = await axios.put(
+        `${BASE_URL}/myadmin/certificate/update-status/${statusModalRow.enrollment_id}`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
 
       if (response.data?.status) {
         setData(prev => prev.map(r =>
@@ -203,8 +190,8 @@ export default function Registrations() {
                 certificate_status: statusInt, 
                 _regStatus: newStatus, 
                 declined_reason: statusInt === 3 ? declineReason : '',
-                certificate_no: statusInt === 2 ? certNo : r.certificate_no,
-                certificate_pdf: statusInt === 2 ? certPdf : r.certificate_pdf
+                certificate_no: response.data.data?.cert_no || '',
+                certificate_pdf: response.data.data?.pdf_url || ''
               } 
             : r
         ))
@@ -226,12 +213,13 @@ export default function Registrations() {
     if (!confirmed) return
     try {
       const token = localStorage.getItem('token')
-      await axios.delete(`${BASE_URL}/myadmin/registrations/${id}`, {
+      await axios.delete(`${BASE_URL}/myadmin/registrations/course-registration/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
-      }).catch(() => {})
+      })
       setData(prev => prev.filter(r => r.enrollment_id !== id))
     } catch (err) {
       console.error(err)
+      await window.customAlert(err.response?.data?.message || 'Failed to delete the registration')
     }
   }
 
@@ -251,21 +239,49 @@ export default function Registrations() {
     setSavingInvoice(true)
     try {
       const token = localStorage.getItem('token')
-      // Update locally
-      setData(prev => prev.map(r =>
-        r.enrollment_id === invoiceRow.enrollment_id
-          ? { ...r, discount_amount: invoiceForm.discount, payable_amount: invoiceForm.payable }
-          : r
-      ))
-      // API call
-      await axios.patch(
+      const response = await axios.patch(
         `${BASE_URL}/myadmin/registrations/update-invoice/${invoiceRow.enrollment_id}`,
         { discount: invoiceForm.discount, payable_amount: invoiceForm.payable },
         { headers: { Authorization: `Bearer ${token}` } }
-      ).catch(() => {})
+      )
+      // show what the server saved, not what was typed
+      const saved = response.data?.data || {}
+      setData(prev => prev.map(r =>
+        r.enrollment_id === invoiceRow.enrollment_id
+          ? { ...r, course_amount: saved.course_amount ?? r.course_amount, discount_amount: saved.discount_amount, payable_amount: saved.payable_amount }
+          : r
+      ))
+      setIsInvoiceModalOpen(false)
+      await window.customAlert('Invoice updated')
+    } catch (err) {
+      await window.customAlert(err.response?.data?.message || 'Failed to update the invoice')
     } finally {
       setSavingInvoice(false)
-      setIsInvoiceModalOpen(false)
+    }
+  }
+
+  // Download the registration's invoice as a PDF
+  const handleDownloadInvoice = async (row) => {
+    try {
+      const token = localStorage.getItem('token')
+      const res = await axios.get(`${BASE_URL}/myadmin/registrations/invoice/${row.enrollment_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: 'blob',
+      })
+      const name = (/filename="?([^";]+)"?/.exec(res.headers['content-disposition'] || '') || [])[1] || 'invoice.pdf'
+      const url = URL.createObjectURL(res.data)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = name
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      // errors come back as a JSON blob
+      let message = 'Could not download the invoice'
+      try { message = JSON.parse(await err.response.data.text()).message || message } catch { /* keep generic */ }
+      await window.customAlert(message)
     }
   }
 
@@ -408,7 +424,7 @@ export default function Registrations() {
         `"${new Date(row.registration_date).toLocaleDateString()}"`,
         row.course_amount || 0, row.payable_amount || 0, row.discount_amount || 0,
         row.offer_amount || 'N/A', `${row.days_left || 0} Days`, `${row.days_left || 0} Days`,
-        row._regStatus || 'Pending'
+        certLabel(row)
       ]
       csvRows.push(values.join(','))
     })
@@ -422,9 +438,14 @@ export default function Registrations() {
   const handleEntriesChange = (e) => { setEntriesPerPage(Number(e.target.value)); setCurrentPage(1) }
 
   // Status badge for Certificate column
+  // certificate_status from the server: 0 not requested, 1 pending, 2 approved, 3 declined
+  const CERT_LABELS = { 0: 'Not requested', 1: 'Pending', 2: 'Approved', 3: 'Decline' }
+  const certLabel = (row) => row._regStatus || CERT_LABELS[row.certificate_status] || 'Not requested'
+
   const statusBadgeClass = (status) => {
     if (status === 'Approved') return 'bg-green-600'
     if (status === 'Decline') return 'bg-red-500'
+    if (status === 'Not requested') return 'bg-slate-400'
     return 'bg-amber-500'
   }
 
@@ -587,7 +608,7 @@ export default function Registrations() {
               </thead>
               <tbody>
                 {data.map((row, index) => {
-                  const regStatus = row._regStatus || 'Pending'
+                  const regStatus = certLabel(row)
                   const appActive = row.enrollment_status === '1' || row.enrollment_status === 1 || row.enrollment_status === 'active'
                   return (
                     <tr key={row.enrollment_id}
@@ -683,7 +704,7 @@ export default function Registrations() {
                             </svg>
                           </button>
                           {/* Download */}
-                          <button title="Download" className="bg-[#144f36] hover:bg-[#0f3d2a] text-white p-1.5 rounded transition-colors">
+                          <button title="Download Invoice" onClick={() => handleDownloadInvoice(row)} className="bg-[#144f36] hover:bg-[#0f3d2a] text-white p-1.5 rounded transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" />
                             </svg>
@@ -845,6 +866,19 @@ export default function Registrations() {
                   <option value="Decline">Decline</option>
                 </select>
               </div>
+
+              {statusModalRow?.certificate_pdf && (
+                <div className="text-sm text-gray-700">
+                  Certificate No: <b>{statusModalRow.certificate_no}</b>{' '}
+                  <a href={statusModalRow.certificate_pdf} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View certificate</a>
+                </div>
+              )}
+
+              {newStatus === 'Approved' && (
+                <p className="text-xs text-gray-500">
+                  The certificate is created from the student's name and course. Its number is assigned automatically.
+                </p>
+              )}
 
               {newStatus === 'Decline' && (
                 <div>

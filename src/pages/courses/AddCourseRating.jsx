@@ -19,8 +19,10 @@ export default function AddCourseRating() {
     user_designation: '',
     user_review: '',
     rating: '5',
-    status: 'active'
+    status: 'active',
+    course_id: ''
   })
+  const [courses, setCourses] = useState([])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -32,10 +34,18 @@ export default function AddCourseRating() {
       user_designation: r.user_designation || '',
       user_review: r.user_review || '',
       rating: (r.rating ?? 5).toString(),
-      status: r.status || 'active'
+      status: r.status || 'active',
+      course_id: r.course_id?._id || r.course_id || ''
     })
     setExistingImage(r.user_image || '')
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    axios.get(`${BASE_URL}/myadmin/course/all-courses?limit=1000`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setCourses(res.data?.data || []))
+      .catch((err) => console.error('Error loading courses', err))
+  }, [])
 
   useEffect(() => {
     if (!id) return
@@ -80,6 +90,7 @@ export default function AddCourseRating() {
       payload.append('user_review', formData.user_review)
       payload.append('rating', formData.rating)
       payload.append('status', formData.status)
+      payload.append('course_id', formData.course_id)
       if (imageFile) payload.append('user_image', imageFile)
 
       const url = id
@@ -161,6 +172,22 @@ export default function AddCourseRating() {
                 className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
               />
             </div>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Show on course</label>
+            <p className="text-xs text-slate-500 mb-1">Pick one course to show this only on that course's page, or leave it as site-wide to show on the homepage and on any course that has no reviews of its own.</p>
+            <select
+              name="course_id"
+              value={formData.course_id}
+              onChange={handleChange}
+              className="w-full border border-slate-300 dark:border-gray-700 bg-[#f6f6ff] dark:bg-[#13111c] text-slate-700 dark:text-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36]"
+            >
+              <option value="">All courses (site-wide)</option>
+              {courses.map((c) => (
+                <option key={c._id} value={c._id}>{c.title || c.m_course_title}</option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-6">

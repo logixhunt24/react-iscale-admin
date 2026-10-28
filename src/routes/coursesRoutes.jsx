@@ -20,6 +20,7 @@ import AddCourseTestSeries from '../pages/courses/AddCourseTestSeries'
 import CourseTrainingHighlights from '../pages/courses/CourseTrainingHighlights'
 import CourseRatings from '../pages/courses/CourseRatings'
 import AddCourseRating from '../pages/courses/AddCourseRating'
+import AppReviews from '../pages/courses/AppReviews'
 import AddCourseCategory from '../pages/courses/AddCourseCategory'
 import EditCourseCategory from '../pages/courses/EditCourseCategory'
 import AddCourse from '../pages/courses/AddCourse'
@@ -50,6 +51,7 @@ const coursesRoutes = [
   <Route key="courses-test-series-add" path="/courses/test-series/add/:id" element={<AddCourseTestSeries />} />,
   <Route key="courses-training-highlights" path="/courses/training-highlights/:id" element={<CourseTrainingHighlights />} />,
   <Route key="courses-ratings" path="/courses/ratings" element={<CourseRatings />} />,
+  <Route key="courses-app-reviews" path="/courses/app-reviews" element={<AppReviews />} />,
   <Route key="courses-ratings-add" path="/courses/ratings/add" element={<AddCourseRating />} />,
   <Route key="courses-ratings-edit" path="/courses/ratings/edit/:id" element={<AddCourseRating />} />
 ]

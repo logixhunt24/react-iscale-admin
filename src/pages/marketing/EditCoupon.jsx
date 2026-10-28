@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
+import CouponTargetFields from './CouponTargetFields'
 
 export default function EditCoupon() {
   const navigate = useNavigate()
@@ -15,8 +16,8 @@ export default function EditCoupon() {
     if (typeVal === undefined || typeVal === null) return '1';
     const valStr = String(typeVal).toLowerCase();
     if (valStr === 'course' || valStr === 'courses') return '1';
-    if (valStr === 'notes') return '2';
-    if (valStr === 'test series' || valStr === 'testseries') return '3';
+    if (valStr === 'test series' || valStr === 'testseries') return '2';
+    if (valStr === 'notes') return '3';
     return valStr;
   };
 
@@ -24,6 +25,9 @@ export default function EditCoupon() {
     m_coupon_code: couponData.coupon_code || '',
     m_coupon_title: couponData.coupon_title || '',
     m_coupon_type: getInitialCouponType(couponData.coupon_type),
+    m_coupon_item: String(couponData.coupon_type_id || couponData.type_data?._id || ''),
+    m_coupon_amount: couponData.amount || 0,
+    m_coupon_offer_amount: couponData.offer_amount || 0,
     m_coupon_discount_type: couponData.coupon_discount_type || 'flat',
     m_coupon_discount: couponData.coupon_discount || '',
     m_coupon_start_date: couponData.coupon_start_date ? new Date(couponData.coupon_start_date).toISOString().split('T')[0] : '',
@@ -35,11 +39,29 @@ export default function EditCoupon() {
   })
 
   useEffect(() => {
-    if (!couponData || !couponData._id) {
-      // If no data passed via state, we could fetch it here
-      // fetchCouponDetails()
-    }
+    const token = localStorage.getItem('token')
+    axios.get(`${BASE_URL}/myadmin/coupons/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        const c = res.data?.data
+        if (!c) return
+        setFormData(prev => ({
+          ...prev,
+          m_coupon_type: String(c.coupon_type || prev.m_coupon_type),
+          m_coupon_item: String(c.coupon_type_id || ''),
+          m_coupon_amount: c.amount || 0,
+          m_coupon_offer_amount: c.offer_amount || 0,
+        }))
+      })
+      .catch((err) => console.error('Could not load coupon target', err))
   }, [id])
+
+// picker reports the chosen type/item and that item's prices
+  const handleTarget = ({ type, itemId, amount, offerAmount }) =>
+    setFormData(prev =>
+      prev.m_coupon_type === type && prev.m_coupon_item === itemId && prev.m_coupon_amount === amount && prev.m_coupon_offer_amount === offerAmount
+        ? prev
+        : { ...prev, m_coupon_type: type, m_coupon_item: itemId, m_coupon_amount: amount, m_coupon_offer_amount: offerAmount }
+    )
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,6 +83,9 @@ export default function EditCoupon() {
         coupon_code: formData.m_coupon_code,
         coupon_title: formData.m_coupon_title,
         coupon_type: Number(formData.m_coupon_type),
+        coupon_type_id: formData.m_coupon_item || null,
+        amount: formData.m_coupon_amount || 0,
+        offer_amount: formData.m_coupon_offer_amount || 0,
         coupon_discount_type: formData.m_coupon_discount_type.toLowerCase(),
         coupon_discount: Number(formData.m_coupon_discount) || 0,
         coupon_start_date: formData.m_coupon_start_date ? new Date(formData.m_coupon_start_date).toISOString() : null,
@@ -113,7 +138,7 @@ export default function EditCoupon() {
         </div>
 
         <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             <div>
               <label className="block text-sm font-bold text-slate-800 mb-1">Coupon Code</label>
               <input 
@@ -136,20 +161,13 @@ export default function EditCoupon() {
                 className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-[#f6f6ff] text-slate-700"
               />
             </div>
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-bold text-slate-800 mb-1">Coupon Type</label>
-              <select 
-                name="m_coupon_type"
-                value={formData.m_coupon_type}
-                onChange={handleChange}
-                className="w-full border border-slate-300 rounded px-3 py-2 text-sm outline-none focus:border-[#144f36] focus:ring-1 focus:ring-[#144f36] bg-[#f6f6ff] text-slate-700"
-              >
-                <option value="1">Course</option>
-                <option value="2">Notes</option>
-                <option value="3">Test Series</option>
-              </select>
-            </div>
           </div>
+
+          <CouponTargetFields
+            type={formData.m_coupon_type}
+            itemId={formData.m_coupon_item}
+            onChange={handleTarget}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-5">
             <div>

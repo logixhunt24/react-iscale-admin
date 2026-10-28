@@ -29,6 +29,7 @@ export const menuItems = [
       { id: 'courses-popular', label: 'Popular Courses', path: '/courses/popular' },
       { id: 'courses-recommended', label: 'Recommended Courses', path: '/courses/recommended' },
       { id: 'courses-ratings', label: 'Testimonials / Ratings', path: '/courses/ratings' },
+      { id: 'courses-app-reviews', label: 'Mobile App Reviews', path: '/courses/app-reviews' },
     ],
   },
   {
