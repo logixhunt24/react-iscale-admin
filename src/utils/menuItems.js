@@ -27,6 +27,7 @@ export const menuItems = [
       { id: 'courses-categories', label: 'Categories', path: '/courses/categories' },
       { id: 'courses-all', label: 'All Courses', path: '/courses/all' },
       { id: 'courses-popular', label: 'Popular Courses', path: '/courses/popular' },
+      { id: 'courses-most-popular', label: 'Most Popular', path: '/courses/most-popular' },
       { id: 'courses-recommended', label: 'Recommended Courses', path: '/courses/recommended' },
       { id: 'courses-ratings', label: 'Testimonials / Ratings', path: '/courses/ratings' },
       { id: 'courses-app-reviews', label: 'Mobile App Reviews', path: '/courses/app-reviews' },
@@ -141,12 +142,6 @@ export const menuItems = [
     path: '/banners',
   },
   {
-    id: 'phone-images',
-    label: 'Phone Images',
-    icon: 'Smartphone',
-    path: '/marketing/phone-images',
-  },
-  {
     id: 'events',
     label: 'Events',
     icon: 'Calendar',
@@ -213,7 +208,6 @@ export const menuItems = [
       { id: 'job-updates', label: 'Job Updates', path: '/job-updates' },
       { id: 'success-story', label: 'Success Story', path: '/success-story' },
       { id: 'placement-talks', label: 'Placement Talks', path: '/placement-talks' },
-      { id: 'news-updates', label: 'News & Updates', path: '/news-updates' },
       { id: 'our-allied', label: 'Our Allied', path: '/our-allied' },
       { id: 'our-clients', label: 'Our Clients', path: '/our-clients' },
       { id: 'career-fit', label: 'Career Fit', path: '/career-fit' },

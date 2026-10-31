@@ -25,6 +25,7 @@ import AddCourseCategory from '../pages/courses/AddCourseCategory'
 import EditCourseCategory from '../pages/courses/EditCourseCategory'
 import AddCourse from '../pages/courses/AddCourse'
 import EditCourse from '../pages/courses/EditCourse'
+import MostPopular from '../pages/courses/MostPopular'
 
 const coursesRoutes = [
   <Route key="wishlist-course" path="/wishlist/course" element={<CourseWishlist />} />,
@@ -37,6 +38,7 @@ const coursesRoutes = [
   <Route key="courses-all-edit" path="/courses/all/edit/:id" element={<EditCourse />} />,
   <Route key="courses-view" path="/courses/view/:id" element={<CourseView />} />,
   <Route key="courses-popular" path="/courses/popular" element={<PopularCourses />} />,
+  <Route key="courses-most-popular" path="/courses/most-popular" element={<MostPopular />} />,
   <Route key="courses-recommended" path="/courses/recommended" element={<RecommendedCourses />} />,
   <Route key="courses-faq" path="/courses/faq/:id" element={<CourseFaq />} />,
   <Route key="courses-features" path="/courses/features/:id" element={<CourseFeatures />} />,
