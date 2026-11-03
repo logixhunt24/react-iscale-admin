@@ -14,7 +14,7 @@ import { BASE_URL } from '../../config/api'
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true)
-  const [apiData, setApiData] = useState({ cards: null, graph: null, topCourses: null })
+  const [apiData, setApiData] = useState({ cards: null, topCourses: null, activities: null })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,16 +22,14 @@ export default function Dashboard() {
         const token = localStorage.getItem('token')
         const headers = { Authorization: `Bearer ${token}` }
         
-        const [cardsRes, graphRes, coursesRes, activitiesRes] = await Promise.allSettled([
+        const [cardsRes, coursesRes, activitiesRes] = await Promise.allSettled([
           axios.get(`${BASE_URL}/myadmin/dashboard/cards`, { headers }),
-          axios.get(`${BASE_URL}/myadmin/dashboard/graph`, { headers }),
           axios.get(`${BASE_URL}/myadmin/dashboard/top-courses`, { headers }),
           axios.get(`${BASE_URL}/myadmin/dashboard/recent_activities`, { headers })
         ])
 
         setApiData({
           cards: cardsRes.status === 'fulfilled' ? (cardsRes.value?.data?.data || cardsRes.value?.data?.cards || cardsRes.value?.data || null) : null,
-          graph: graphRes.status === 'fulfilled' ? (graphRes.value?.data?.data || graphRes.value?.data || null) : null,
           topCourses: coursesRes.status === 'fulfilled' ? (coursesRes.value?.data?.data || coursesRes.value?.data || null) : null,
           activities: activitiesRes.status === 'fulfilled' ? (activitiesRes.value?.data?.data || activitiesRes.value?.data?.activities || activitiesRes.value?.data?.recent_activities || activitiesRes.value?.data || null) : null
         })
@@ -63,7 +61,7 @@ export default function Dashboard() {
           
           return {
             ...stat,
-            value: apiValue !== undefined && apiValue !== null ? apiValue : stat.value
+            value: apiValue ?? null
           };
         });
       }
@@ -112,7 +110,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
                 {/* Chart Area */}
                 <div className="xl:col-span-2 h-[400px]">
-                  <RegistrationChart apiData={apiData.graph} />
+                  <RegistrationChart />
                 </div>
                 
                 {/* Activity Feed */}

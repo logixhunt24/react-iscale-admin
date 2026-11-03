@@ -80,7 +80,7 @@ export default function HeroBanner({ cardsData = [] }) {
                 </div>
                 <span className="text-white/80 text-[11px] font-bold uppercase tracking-wider">{String(card?.title || 'Stat')}</span>
               </div>
-              <h3 className="text-white text-2xl font-black tracking-tight">{String(card?.value || '0')}</h3>
+              <h3 className="text-white text-2xl font-black tracking-tight">{card?.value == null ? '—' : String(card.value)}</h3>
             </MotionLink>
           );
         })}

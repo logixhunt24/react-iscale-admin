@@ -1,13 +1,6 @@
 import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
 
-const activities = [
-  { id: 1, type: 'user', title: 'New student registered', desc: 'James Smith joined your course', time: '2m ago', icon: 'User', color: 'text-[#22c55e] bg-green-50' },
-  { id: 2, type: 'course', title: 'Course purchased', desc: 'React JS Bootcamp purchased', time: '15m ago', icon: 'ShoppingCart', color: 'text-blue-500 bg-blue-50' },
-  { id: 3, type: 'quiz', title: 'Quiz completed', desc: 'Advanced JavaScript quiz completed', time: '45m ago', icon: 'FileText', color: 'text-orange-500 bg-orange-50' },
-  { id: 4, type: 'review', title: 'New review received', desc: '5 star rating on Python Mastery', time: '1h ago', icon: 'Star', color: 'text-yellow-500 bg-yellow-50' },
-  { id: 5, type: 'payout', title: 'Payout requested', desc: 'John Doe requested payout', time: '2h ago', icon: 'DollarSign', color: 'text-[#22c55e] bg-green-50' },
-]
 
 export default function ActivityFeed({ apiData }) {
   // Helper to format date to relative time
@@ -35,7 +28,7 @@ export default function ActivityFeed({ apiData }) {
     return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
-  let displayActivities = activities;
+  let displayActivities = [];
 
   if (apiData && typeof apiData === 'object') {
     const dataSource = apiData.data || apiData;

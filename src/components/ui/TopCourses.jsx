@@ -5,23 +5,17 @@ import { useNavigate, Link } from 'react-router-dom'
 export default function TopCourses({ apiData }) {
   const navigate = useNavigate()
 
-  const defaultCourses = [
-    { name: 'React Masterclass', category: 'Development', sales: 1524, progress: 85, color: 'bg-blue-500', icon: 'Code' },
-    { name: 'AI Course', category: 'Technology', sales: 1254, progress: 70, color: 'bg-emerald-500', icon: 'Cpu' },
-    { name: 'Python Bootcamp', category: 'Development', sales: 1054, progress: 65, color: 'bg-amber-500', icon: 'Terminal' },
-    { name: 'UI/UX Design Principles', category: 'Design', sales: 925, progress: 50, color: 'bg-purple-500', icon: 'PenTool' }
-  ]
-
-  const courses = apiData && Array.isArray(apiData) && apiData.length > 0 
-    ? apiData.map((c, i) => ({
-        name: c.courseName || c.name || c.course_name || c.title || defaultCourses[i]?.name || 'Unknown',
-        category: c.courseCategory || c.category || c.course_category || defaultCourses[i]?.category || 'Category',
-        sales: c.totalSales || c.sales || c.total_sales || c.count || c.value || defaultCourses[i]?.sales || 0,
-        progress: c.progress || c.completion || defaultCourses[i]?.progress || 0,
-        color: c.color || defaultCourses[i]?.color || 'bg-blue-500',
-        icon: c.icon || defaultCourses[i]?.icon || 'BookOpen'
-      }))
-    : defaultCourses;
+  // API rows: { course_name, category: { name }, total_registrations }
+  const rows = Array.isArray(apiData) ? apiData.slice(0, 5) : []
+  const best = Math.max(...rows.map(r => r.total_registrations || 0), 1)
+  const courses = rows.map(r => ({
+    name: r.course_name,
+    category: r.category?.name || '',
+    sales: r.total_registrations || 0,
+    progress: Math.round(((r.total_registrations || 0) / best) * 100),
+    color: 'bg-emerald-500',
+    icon: 'BookOpen'
+  }))
 
   return (
     <div className="bg-gradient-to-b from-white to-[#fcfcfd] rounded-2xl border border-white ring-1 ring-black/[0.02] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.04)] p-6 h-full flex flex-col">
@@ -36,6 +30,9 @@ export default function TopCourses({ apiData }) {
       </div>
 
       <div className="flex flex-col gap-6">
+        {courses.length === 0 && (
+          <p className="text-sm text-slate-400 py-4 text-center">No course sales yet.</p>
+        )}
         {courses.map((course, i) => {
           const Icon = Icons[course?.icon] || Icons.BookOpen
           return (

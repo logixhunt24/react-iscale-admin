@@ -54,15 +54,6 @@ export default function StatCard({ card, index }) {
   };
   const cardPathTo = getCardPath(card?.key);
   
-  // Generating a simple random looking SVG line based on index
-  const paths = [
-    "M0,20 L10,15 L20,25 L30,5 L40,10 L50,0",
-    "M0,10 L10,25 L20,15 L30,20 L40,0 L50,10",
-    "M0,25 L10,5 L20,15 L30,10 L40,20 L50,0",
-    "M0,15 L10,20 L20,5 L30,25 L40,10 L50,0",
-    "M0,5 L10,10 L20,0 L30,20 L40,15 L50,5",
-  ]
-  const path = paths[index % 5]
 
   return (
     <MotionLink
@@ -82,32 +73,10 @@ export default function StatCard({ card, index }) {
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{String(card?.title || 'Stat')}</span>
         </div>
         <h3 className="text-2xl font-black text-slate-800 tracking-tight mt-1">
-          <AnimatedCounter value={card?.value || 0} />
+          {card?.value == null ? '—' : <AnimatedCounter value={card.value} />}
         </h3>
       </div>
 
-      <div className="flex items-end justify-between mt-1 relative z-10">
-        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md">
-          <span className="text-[#22c55e] flex items-center">
-            <Icons.TrendingUp size={10} strokeWidth={3} className="mr-1" />
-            {String(card?.trend || '+0%')}
-          </span>
-          vs last month
-        </div>
-        
-        {/* Mini Graph */}
-        <div className="w-12 h-6 opacity-80">
-          <svg viewBox="0 0 50 30" preserveAspectRatio="none" className="w-full h-full drop-shadow-[0_2px_4px_rgba(34,197,94,0.3)]">
-            <path d={path} fill="none" stroke="url(#greenGradient)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            <defs>
-              <linearGradient id="greenGradient" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#144f36" />
-                <stop offset="100%" stopColor="#22c55e" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
     </MotionLink>
   )
 }
