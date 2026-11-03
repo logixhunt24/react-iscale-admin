@@ -238,3 +238,19 @@
     transform: translateY(-1px);
   }
 }
+
+/* Table headers: one look everywhere, white background with dark text.
+   !important because pages set colours directly on <thead>, <tr> and <th>. */
+thead, thead tr, thead th, thead td {
+  background: #ffffff !important;
+  color: #334155 !important;
+}
+thead th, thead td { border-color: #e2e8f0 !important; }
+thead [class*="text-white"] { color: #94a3b8 !important; } /* sort arrows etc. that were white-on-green */
+
+.dark thead, .dark thead tr, .dark thead th, .dark thead td {
+  background: #13111c !important;
+  color: #e2e8f0 !important;
+}
+.dark thead th, .dark thead td { border-color: #1f1b2e !important; }
+.dark thead [class*="text-white"] { color: #94a3b8 !important; }
