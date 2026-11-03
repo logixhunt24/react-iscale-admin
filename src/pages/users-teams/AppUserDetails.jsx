@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { Trash2, Edit2, Eye, User, Mail, Phone, Calendar, MessageCircle, MapPin, Cake, Hash } from 'lucide-react'
+import { getImageUrl } from '../../utils/imageUtils'
+import { ProfileTab, OrdersTab, LearningTab, ActivityTab, useUserOverview } from './UserFullDetails'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
 
@@ -23,6 +25,8 @@ export default function AppUserDetails({ userId, onClose, onDeleted }) {
   
   const [activeTab, setActiveTab] = useState('enrollments') // 'enrollments', 'wishlists'
   const [activeSubTab, setActiveSubTab] = useState('courses') // 'courses', 'test-series', 'notes'
+  const [modalTab, setModalTab] = useState('profile') // profile | enrollments | wishlists | orders | learning | activity
+  const overview = useUserOverview(isModal ? id : null)
   const [user, setUser] = useState(null)
   const [userLoading, setUserLoading] = useState(true)
 
@@ -71,7 +75,7 @@ export default function AppUserDetails({ userId, onClose, onDeleted }) {
   if (isModal) {
     return (
       <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 relative border border-slate-200 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[92vh] overflow-y-auto p-6 relative border border-slate-200 flex flex-col gap-4">
           
           {/* Modal Header */}
           <div className="flex justify-between items-center pb-3 border-b border-slate-100">
@@ -86,131 +90,131 @@ export default function AppUserDetails({ userId, onClose, onDeleted }) {
           ) : user ? (
             <div className="flex-1 flex flex-col gap-5">
               
-              {/* CANDIDATE INFORMATION Block (styled like the second screenshot) */}
-              <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm">
-                <h4 className="text-xs font-bold tracking-wider text-[#7c3aed] uppercase mb-4">
-                  CANDIDATE INFORMATION
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Name</div>
-                    <div className="text-sm text-slate-800 font-bold flex items-center gap-2 flex-wrap">
-                      {`${user.c_first_name || ''} ${user.c_last_name || ''}`.trim() || user.c_display_name || 'N/A'}
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${user.c_user_status === 1 ? 'bg-[#144f36]/10 text-[#144f36] border border-[#144f36]/20' : 'bg-[#d87025]/10 text-[#d87025] border border-[#d87025]/20'}`}>
-                        {user.c_user_status === 1 ? 'Active' : 'Inactive'}
-                      </span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${isVerifiedUser(user) ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
-                        {isVerifiedUser(user) ? 'Verified' : 'Unverified'}
-                      </span>
-                    </div>
+              {/* Summary header */}
+              <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm flex flex-col sm:flex-row gap-4 sm:items-center">
+                {user.c_profile_image ? (
+                  <img src={getImageUrl(user.c_profile_image)} alt="" className="w-16 h-16 rounded-full object-cover border border-slate-200 shrink-0" />
+                ) : (
+                  <div className="w-16 h-16 bg-[#144f36]/10 text-[#144f36] rounded-full flex items-center justify-center font-bold text-2xl shrink-0 uppercase">
+                    {user.c_first_name?.[0] || user.c_display_name?.[0] || 'U'}
                   </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Email</div>
-                    <div className="text-sm text-slate-800 font-bold break-all">{user.c_email || 'N/A'}</div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="text-lg font-bold text-slate-800 flex items-center gap-2 flex-wrap">
+                    {`${user.c_first_name || ''} ${user.c_last_name || ''}`.trim() || user.c_display_name || 'N/A'}
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${user.c_user_status === 1 ? 'bg-[#144f36]/10 text-[#144f36] border border-[#144f36]/20' : 'bg-[#d87025]/10 text-[#d87025] border border-[#d87025]/20'}`}>
+                      {user.c_user_status === 1 ? 'Active' : 'Inactive'}
+                    </span>
+                    {user.c_deactivated && (
+                      <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">Deactivated</span>
+                    )}
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${isVerifiedUser(user) ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}`}>
+                      {isVerifiedUser(user) ? 'Verified' : 'Unverified'}
+                    </span>
                   </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Mobile</div>
-                    <div className="text-sm text-slate-800 font-bold">{user.c_contact || 'N/A'}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Alternate Mobile</div>
-                    <div className="text-sm text-slate-800 font-bold">{user.c_alt_contact || 'N/A'}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">WhatsApp Number</div>
-                    <div className="text-sm text-slate-800 font-bold">{user.c_whatsapp || 'N/A'}</div>
-                  </div>
-                  <div className="md:col-span-2">
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Address</div>
-                    <div className="text-sm text-slate-800 font-bold">{user.c_current_address1 || 'N/A'}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Candidate ID</div>
-                    <div className="text-sm text-slate-800 font-bold">{user.candidate_idno || 'N/A'}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Joined Date</div>
-                    <div className="text-sm text-slate-800 font-bold">{formatDate(user.c_register_date)}</div>
-                  </div>
-                  {user.c_gender && (
-                    <div>
-                      <div className="text-xs text-slate-400 font-semibold mb-0.5">Gender</div>
-                      <div className="text-sm text-slate-800 font-bold capitalize">{user.c_gender}</div>
-                    </div>
-                  )}
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Date of Birth</div>
-                    <div className="text-sm text-slate-800 font-bold">{formatDate(user.c_dob)}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-semibold mb-0.5">Pincode</div>
-                    <div className="text-sm text-slate-800 font-bold">{user.c_current_pincode || 'N/A'}</div>
+                  <div className="text-sm text-slate-500 mt-1 flex flex-wrap gap-x-5 gap-y-1">
+                    <span>ID: <b className="text-slate-700">{user.candidate_idno || 'N/A'}</b></span>
+                    <span>Joined: <b className="text-slate-700">{formatDate(user.c_register_date)}</b></span>
+                    <span className="break-all">{user.c_email || 'No email'}</span>
+                    <span>{user.c_contact || 'No mobile'}</span>
                   </div>
                 </div>
               </div>
 
-              {/* ENROLLMENT & WISHLIST DETAILS Card Block */}
+              {/* Tabs */}
               <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm flex flex-col gap-4">
-                
-                {/* Tab Header Bar (styled like the second screenshot tabs) */}
                 <div className="flex flex-wrap gap-x-6 gap-y-2 border-b border-slate-100 pb-3">
-                  <button 
-                    onClick={() => { setActiveTab('enrollments'); setActiveSubTab('courses'); }}
-                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${activeTab === 'enrollments' && activeSubTab === 'courses' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-800'}`}
+                  <button
+                    onClick={() => { setModalTab('profile'); setActiveSubTab('courses'); }}
+                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${modalTab === 'profile' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-900'}`}
                   >
-                    Enrolled Courses
+                    Profile
                   </button>
-                  <button 
-                    onClick={() => { setActiveTab('enrollments'); setActiveSubTab('test-series'); }}
-                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${activeTab === 'enrollments' && activeSubTab === 'test-series' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-800'}`}
+                  <button
+                    onClick={() => { setModalTab('enrollments'); setActiveSubTab('courses'); }}
+                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${modalTab === 'enrollments' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-900'}`}
                   >
-                    Enrolled Test Series
+                    Enrollments
                   </button>
-                  <button 
-                    onClick={() => { setActiveTab('enrollments'); setActiveSubTab('notes'); }}
-                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${activeTab === 'enrollments' && activeSubTab === 'notes' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-800'}`}
-                  >
-                    Enrolled Notes
-                  </button>
-                  <button 
-                    onClick={() => { setActiveTab('wishlists'); setActiveSubTab('courses'); }}
-                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${activeTab === 'wishlists' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-800'}`}
+                  <button
+                    onClick={() => { setModalTab('wishlists'); setActiveSubTab('courses'); }}
+                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${modalTab === 'wishlists' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-900'}`}
                   >
                     Wishlist
                   </button>
+                  <button
+                    onClick={() => { setModalTab('orders'); setActiveSubTab('courses'); }}
+                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${modalTab === 'orders' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-900'}`}
+                  >
+                    Orders & Payments
+                  </button>
+                  <button
+                    onClick={() => { setModalTab('learning'); setActiveSubTab('courses'); }}
+                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${modalTab === 'learning' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-900'}`}
+                  >
+                    Learning
+                  </button>
+                  <button
+                    onClick={() => { setModalTab('activity'); setActiveSubTab('courses'); }}
+                    className={`text-xs font-bold tracking-wider uppercase transition-all pb-1.5 ${modalTab === 'activity' ? 'text-[#7c3aed] border-b-2 border-[#7c3aed]' : 'text-emerald-700 hover:text-emerald-900'}`}
+                  >
+                    Activity
+                  </button>
                 </div>
 
-                {/* Tab Content Table */}
                 <div className="min-h-[250px]">
-                  {activeTab === 'enrollments' && activeSubTab === 'courses' && <EnrollmentCourses candidateId={id} />}
-                  {activeTab === 'enrollments' && activeSubTab === 'test-series' && <EnrollmentTestSeries candidateId={id} />}
-                  {activeTab === 'enrollments' && activeSubTab === 'notes' && <EnrollmentNotes candidateId={id} />}
-                  
-                  {activeTab === 'wishlists' && (
+                  {modalTab === 'profile' && <ProfileTab user={user} />}
+
+                  {modalTab === 'enrollments' && (
                     <div className="flex flex-col gap-4">
-                      {/* Wishlist Sub-Tabs Switcher */}
                       <div className="flex gap-2">
-                        <button 
-                          onClick={() => setActiveSubTab('courses')}
-                          className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'courses' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                        >
-                          Courses
-                        </button>
-                        <button 
-                          onClick={() => setActiveSubTab('test-series')}
-                          className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'test-series' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                        >
-                          Test Series
-                        </button>
-                        <button 
-                          onClick={() => setActiveSubTab('notes')}
-                          className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'notes' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                        >
-                          Notes
-                        </button>
+                    <button
+                      onClick={() => setActiveSubTab('courses')}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'courses' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                    >
+                      Courses
+                    </button>
+                    <button
+                      onClick={() => setActiveSubTab('test-series')}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'test-series' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                    >
+                      Test Series
+                    </button>
+                    <button
+                      onClick={() => setActiveSubTab('notes')}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'notes' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                    >
+                      Notes
+                    </button>
                       </div>
-                      
-                      {/* Wishlist Table Content */}
+                      {activeSubTab === 'courses' && <EnrollmentCourses candidateId={id} />}
+                      {activeSubTab === 'test-series' && <EnrollmentTestSeries candidateId={id} />}
+                      {activeSubTab === 'notes' && <EnrollmentNotes candidateId={id} />}
+                    </div>
+                  )}
+
+                  {modalTab === 'wishlists' && (
+                    <div className="flex flex-col gap-4">
+                      <div className="flex gap-2">
+                    <button
+                      onClick={() => setActiveSubTab('courses')}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'courses' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                    >
+                      Courses
+                    </button>
+                    <button
+                      onClick={() => setActiveSubTab('test-series')}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'test-series' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                    >
+                      Test Series
+                    </button>
+                    <button
+                      onClick={() => setActiveSubTab('notes')}
+                      className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${activeSubTab === 'notes' ? 'bg-[#7c3aed] text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                    >
+                      Notes
+                    </button>
+                      </div>
                       <div className="border border-slate-100 rounded-lg overflow-hidden">
                         {activeSubTab === 'courses' && <WishlistCourses candidateId={id} />}
                         {activeSubTab === 'test-series' && <WishlistTestSeries candidateId={id} />}
@@ -218,8 +222,11 @@ export default function AppUserDetails({ userId, onClose, onDeleted }) {
                       </div>
                     </div>
                   )}
-                </div>
 
+                  {modalTab === 'orders' && <OrdersTab state={overview} />}
+                  {modalTab === 'learning' && <LearningTab state={overview} />}
+                  {modalTab === 'activity' && <ActivityTab state={overview} />}
+                </div>
               </div>
 
             </div>
@@ -227,8 +234,16 @@ export default function AppUserDetails({ userId, onClose, onDeleted }) {
             <div className="p-8 text-center text-slate-500">Failed to load user details.</div>
           )}
 
-          {/* Footer Close Button */}
-          <div className="flex justify-end pt-3 border-t border-slate-100">
+          {/* Footer: Delete (the only place a student can be deleted) + Close */}
+          <div className="flex justify-between items-center pt-3 border-t border-slate-100">
+            <button
+              onClick={handleDeleteUser}
+              disabled={!user}
+              className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:opacity-40 text-white px-4 py-2.5 rounded-full text-sm font-bold transition-colors shadow-sm"
+              title="Permanently delete this user"
+            >
+              <Trash2 size={15} /> Delete User
+            </button>
             <button 
               onClick={onClose} 
               className="bg-[#f0f4f9] text-slate-700 hover:bg-[#e1e9f4] px-6 py-2.5 rounded-full font-bold text-sm transition-colors shadow-sm"
@@ -362,14 +377,6 @@ export default function AppUserDetails({ userId, onClose, onDeleted }) {
               <span className="font-semibold">{user.c_current_address1 || 'N/A'}</span>
             </div>
           </div>
-
-          <button
-            onClick={handleDeleteUser}
-            className="shrink-0 self-start md:self-center flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-bold transition-colors"
-            title="Permanently delete this user"
-          >
-            <Trash2 size={14} /> Delete User
-          </button>
         </div>
       ) : null}
 
