@@ -145,7 +145,7 @@ export const menuItems = [
     id: 'events',
     label: 'Events',
     icon: 'Calendar',
-    path: '/events',
+    path: '/events/category',
     children: [
       { id: 'event-category', label: 'Event Category', path: '/events/category' },
       { id: 'events-list', label: 'Events', path: '/events/list' }
@@ -165,7 +165,7 @@ export const menuItems = [
     id: 'teams',
     label: 'Teams',
     icon: 'Users',
-    path: '/teams',
+    path: '/teams/all',
     children: [
       { id: 'team-add', label: 'Add Team', path: '/teams/add' },
       { id: 'team-all', label: 'All Teams', path: '/teams/all' },
@@ -202,7 +202,7 @@ export const menuItems = [
     id: 'more',
     label: 'More',
     icon: 'Menu',
-    path: '/more',
+    path: '/master/who-we-are',
     children: [
       { id: 'who-we-are', label: 'Who We Are (Homepage)', path: '/master/who-we-are' },
       { id: 'job-updates', label: 'Job Updates', path: '/job-updates' },
@@ -218,7 +218,7 @@ export const menuItems = [
     id: 'forms',
     label: 'Form & Queries',
     icon: 'FileText',
-    path: '/forms',
+    path: '/forms/contact-query',
     children: [
       { id: 'contact-query', label: 'Contact Query', path: '/forms/contact-query' },
       { id: 'hire-with-us', label: 'Hire With Us Form', path: '/forms/hire-with-us' }
@@ -228,7 +228,7 @@ export const menuItems = [
     id: 'master',
     label: 'Master',
     icon: 'Database',
-    path: '/master',
+    path: '/master/coupons',
     children: [
       { id: 'coupons', label: 'Coupons', path: '/master/coupons' },
       { id: 'module-sub-module', label: 'Module/Sub-Module', path: '/master/module-sub-module' },
@@ -252,7 +252,7 @@ export const menuItems = [
     id: 'general-setting',
     label: 'General Setting',
     icon: 'Settings',
-    path: '/general-setting',
+    path: '/general-setting/application',
     children: [
       { id: 'application', label: 'Application', path: '/general-setting/application' },
       { id: 'send-notification', label: 'Send Notification', path: '/general-setting/send-notification' },
@@ -263,7 +263,7 @@ export const menuItems = [
     id: 'location-setting',
     label: 'Location Setting',
     icon: 'Globe',
-    path: '/location-setting',
+    path: '/location-setting/country',
     children: [
       { id: 'country', label: 'Country', path: '/location-setting/country' },
       { id: 'state', label: 'State', path: '/location-setting/state' },
