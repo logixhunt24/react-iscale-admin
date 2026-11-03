@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Edit2, Trash2 } from 'lucide-react'
+import { Edit2, Trash2, Mail } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -115,6 +115,29 @@ export default function LiveClasses() {
     setTeacherId('')
     setSearchQuery('')
     setCurrentPage(1)
+  }
+
+  const [sendingId, setSendingId] = useState('')
+
+  // Emails the class's batch (one message per student).
+  const handleSendReminder = async (row) => {
+    const batch = row.batch_id?.batch_name || 'this class'
+    if (!(await window.customConfirm(`Send a reminder email for "${row.title}" to every student in ${batch}?`))) return
+    setSendingId(row._id)
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.post(`${BASE_URL}/myadmin/live-class/send-reminder/${row._id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      const d = response.data?.data
+      await window.customAlert(
+        `${response.data?.message}${d ? `\n\nStudents in batch: ${d.total}\nSent: ${d.sent}\nFailed: ${d.failed}\nNo valid email: ${d.skipped}` : ''}`
+      )
+    } catch (error) {
+      await window.customAlert(error.response?.data?.message || 'Could not send the reminder')
+    } finally {
+      setSendingId('')
+    }
   }
 
   const handleDelete = async (id) => {
@@ -251,7 +274,15 @@ export default function LiveClasses() {
                       >
                         <Edit2 size={14} />
                       </Link>
-                      <button 
+                      <button
+                        onClick={() => handleSendReminder(row)}
+                        disabled={sendingId === row._id}
+                        title="Email a reminder to the batch"
+                        className="bg-[#144f36] text-white p-2 rounded-lg hover:bg-[#0f3d2a] transition-colors w-fit disabled:opacity-50"
+                      >
+                        <Mail size={14} />
+                      </button>
+                      <button
                         onClick={() => handleDelete(row._id)}
                         className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition-colors w-fit"
                       >
