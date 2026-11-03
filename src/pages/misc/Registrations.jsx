@@ -93,8 +93,8 @@ export default function Registrations() {
           let rawData = response.data.data || []
           if (statusInput && statusInput !== 'Select Value') {
             rawData = rawData.filter(row => {
-              if (statusInput === 'Active') return row.enrollment_status === '1' || row.enrollment_status === 1 || row.enrollment_status === 'active'
-              if (statusInput === 'Inactive') return row.enrollment_status === '0' || row.enrollment_status === 0 || row.enrollment_status === 'inactive'
+              if (statusInput === 'Active') return row.app_status === 1
+              if (statusInput === 'Inactive') return row.app_status !== 1
               return true
             })
           }
@@ -205,6 +205,33 @@ export default function Registrations() {
       await window.customAlert(err.response?.data?.message || 'Error updating status')
     } finally {
       setSavingStatus(false)
+    }
+  }
+
+  // Flip one of the access switches (App / Android / IOS / Test Series / Live Class)
+  const STATUS_ENDPOINT = {
+    app_status: 'toggle-app-status',
+    android_status: 'toggle-android-status',
+    ios_status: 'toggle-ios-status',
+    test_series_status: 'toggle-test-series-status',
+    live_class_status: 'toggle-live-class-status',
+  }
+  const handleToggleStatus = async (row, field) => {
+    const setField = (value) =>
+      setData(prev => prev.map(r => (r.enrollment_id === row.enrollment_id ? { ...r, [field]: value } : r)))
+    const previous = row[field] === 1 ? 1 : 0
+    setField(previous === 1 ? 0 : 1) // show the change right away
+    try {
+      const token = localStorage.getItem('token')
+      const res = await axios.patch(
+        `${BASE_URL}/myadmin/registrations/${STATUS_ENDPOINT[field]}/${row.enrollment_id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      if (res.data?.[field] !== undefined) setField(res.data[field]) // trust the server's value
+    } catch (err) {
+      setField(previous)
+      await window.customAlert(err.response?.data?.message || 'Failed to update status')
     }
   }
 
@@ -440,6 +467,20 @@ export default function Registrations() {
   // Status badge for Certificate column
   // certificate_status from the server: 0 not requested, 1 pending, 2 approved, 3 declined
   const CERT_LABELS = { 0: 'Not requested', 1: 'Pending', 2: 'Approved', 3: 'Decline' }
+  const StatusToggle = ({ row, field }) => {
+    const on = row[field] === 1
+    return (
+      <button
+        type="button"
+        onClick={() => handleToggleStatus(row, field)}
+        title="Click to change"
+        className={`inline-block px-2 py-0.5 rounded text-white text-xs font-semibold cursor-pointer hover:opacity-80 transition-opacity ${on ? 'bg-[#144f36]' : 'bg-orange-500'}`}
+      >
+        {on ? 'Active' : 'In-Active'}
+      </button>
+    )
+  }
+
   const certLabel = (row) => row._regStatus || CERT_LABELS[row.certificate_status] || 'Not requested'
 
   const statusBadgeClass = (status) => {
@@ -609,7 +650,6 @@ export default function Registrations() {
               <tbody>
                 {data.map((row, index) => {
                   const regStatus = certLabel(row)
-                  const appActive = row.enrollment_status === '1' || row.enrollment_status === 1 || row.enrollment_status === 'active'
                   return (
                     <tr key={row.enrollment_id}
                       className="border-b border-gray-100 hover:bg-green-50/20 transition-colors bg-white">
@@ -660,26 +700,24 @@ export default function Registrations() {
                           </svg>
                         </button>
                       </td>
-                      {/* Status - APP/Android/IOS */}
+                      {/* Status - APP/Android/IOS (click to switch) */}
                       <td className="px-3 py-2 border-r border-gray-100">
                         <div className="space-y-1">
                           <div className="text-xs text-gray-600 font-medium">APP:</div>
-                          <span className={`inline-block px-2 py-0.5 rounded text-white text-xs font-semibold ${appActive ? 'bg-[#144f36]' : 'bg-orange-500'}`}>
-                            {appActive ? 'Active' : 'In-Active'}
-                          </span>
+                          <StatusToggle row={row} field="app_status" />
                           <div className="text-xs text-gray-600 font-medium mt-1">Android:</div>
-                          <span className="inline-block px-2 py-0.5 rounded bg-orange-500 text-white text-xs font-semibold">In-Active</span>
+                          <StatusToggle row={row} field="android_status" />
                           <div className="text-xs text-gray-600 font-medium mt-1">IOS:</div>
-                          <span className="inline-block px-2 py-0.5 rounded bg-orange-500 text-white text-xs font-semibold">In-Active</span>
+                          <StatusToggle row={row} field="ios_status" />
                         </div>
                       </td>
-                      {/* C Status */}
+                      {/* C Status (click to switch) */}
                       <td className="px-3 py-2 border-r border-gray-100">
                         <div className="space-y-1">
                           <div className="text-xs text-gray-600 font-medium">Test Series:</div>
-                          <span className="inline-block px-2 py-0.5 rounded bg-orange-500 text-white text-xs font-semibold">In-Active</span>
+                          <StatusToggle row={row} field="test_series_status" />
                           <div className="text-xs text-gray-600 font-medium mt-1">Live Class:</div>
-                          <span className="inline-block px-2 py-0.5 rounded bg-orange-500 text-white text-xs font-semibold">In-Active</span>
+                          <StatusToggle row={row} field="live_class_status" />
                         </div>
                       </td>
 
