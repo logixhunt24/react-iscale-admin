@@ -15,7 +15,7 @@ function formatDate(dateStr) {
 const isVerifiedUser = (user) =>
   Boolean(user.c_mobile_verified || user.c_email_verified || user.c_admin_verified);
 
-export default function AppUserDetails({ userId, onClose }) {
+export default function AppUserDetails({ userId, onClose, onDeleted }) {
   const { id: paramId } = useParams()
   const navigate = useNavigate()
   const id = userId || paramId
@@ -25,6 +25,26 @@ export default function AppUserDetails({ userId, onClose }) {
   const [activeSubTab, setActiveSubTab] = useState('courses') // 'courses', 'test-series', 'notes'
   const [user, setUser] = useState(null)
   const [userLoading, setUserLoading] = useState(true)
+
+  const handleDeleteUser = async () => {
+    const name = `${user?.c_first_name || ''} ${user?.c_last_name || ''}`.trim() || user?.c_display_name || 'this user'
+    if (!await window.customConfirm(`Permanently delete ${name}? This cannot be undone.`)) return
+    try {
+      const token = localStorage.getItem('token')
+      const res = await axios.delete(`${BASE_URL}/myadmin/app-users/delete/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (res.data?.status) {
+        await window.customAlert(res.data.message || 'App User deleted successfully')
+        if (isModal) onDeleted?.()
+        else navigate('/app-users')
+      } else {
+        await window.customAlert(res.data?.message || 'Failed to delete App User')
+      }
+    } catch (err) {
+      await window.customAlert(err.response?.data?.message || 'Error deleting user')
+    }
+  }
 
   const fetchUserDetails = async () => {
     try {
@@ -342,6 +362,14 @@ export default function AppUserDetails({ userId, onClose }) {
               <span className="font-semibold">{user.c_current_address1 || 'N/A'}</span>
             </div>
           </div>
+
+          <button
+            onClick={handleDeleteUser}
+            className="shrink-0 self-start md:self-center flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-bold transition-colors"
+            title="Permanently delete this user"
+          >
+            <Trash2 size={14} /> Delete User
+          </button>
         </div>
       ) : null}
 

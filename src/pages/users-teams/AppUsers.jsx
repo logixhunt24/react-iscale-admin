@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Eye, Edit2, Trash2 } from 'lucide-react'
+import { Eye, Edit2, UserX, UserCheck } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../../config/api'
@@ -185,21 +185,24 @@ export default function AppUsers() {
     return pages
   }
 
-  const handleDelete = async (id) => {
-    if (!await window.customConfirm("Are you sure you want to delete this app user?")) return;
+  const handleToggleUserStatus = async (row) => {
+    const deactivating = row.c_user_status === 1
+    const question = deactivating
+      ? 'Deactivate this user? They will no longer be able to log in or use the app. Their record is kept.'
+      : 'Activate this user? They will be able to log in again.'
+    if (!await window.customConfirm(question)) return
     try {
       const token = localStorage.getItem('token')
-      const res = await axios.delete(`${BASE_URL}/myadmin/app-users/delete/${id}`, {
+      const res = await axios.patch(`${BASE_URL}/myadmin/app-users/toggle-status/${row._id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
       if (res.data?.status) {
-        await window.customAlert(res.data.message || "App User deleted successfully");
-        fetchUsers();
+        fetchUsers()
       } else {
-        await window.customAlert(res.data.message || "Failed to delete App User");
+        await window.customAlert(res.data?.message || 'Failed to update user status')
       }
     } catch (err) {
-      await window.customAlert(err.response?.data?.message || "Error deleting user");
+      await window.customAlert(err.response?.data?.message || 'Error updating user status')
     }
   }
 
@@ -367,6 +370,9 @@ export default function AppUsers() {
                       <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">{startIndex + index + 1}</td>
                       <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">
                         {`${row.c_first_name || ''} ${row.c_last_name || ''}`.trim() || row.c_display_name || 'N/A'}
+                        {row.c_user_status !== 1 && (
+                          <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200 align-middle">Inactive</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">{row.c_contact || 'N/A'}</td>
                       <td className="px-4 py-3 border-r border-slate-200 dark:border-gray-800/50 align-middle">{row.c_email || 'N/A'}</td>
@@ -390,9 +396,15 @@ export default function AppUsers() {
                           <Link to={`/app-users/edit/${row._id}`} className="inline-block bg-green-600 text-white p-1.5 rounded hover:bg-green-700 transition-colors" title="Edit User">
                             <Edit2 size={14} />
                           </Link>
-                          <button onClick={() => handleDelete(row._id)} className="btn-glossy-red icon-only" title="Delete User">
-                            <Trash2 size={14} />
-                          </button>
+                          {row.c_user_status === 1 ? (
+                            <button onClick={() => handleToggleUserStatus(row)} className="bg-orange-500 text-white p-1.5 rounded hover:bg-orange-600 transition-colors" title="Deactivate User">
+                              <UserX size={14} />
+                            </button>
+                          ) : (
+                            <button onClick={() => handleToggleUserStatus(row)} className="bg-[#144f36] text-white p-1.5 rounded hover:bg-[#0f3d2a] transition-colors" title="Activate User">
+                              <UserCheck size={14} />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -438,7 +450,7 @@ export default function AppUsers() {
         </div>
       </div>
       {selectedUserId && (
-        <AppUserDetails userId={selectedUserId} onClose={() => setSelectedUserId(null)} />
+        <AppUserDetails userId={selectedUserId} onClose={() => setSelectedUserId(null)} onDeleted={() => { setSelectedUserId(null); fetchUsers() }} />
       )}
     </div>
   )
